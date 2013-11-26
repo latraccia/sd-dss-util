@@ -1,0 +1,4 @@
+dss-cli-main/**/target/
+!.idea
+.idea/*
+!.idea/runConfigurations/
