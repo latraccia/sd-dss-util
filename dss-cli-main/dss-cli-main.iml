@@ -44,6 +44,7 @@
     <orderEntry type="module" module-name="dss-report" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.beust:jcommander:1.32" level="project" />
   </component>
 </module>
 
