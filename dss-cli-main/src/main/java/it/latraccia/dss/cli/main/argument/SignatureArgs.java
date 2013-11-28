@@ -71,6 +71,23 @@ public class SignatureArgs {
     private String mocca;
     /* END OF SIGNATURE TOKEN PARAMETERS */
 
+    /* SIGNER CLAIMED ROLE */
+    @Parameter(names = {"-sr", "--signer-role"},
+            description = "The claimed role of the signer")
+    private String claimedRole;
+    /* END OF SIGNER CLAIMED ROLE */
+
+    /* POLICY */
+    @Parameter(names = {"-spi", "--signature-policy-implicit"},
+            description = "If there is a signature policy to be implicitly inferred from the certificate/token")
+    private boolean implicitPolicy;
+
+    @Parameter(names = {"-spe", "--signature-policy-explicit"}, arity = 3,
+            description = "Specify the policy with, in order, an OID, the base64 hash value of OID and the algorithm " +
+                    "used to calculate the hash (only \"SHA1\" is allowed for now)")
+    private List<String> explicitPolicy;
+    /* END OF POLICY */
+
     /* GETTERS / SETTERS */
     public List<String> getSource() {
         return source;
@@ -150,6 +167,30 @@ public class SignatureArgs {
 
     public void setMocca(String mocca) {
         this.mocca = mocca;
+    }
+
+    public String getClaimedRole() {
+        return claimedRole;
+    }
+
+    public void setClaimedRole(String claimedRole) {
+        this.claimedRole = claimedRole;
+    }
+
+    public boolean isImplicitPolicy() {
+        return implicitPolicy;
+    }
+
+    public void setImplicitPolicy(boolean implicitPolicy) {
+        this.implicitPolicy = implicitPolicy;
+    }
+
+    public List<String> getExplicitPolicy() {
+        return explicitPolicy;
+    }
+
+    public void setExplicitPolicy(List<String> explicitPolicy) {
+        this.explicitPolicy = explicitPolicy;
     }
 
     /* END OF GETTERS / SETTERS */
