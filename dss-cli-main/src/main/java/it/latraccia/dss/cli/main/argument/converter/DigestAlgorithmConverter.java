@@ -21,28 +21,27 @@ package it.latraccia.dss.cli.main.argument.converter;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
-import eu.europa.ec.markt.dss.signature.SignaturePackaging;
+import eu.europa.ec.markt.dss.DigestAlgorithm;
 
 /**
- * Converter class from {@link String} to {@link SignaturePackaging}.
- * Accepts any case form of "ENVELOPED", "ENVELOPING", "DETACHED".
+ * Converter class from {@link String} to {@link eu.europa.ec.markt.dss.DigestAlgorithm}.
+ * Accepts any case form of "SHA1", "SHA256", "SHA512".
  *
  * @author Francesco Pontillo
  *
- * Date: 27/11/13
- * Time: 11.26
+ * Date: 29/11/13
+ * Time: 12.01
  */
-public class PackagingConverter implements IStringConverter<SignaturePackaging> {
+public class DigestAlgorithmConverter implements IStringConverter<DigestAlgorithm> {
     @Override
-    public SignaturePackaging convert(String s) {
-        String upperedPackage = s.toUpperCase();
-        if ("ENVELOPED".equals(upperedPackage)) {
-            return SignaturePackaging.ENVELOPED;
-        } else if ("ENVELOPING".equals(upperedPackage)) {
-            return SignaturePackaging.ENVELOPING;
-        } else if ("DETACHED".equals(upperedPackage)) {
-            return SignaturePackaging.DETACHED;
+    public DigestAlgorithm convert(String s) {
+        if ("SHA1".equalsIgnoreCase(s)) {
+            return DigestAlgorithm.SHA1;
+        } else if ("SHA256".equalsIgnoreCase(s)) {
+            return DigestAlgorithm.SHA256;
+        } else if ("SHA512".equalsIgnoreCase(s)) {
+            return DigestAlgorithm.SHA512;
         } else throw new ParameterException(
-                String.format("Could not recognize %s as a valid signature packaging.", s));
+                String.format("Could not recognize %s as a valid digest algorithm.", s));
     }
 }

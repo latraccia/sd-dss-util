@@ -1,3 +1,22 @@
+/*
+ * DSS-CLI, a Command Line Interface for SD-DSS.
+ * Copyright (C) 2013 La Traccia
+ * Developed by Francesco Pontillo
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see [http://www.gnu.org/licenses/].
+ */
+
 package it.latraccia.dss.cli.main.util;
 
 import java.io.BufferedReader;
@@ -6,12 +25,15 @@ import java.io.InputStreamReader;
 import java.security.cert.X509Certificate;
 
 /**
+ * Utility class for {@link String}, {@link java.io.File} and console handling.
+ *
  * @author Francesco Pontillo
  *
  * Date: 27/11/13
  * Time: 13.14
  */
 public class Util {
+
     /**
      * Check if a {@link String} is null or empty.
      * @param string The {@link String} to check
@@ -28,8 +50,7 @@ public class Util {
      */
     public static String readln() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String password = br.readLine();
-        return password;
+        return br.readLine();
     }
 
     /**
@@ -56,8 +77,7 @@ public class Util {
     public static int readInt() throws IOException, NumberFormatException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String input = bufferedReader.readLine();
-        int number = Integer.parseInt(input);
-        return number;
+        return Integer.parseInt(input);
     }
 
     /**
@@ -65,8 +85,9 @@ public class Util {
      * @param maxAttempts Number of maximum attempts for reading, unhandled if less than 1.
      * @param lBound Lower bound accepted for the integer number (included).
      * @param uBound Upper bound accepted for the integer number (included).
-     * @return
+     * @return The read {@link Integer}
      */
+    @SuppressWarnings("ConstantConditions")
     public static int readInt(int maxAttempts, int lBound, int uBound) {
         boolean parsed;
         int number = -1;
@@ -89,5 +110,34 @@ public class Util {
                 (number < lBound) || (number > uBound));        // - the upper or lower bound is not respected
 
         return number;
+    }
+
+    /**
+     * Get the file extension from a file name.
+     * @param fileName The file name
+     * @return The last extension for the file name
+     */
+    public static String getFileExtension(String fileName) {
+        String extension = null;
+        int i2 = fileName.lastIndexOf(".");
+        if (i2 > 0) {
+            extension = fileName.substring(i2);
+        }
+        return extension;
+    }
+
+    /**
+     * Get the file name without the extension.
+     * @param fileName The file name
+     * @return The file name without the final extension
+     */
+    public static String getFileNameWithoutExtension(String fileName) {
+        int i2 = fileName.lastIndexOf(".");
+        String simpleFileName = null;
+        if (i2 > 0) {
+            // Get the original name without the extension
+            simpleFileName = fileName.substring(0, i2);
+        }
+        return simpleFileName;
     }
 }

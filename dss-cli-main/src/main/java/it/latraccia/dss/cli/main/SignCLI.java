@@ -1,27 +1,59 @@
+/*
+ * DSS-CLI, a Command Line Interface for SD-DSS.
+ * Copyright (C) 2013 La Traccia
+ * Developed by Francesco Pontillo
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see [http://www.gnu.org/licenses/].
+ */
+
 package it.latraccia.dss.cli.main;
 
 import com.beust.jcommander.JCommander;
+import eu.europa.ec.markt.dss.DigestAlgorithm;
 import eu.europa.ec.markt.dss.common.SignatureTokenType;
-import eu.europa.ec.markt.dss.signature.FileDocument;
-import eu.europa.ec.markt.dss.signature.SignaturePackaging;
-import eu.europa.ec.markt.dss.signature.SignaturePolicy;
+import eu.europa.ec.markt.dss.signature.*;
+import eu.europa.ec.markt.dss.signature.cades.CAdESService;
 import eu.europa.ec.markt.dss.signature.token.DSSPrivateKeyEntry;
 import eu.europa.ec.markt.dss.signature.token.SignatureTokenConnection;
 import it.latraccia.dss.cli.main.argument.SignatureArgs;
+import it.latraccia.dss.cli.main.argument.converter.DigestAlgorithmConverter;
 import it.latraccia.dss.cli.main.model.ExplicitSignaturePolicyModel;
 import it.latraccia.dss.cli.main.model.PKCS12Model;
 import it.latraccia.dss.cli.main.model.SignatureCLIModel;
 import it.latraccia.dss.cli.main.util.Util;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.bouncycastle.cms.CMSException;
+import org.bouncycastle.cms.CMSSignedData;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
  * CLI for signing documents by using the DSS server and libraries.
  * Call this CLI with
- *      java SignCLI "the/file/to/be/signed" -d="the/signed/file/destination/"
+ *      java SignCLI [parameters]
+ * See README.md for the complete documentation.
  *
  * @author Francesco Pontillo
  * Date: 26/11/13
@@ -39,24 +71,33 @@ public class SignCLI {
         // Validate and set the parameters inside the SignatureModel, step by step
         setSourceFile(signatureArgs, model);
         setSignatureFormatLevelPackaging(signatureArgs, model);
+        setDigestAlgorithm(signatureArgs, model);
 
         setTokenType(signatureArgs, model);
         setTokenParameters(signatureArgs, model);
-        setPrivateKey(signatureArgs, model);
+        setPrivateKey(model);
 
         setClaimedRole(signatureArgs, model);
         setPolicy(signatureArgs, model);
 
         setOutputFile(signatureArgs, model);
+
+        try {
+            signAndSaveFile(signatureArgs, model);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static void setSourceFile(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setSourceFile(SignatureArgs signatureArgs, SignatureCLIModel model) {
         // Set the FileDocument from the user source path
         String sourceFile = signatureArgs.getSource().get(0);
         model.setOriginalFile(new FileDocument(sourceFile));
     }
 
-    private static void setSignatureFormatLevelPackaging(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setSignatureFormatLevelPackaging(SignatureArgs signatureArgs, SignatureCLIModel model) {
         // Set the signature format
         String format = signatureArgs.getFormat();
         String level = signatureArgs.getLevel();
@@ -68,7 +109,16 @@ public class SignCLI {
         model.setPackaging(packaging);
     }
 
-    private static void setTokenType(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setDigestAlgorithm(SignatureArgs signatureArgs, SignatureCLIModel model) {
+        // Set the digest algorithm, to SHA1 if null
+        if (signatureArgs.getDigestAlgorithm() != null) {
+            model.setDigestAlgorithm(signatureArgs.getDigestAlgorithm());
+        } else {
+            model.setDigestAlgorithm(DigestAlgorithm.SHA1);
+        }
+    }
+
+    protected static void setTokenType(SignatureArgs signatureArgs, SignatureCLIModel model) {
         SignatureTokenType tokenType = null;
         // Get the parameters
         String pkcs11 = signatureArgs.getPkcs11();
@@ -90,7 +140,7 @@ public class SignCLI {
         model.setTokenType(tokenType);
     }
 
-    private static void setTokenParameters(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setTokenParameters(SignatureArgs signatureArgs, SignatureCLIModel model) {
         // Get the parameters
         String pkcs11 = signatureArgs.getPkcs11();
         List<String> pkcs12 = signatureArgs.getPkcs12();
@@ -127,7 +177,7 @@ public class SignCLI {
         }
     }
 
-    private static void setPrivateKey(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setPrivateKey(SignatureCLIModel model) {
         // Set the connection to the keystore provider
         SignatureTokenConnection connection;
         connection = model.createTokenConnection();
@@ -159,7 +209,7 @@ public class SignCLI {
                 }
 
                 // Ask for a choice
-                int keyIndex = -1;
+                int keyIndex;
                 System.out.println("Select the number of the certificate you wish to use:");
 
                 // Read the integer until we get a valid number within the entries' bounds
@@ -179,11 +229,11 @@ public class SignCLI {
         model.setPrivateKey(key);
     }
 
-    private static void setClaimedRole(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setClaimedRole(SignatureArgs signatureArgs, SignatureCLIModel model) {
         model.setClaimedRole(signatureArgs.getClaimedRole());
     }
 
-    private static void setPolicy(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setPolicy(SignatureArgs signatureArgs, SignatureCLIModel model) {
         // Default to no policy
         model.setSignaturePolicyType(SignaturePolicy.NO_POLICY);
 
@@ -209,8 +259,144 @@ public class SignCLI {
         }
     }
 
-    private static void setOutputFile(SignatureArgs signatureArgs, SignatureCLIModel model) {
-        String outFile = signatureArgs.getDestination();
-        // TODO: Set the user-selected destination path or file
+    protected static void setOutputFile(SignatureArgs signatureArgs, SignatureCLIModel model) {
+        // The output path if and as requested by the user
+        String destination = signatureArgs.getOutput();
+
+        File outputDir;
+        String outputFile;
+        File destinationFile;
+
+        // If the destination wasn't set
+        if (Util.isNullOrEmpty(destination)) {
+            // Use the parent dir of the original file
+            outputDir = model.getOriginalFile().getParentFile();
+            // Use the suggested file name
+            outputFile = getSuggestedFileName(model);
+            destinationFile = new File(outputDir, outputFile);
+        } else {
+            // Tries to understand what destination is
+            File outFileOrDir = new File(destination);
+
+            // If the user requested a directory
+            if (outFileOrDir.isDirectory()) {
+                // Store the file in the outFileOrDir directory
+                outputDir = outFileOrDir;
+                // Use the suggested file name
+                outputFile = getSuggestedFileName(model);
+                destinationFile = new File(outputDir, outputFile);
+            } else {
+                // If the user explicitly requested a file name and directory, proceed regularly
+                destinationFile = outFileOrDir;
+            }
+        }
+
+        // Set the user-selected destination path or file
+        model.setSignedFile(destinationFile);
+    }
+
+    private static void signAndSaveFile(SignatureArgs signatureArgs, SignatureCLIModel model)
+            throws NoSuchAlgorithmException, IOException {
+        SignatureTokenConnection connection;
+
+        DocumentSignatureService service = model.createDocumentSignatureService();
+
+        Document document = model.getOriginalFile();
+
+        SignatureParameters parameters = new SignatureParameters();
+        parameters.setSigningDate(new Date());
+        parameters.setSigningCertificate(model.getPrivateKey().getCertificate());
+        if (model.getPrivateKey().getCertificateChain() != null) {
+            parameters.setCertificateChain(Arrays.asList((X509Certificate[]) model.getPrivateKey().getCertificateChain()));
+        }
+        parameters.setSignatureFormat(model.getSignatureFormat());
+        parameters.setSignaturePackaging(model.getPackaging());
+
+        // BEGIN: Added to 2.0.2
+
+        String moccaSignatureAlgorithm = model.getMoccaSignatureAlgorithm();
+        if (moccaSignatureAlgorithm != null && "sha256".equalsIgnoreCase(moccaSignatureAlgorithm)) {
+            parameters.setDigestAlgorithm(new DigestAlgorithmConverter().convert(model.getMoccaSignatureAlgorithm()));
+        } else {
+            parameters.setDigestAlgorithm(model.getDigestAlgorithm());
+        }
+        parameters.setSignatureAlgorithm(model.getPrivateKey().getSignatureAlgorithm());
+
+        // END:
+        parameters.setClaimedSignerRole(model.getClaimedRole());
+        parameters.setSignaturePolicy(model.getSignaturePolicyType());
+        parameters.setSignaturePolicyId(model.getSignaturePolicy());
+        parameters.setSignaturePolicyHashValue(model.getSignaturePolicyValue());
+        parameters.setSignaturePolicyHashAlgo(model.getSignaturePolicyAlgo());
+
+        connection = model.createTokenConnection();
+
+        Document contentInCMS = null;
+        if (service instanceof CAdESService && parameters.getSignaturePackaging() == SignaturePackaging.ENVELOPING) {
+
+            FileInputStream original = null;
+            try {
+                CMSSignedData cmsData = new CMSSignedData(model.getOriginalFile().openStream());
+                if (cmsData != null && cmsData.getSignedContent() != null && cmsData.getSignedContent().getContent() != null) {
+                    ByteArrayOutputStream buf = new ByteArrayOutputStream();
+                    cmsData.getSignedContent().write(buf);
+                    contentInCMS = new InMemoryDocument(buf.toByteArray());
+                }
+            } catch (CMSException ex) {
+
+            } finally {
+                if (original != null) {
+                    original.close();
+                }
+            }
+        }
+
+        Document signedDocument;
+        if (contentInCMS != null) {
+            byte[] signatureValue = connection
+                    .sign(service.toBeSigned(contentInCMS, parameters), parameters.getDigestAlgorithm(), model.getPrivateKey());
+            CAdESService cadesService = (CAdESService) service;
+            signedDocument = cadesService.addASignatureToDocument(document, parameters, signatureValue);
+        } else {
+            byte[] signatureValue = connection
+                    .sign(service.toBeSigned(document, parameters), parameters.getDigestAlgorithm(), model.getPrivateKey());
+            signedDocument = service.signDocument(document, parameters, signatureValue);
+        }
+
+        FileOutputStream output = new FileOutputStream(model.getSignedFile());
+        IOUtils.copy(signedDocument.openStream(), output);
+        output.close();
+    }
+
+    private static String getSuggestedFileName(SignatureCLIModel model) {
+        // The original filename
+        String originalName = model.getOriginalFile().getName();
+
+        // Delete the extension from the original name
+        originalName = Util.getFileNameWithoutExtension(originalName);
+
+        // Build the new suggested name
+        String newName;
+        if (model.getPackaging() == SignaturePackaging.ENVELOPING
+                && model.getSignatureFormat().startsWith("XAdES")) {
+            newName = originalName + "-signed" + ".xml";
+        } else if (model.getPackaging() == SignaturePackaging.DETACHED
+                && model.getSignatureFormat().startsWith("XAdES")) {
+            newName = originalName + "-signed" + ".xml";
+        } else if (model.getSignatureFormat().startsWith("CAdES-")
+                && !model.getOriginalFile().getName().endsWith(".p7m")) {
+            newName = model.getOriginalFile().getName() + ".p7m";
+        } else if (model.getSignatureFormat().startsWith("ASiC-")) {
+            newName = model.getOriginalFile().getName() + ".asics";
+        } else {
+            int i = model.getOriginalFile().getName().lastIndexOf(".");
+            if (i > 0) {
+                newName = model.getOriginalFile().getName().substring(0, i) + "-signed"
+                        + model.getOriginalFile().getName().substring(i);
+            } else {
+                newName = model.getOriginalFile().getName() + "-signed";
+            }
+        }
+        return newName;
     }
 }

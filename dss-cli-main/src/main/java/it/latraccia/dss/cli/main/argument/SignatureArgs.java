@@ -1,17 +1,38 @@
+/*
+ * DSS-CLI, a Command Line Interface for SD-DSS.
+ * Copyright (C) 2013 La Traccia
+ * Developed by Francesco Pontillo
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see [http://www.gnu.org/licenses/].
+ */
+
 package it.latraccia.dss.cli.main.argument;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import eu.europa.ec.markt.dss.DigestAlgorithm;
 import eu.europa.ec.markt.dss.signature.SignaturePackaging;
+import it.latraccia.dss.cli.main.argument.converter.DigestAlgorithmConverter;
 import it.latraccia.dss.cli.main.argument.converter.PackagingConverter;
 
 import java.util.List;
 
 /**
  * @author Francesco Pontillo
- *         <p/>
- *         Date: 27/11/13
- *         Time: 10.25
+ *
+ * Date: 27/11/13
+ * Time: 10.25
  */
 @Parameters(separators = "=")
 public class SignatureArgs {
@@ -20,10 +41,9 @@ public class SignatureArgs {
             description = "Source filenames of the files to be signed")
     private List<String> source;
 
-    // TODO: destination as a filename or a folder?
-    @Parameter(names = {"-d", "--destination"},
-            description = "Destination filename of the signed file")
-    private String destination;
+    @Parameter(names = {"-o", "--output"},
+            description = "Destination path or file name for the signed document")
+    private String output;
     /* END OF MAIN PARAMETERS */
 
     /* SIGNATURE FORMAT PARAMETERS */
@@ -42,6 +62,10 @@ public class SignatureArgs {
                     "Can be \"ENVELOPED\", \"ENVELOPING\", \"DETACHED\"",
             converter = PackagingConverter.class)
     private SignaturePackaging packaging;
+
+    @Parameter(names = {"-d", "--digest-algorithm"}, converter = DigestAlgorithmConverter.class,
+            description = "The algorithm used for digesting. It can be \"SHA1\" (default), \"SHA256\", \"SHA512\"")
+    private DigestAlgorithm digestAlgorithm;
 
     @Parameter(names = {"-w", "--wrap"}, hidden = true,
             description = "Wrap in ASiC-S, if existing, create a specially signed zip file for packaging the unaltered " +
@@ -97,12 +121,12 @@ public class SignatureArgs {
         this.source = source;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getOutput() {
+        return output;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setOutput(String output) {
+        this.output = output;
     }
 
     public String getFormat() {
@@ -127,6 +151,14 @@ public class SignatureArgs {
 
     public void setPackaging(SignaturePackaging packaging) {
         this.packaging = packaging;
+    }
+
+    public DigestAlgorithm getDigestAlgorithm() {
+        return digestAlgorithm;
+    }
+
+    public void setDigestAlgorithm(DigestAlgorithm digestAlgorithm) {
+        this.digestAlgorithm = digestAlgorithm;
     }
 
     public boolean isWrapAsics() {
