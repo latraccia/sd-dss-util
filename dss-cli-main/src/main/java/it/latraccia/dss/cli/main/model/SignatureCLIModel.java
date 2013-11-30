@@ -33,6 +33,8 @@ import java.io.IOException;
  * Time: 11.07
  */
 public class SignatureCLIModel extends SignatureModel {
+    protected String signatureSimpleFormat;
+    protected String signatureLevel;
     protected SignatureTokenConnection signatureTokenConnection;
     protected DigestAlgorithm digestAlgorithm;
 
@@ -41,6 +43,24 @@ public class SignatureCLIModel extends SignatureModel {
         SignatureTokenConnection connection = super.createTokenConnection(passwordInput);
         setSignatureTokenConnection(connection);
         return connection;
+    }
+
+    public String getSignatureSimpleFormat() {
+        return signatureSimpleFormat;
+    }
+
+    public void setSignatureSimpleFormat(String signatureSimpleFormat) {
+        this.signatureSimpleFormat = signatureSimpleFormat;
+        setSignatureFormat(signatureSimpleFormat + "-" + signatureLevel);
+    }
+
+    public String getSignatureLevel() {
+        return signatureLevel;
+    }
+
+    public void setSignatureLevel(String signatureLevel) {
+        this.signatureLevel = signatureLevel;
+        setSignatureFormat(signatureSimpleFormat + "-" + signatureLevel);
     }
 
     public SignatureTokenConnection getSignatureTokenConnection() {

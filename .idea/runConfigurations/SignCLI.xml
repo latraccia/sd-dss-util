@@ -3,7 +3,7 @@
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
     <option name="MAIN_CLASS_NAME" value="it.latraccia.dss.cli.main.SignCLI" />
     <option name="VM_PARAMETERS" value="" />
-    <option name="PROGRAM_PARAMETERS" value="&quot;C:\Users\fpontillo\Desktop\gepadial.pdf&quot; -f=CAdES -l=BES -p=ENVELOPING -p12=&quot;C:\Users\fpontillo\Desktop\0f.p12&quot; &quot;password&quot; -o=C:\Users\fpontillo\Desktop -d=sha256" />
+    <option name="PROGRAM_PARAMETERS" value="&quot;C:\Users\fpontillo\Desktop\gepadial.pdf&quot; -f=CAdES -l=BES -p=ENVELOPING -p12=&quot;C:\Users\fpontillo\Desktop\0f.p12&quot; &quot;password&quot; -o=C:\Users\fpontillo\Desktop -d=SHA256" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />

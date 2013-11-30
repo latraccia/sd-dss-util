@@ -21,6 +21,8 @@ package it.latraccia.dss.cli.main;
 
 import com.beust.jcommander.JCommander;
 import eu.europa.ec.markt.dss.DigestAlgorithm;
+import eu.europa.ec.markt.dss.applet.MOCCAAdapter;
+import eu.europa.ec.markt.dss.applet.model.Filetype;
 import eu.europa.ec.markt.dss.common.SignatureTokenType;
 import eu.europa.ec.markt.dss.signature.*;
 import eu.europa.ec.markt.dss.signature.cades.CAdESService;
@@ -28,9 +30,11 @@ import eu.europa.ec.markt.dss.signature.token.DSSPrivateKeyEntry;
 import eu.europa.ec.markt.dss.signature.token.SignatureTokenConnection;
 import it.latraccia.dss.cli.main.argument.SignatureArgs;
 import it.latraccia.dss.cli.main.argument.converter.DigestAlgorithmConverter;
+import it.latraccia.dss.cli.main.exception.*;
 import it.latraccia.dss.cli.main.model.ExplicitSignaturePolicyModel;
 import it.latraccia.dss.cli.main.model.PKCS12Model;
 import it.latraccia.dss.cli.main.model.SignatureCLIModel;
+import it.latraccia.dss.cli.main.util.AssertHelper;
 import it.latraccia.dss.cli.main.util.Util;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -38,56 +42,154 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSSignedData;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * CLI for signing documents by using the DSS server and libraries.
  * Call this CLI with
- *      java SignCLI [parameters]
+ * java SignCLI [parameters]
  * See README.md for the complete documentation.
  *
- * @author Francesco Pontillo
  * Date: 26/11/13
  * Time: 11.30
+ *
+ * @author Francesco Pontillo
  */
 public class SignCLI {
 
-    public static void main(String[] args) {
-        // Create the signature wizard model
-        SignatureCLIModel model = new SignatureCLIModel();
+    public static void main(String[] args) throws FileNotFoundException, SignatureException {
         // Read and parse the arguments
         SignatureArgs signatureArgs = new SignatureArgs();
         new JCommander(signatureArgs, args);
 
-        // Validate and set the parameters inside the SignatureModel, step by step
+        execute(signatureArgs);
+    }
+
+    private static FileOutputStream execute(SignatureArgs signatureArgs)
+            throws FileNotFoundException, SignatureException {
+        // Create the signature wizard model
+        SignatureCLIModel model = new SignatureCLIModel();
+
+        // Set the parameters inside the SignatureModel, step by step
         setSourceFile(signatureArgs, model);
         setSignatureFormatLevelPackaging(signatureArgs, model);
         setDigestAlgorithm(signatureArgs, model);
-
         setTokenType(signatureArgs, model);
         setTokenParameters(signatureArgs, model);
         setPrivateKey(model);
-
         setClaimedRole(signatureArgs, model);
         setPolicy(signatureArgs, model);
-
         setOutputFile(signatureArgs, model);
 
-        try {
-            signAndSaveFile(signatureArgs, model);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        // If simulate is off
+        if (!signatureArgs.isSimulate()) {
+            try {
+                return signAndSaveFile(model);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    protected static void validateSignatureFormat(SignatureCLIModel model) throws SignatureException {
+        String signatureFormat = model.getSignatureSimpleFormat();
+
+        // Validate the simple format
+        String[] allowedFormats = new String[]{"PAdES", "CAdES", "XAdES", "ASiC-S"};
+        if (!AssertHelper.stringMustBeInList(
+                "signature format",
+                signatureFormat,
+                allowedFormats)) {
+            throw new SignatureFormatMismatchException();
+        }
+
+        // If the file is not a PDF, the PAdES cannot be selected
+        if (model.getOriginalFiletype() != Filetype.PDF) {
+            if (!AssertHelper.stringMustNotEqual("signature level", signatureFormat, "PAdES")) {
+                throw new SignatureFormatMismatchException();
+            }
+        }
+    }
+
+    protected static void validateSignatureLevel(SignatureCLIModel model) throws SignatureException {
+        // Validate the level
+        String signatureFormat = model.getSignatureSimpleFormat();
+        String signatureLevel = model.getSignatureLevel();
+
+        // The map of allowed levels for each simple format
+        HashMap<String, String[]> allowedLevelsMap = new HashMap<String, String[]>();
+        allowedLevelsMap.put("PAdES", new String[]{"BES", "EPES", "LTV"});
+        allowedLevelsMap.put("CAdES", new String[]{"BES", "EPES", "T", "C", "X", "XL", "A"});
+        allowedLevelsMap.put("XAdES", new String[]{"BES", "EPES", "T", "C", "X", "XL", "A"});
+        allowedLevelsMap.put("ASiC-S", new String[]{"BES", "EPES", "T"});
+
+        // Validate the level for the format set
+        if (!AssertHelper.stringMustBeInList(
+                "signature level for " + signatureFormat,
+                signatureLevel,
+                allowedLevelsMap.get(signatureFormat))) {
+            throw new SignatureLevelMismatchException();
+        }
+    }
+
+    protected static void validateSignaturePackaging(SignatureCLIModel model) throws SignatureException {
+        // Validate the packaging
+        String signatureFormat = model.getSignatureSimpleFormat();
+        SignaturePackaging signaturePackaging = model.getPackaging();
+
+        // The map of allowed packaging for each simple format
+        HashMap<String, SignaturePackaging[]> allowedPackagingMap = new HashMap<String, SignaturePackaging[]>();
+        allowedPackagingMap.put("PAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPED});
+        allowedPackagingMap.put("CAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
+        allowedPackagingMap.put("XAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
+        allowedPackagingMap.put("ASiC-S", new SignaturePackaging[]{SignaturePackaging.DETACHED});
+
+        // Validate the level for the format set
+        if (!AssertHelper.packageMustBeInList(
+                "packaging for " + signatureFormat,
+                signaturePackaging,
+                allowedPackagingMap.get(signatureFormat))) {
+            throw new SignaturePackagingMismatchException();
+        }
+    }
+
+    protected static void validateMoccaAvailability(SignatureCLIModel model) throws SignatureException {
+        boolean isMoccaSet = !Util.isNullOrEmpty(model.getMoccaSignatureAlgorithm());
+        boolean isMoccaAvailable = new MOCCAAdapter().isMOCCAAvailable();
+        if (isMoccaSet && !isMoccaAvailable) {
+            System.err.println("MOCCA is not available, please choose another token provider.");
+            throw new SignatureMoccaUnavailabilityException();
+        }
+    }
+
+    protected static void validateMoccaAlgorithm(SignatureCLIModel model) throws SignatureException {
+        if (!AssertHelper.stringMustBeInList(
+                "MOCCA algorithm",
+                model.getMoccaSignatureAlgorithm(),
+                new String[]{"SHA1", "SHA"})) {
+            throw new SignatureMoccaAlgorithmMismatchException();
+        }
+    }
+
+    protected static void validatePolicy(SignatureCLIModel model) throws SignatureException {
+        if (model.getSignaturePolicyType() == SignaturePolicy.EXPLICIT) {
+            if (!AssertHelper.stringMustBeInList(
+                    "explicit policy algorithm",
+                    model.getSignaturePolicyAlgo(),
+                    new String[]{"SHA1"})) {
+                throw new SignaturePolicyAlgorithmMismatchException();
+            }
         }
     }
 
@@ -97,16 +199,20 @@ public class SignCLI {
         model.setOriginalFile(new FileDocument(sourceFile));
     }
 
-    protected static void setSignatureFormatLevelPackaging(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setSignatureFormatLevelPackaging(SignatureArgs signatureArgs, SignatureCLIModel model)
+            throws SignatureException {
         // Set the signature format
         String format = signatureArgs.getFormat();
         String level = signatureArgs.getLevel();
         SignaturePackaging packaging = signatureArgs.getPackaging();
-        // TODO: validate the signature level (ChooseSignaturePanel.LevelComboBoxModel.getElements)
-        // TODO: validate the signature format for non-PDF files (ChooseSignaturePanel.aboutToDisplayPanel)
-        // TODO: validate the packaging according to the signature format (ChooseSignaturePanel.*RadioActionPerformed)
-        model.setSignatureFormat(format + "-" + level);
+        model.setSignatureSimpleFormat(format);
+        model.setSignatureLevel(level);
         model.setPackaging(packaging);
+
+        // Validate the parts of the model
+        validateSignatureFormat(model);
+        validateSignatureLevel(model);
+        validateSignaturePackaging(model);
     }
 
     protected static void setDigestAlgorithm(SignatureArgs signatureArgs, SignatureCLIModel model) {
@@ -118,7 +224,7 @@ public class SignCLI {
         }
     }
 
-    protected static void setTokenType(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setTokenType(SignatureArgs signatureArgs, SignatureCLIModel model) throws SignatureException {
         SignatureTokenType tokenType = null;
         // Get the parameters
         String pkcs11 = signatureArgs.getPkcs11();
@@ -135,12 +241,13 @@ public class SignCLI {
             tokenType = SignatureTokenType.MSCAPI;
         } else if (!Util.isNullOrEmpty(mocca)) {
             tokenType = SignatureTokenType.MOCCA;
+            validateMoccaAvailability(model);
         }
-        // TODO: handle MOCCA token only if it is available (SignatureTokenAPIPanel.aboutToDisplayPanel)
         model.setTokenType(tokenType);
     }
 
-    protected static void setTokenParameters(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setTokenParameters(SignatureArgs signatureArgs, SignatureCLIModel model)
+            throws FileNotFoundException, SignatureException {
         // Get the parameters
         String pkcs11 = signatureArgs.getPkcs11();
         List<String> pkcs12 = signatureArgs.getPkcs12();
@@ -155,7 +262,8 @@ public class SignCLI {
                 if (tokenAsset.exists()) {
                     model.setPkcs11LibraryPath(tokenAsset.getAbsolutePath());
                 } else {
-                    // TODO: throw exception for non existing PKCS11 library
+                    // Throw exception for non existing PKCS11 library
+                    throw new FileNotFoundException("The PKCS11 library could not be found.");
                 }
                 break;
             case PKCS12:
@@ -167,12 +275,14 @@ public class SignCLI {
                     // Set the file encryption password
                     model.setPkcs12Password(pkcs12Model.getPassword().toCharArray());
                 } else {
-                    // TODO: throw exception for non existing PKCS11 library
+                    // Throw exception for non existing PKCS12 file
+                    throw new FileNotFoundException("The PKCS12 private key could not be found.");
                 }
                 break;
             case MOCCA:
-                // TODO: validate the MOCCA algorithm (sha1 or sha256)
                 model.setMoccaSignatureAlgorithm(mocca.toLowerCase());
+                // Validate the MOCCA algorithm (sha1 or sha256)
+                validateMoccaAlgorithm(model);
                 break;
         }
     }
@@ -215,7 +325,7 @@ public class SignCLI {
                 // Read the integer until we get a valid number within the entries' bounds
                 keyIndex = Util.readInt(-1, 1, entries.size());
                 // Get the key and print a summary
-                key = entries.get(keyIndex-1);
+                key = entries.get(keyIndex - 1);
                 System.out.println(
                         String.format("Certificate selected: %s",
                                 Util.getSubjectDN(key.getCertificate())));
@@ -233,7 +343,7 @@ public class SignCLI {
         model.setClaimedRole(signatureArgs.getClaimedRole());
     }
 
-    protected static void setPolicy(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setPolicy(SignatureArgs signatureArgs, SignatureCLIModel model) throws SignatureException {
         // Default to no policy
         model.setSignaturePolicyType(SignaturePolicy.NO_POLICY);
 
@@ -253,8 +363,8 @@ public class SignCLI {
                 model.setSignaturePolicyAlgo(explicitPolicy.getHashAlgo());
                 model.setSignaturePolicyValue(Base64.decodeBase64(explicitPolicy.getHash()));
                 model.setSignaturePolicyType(SignaturePolicy.EXPLICIT);
-            } else {
-                // TODO: validate explicit policy parameters
+                // Validate explicit policy parameters
+                validatePolicy(model);
             }
         }
     }
@@ -295,7 +405,7 @@ public class SignCLI {
         model.setSignedFile(destinationFile);
     }
 
-    private static void signAndSaveFile(SignatureArgs signatureArgs, SignatureCLIModel model)
+    private static FileOutputStream signAndSaveFile(SignatureCLIModel model)
             throws NoSuchAlgorithmException, IOException {
         SignatureTokenConnection connection;
 
@@ -309,6 +419,8 @@ public class SignCLI {
         if (model.getPrivateKey().getCertificateChain() != null) {
             parameters.setCertificateChain(Arrays.asList((X509Certificate[]) model.getPrivateKey().getCertificateChain()));
         }
+
+        //noinspection deprecation
         parameters.setSignatureFormat(model.getSignatureFormat());
         parameters.setSignaturePackaging(model.getPackaging());
 
@@ -337,14 +449,15 @@ public class SignCLI {
             FileInputStream original = null;
             try {
                 CMSSignedData cmsData = new CMSSignedData(model.getOriginalFile().openStream());
-                if (cmsData != null && cmsData.getSignedContent() != null && cmsData.getSignedContent().getContent() != null) {
+                if (cmsData.getSignedContent() != null && cmsData.getSignedContent().getContent() != null) {
                     ByteArrayOutputStream buf = new ByteArrayOutputStream();
                     cmsData.getSignedContent().write(buf);
                     contentInCMS = new InMemoryDocument(buf.toByteArray());
                 }
             } catch (CMSException ex) {
-
+                // Do nothing
             } finally {
+                //noinspection ConstantConditions
                 if (original != null) {
                     original.close();
                 }
@@ -366,6 +479,9 @@ public class SignCLI {
         FileOutputStream output = new FileOutputStream(model.getSignedFile());
         IOUtils.copy(signedDocument.openStream(), output);
         output.close();
+        System.out.println("SUCCESS.");
+        System.out.println(String.format("Signed file: %s", model.getSignedFile().getAbsoluteFile()));
+        return output;
     }
 
     private static String getSuggestedFileName(SignatureCLIModel model) {

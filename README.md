@@ -43,7 +43,7 @@ To sign a document, simply call the `SignCLI` class on the `dss-cli-main.jar` wi
 ### Parameters
 The following list contains all of the accepted parameters.
 
-* input file, passed as first parameter
+* input file, passed as first nameless parameter
 * `--output` or `-o`, the destination path (optionally, with a file name)
 * `--format` or `-f`, the signature format
 	* `CAdES`
@@ -79,6 +79,7 @@ The following list contains all of the accepted parameters.
 	* the policy OID as a dot-separated digits string
 	* the hash value of the signature policy in base64 format
 	* the algorithm used to produce it (only available option for now is `SHA1`)
+* `--simulate` or `-s`, validates the parameters but doesn't start the actual signing process
 
 ### Example
 

@@ -22,10 +22,11 @@ package it.latraccia.dss.cli.main.argument.converter;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
 import eu.europa.ec.markt.dss.DigestAlgorithm;
+import it.latraccia.dss.cli.main.util.AssertHelper;
 
 /**
  * Converter class from {@link String} to {@link eu.europa.ec.markt.dss.DigestAlgorithm}.
- * Accepts any case form of "SHA1", "SHA256", "SHA512".
+ * Accepts the exact strings "SHA1", "SHA256", "SHA512".
  *
  * @author Francesco Pontillo
  *
@@ -35,13 +36,15 @@ import eu.europa.ec.markt.dss.DigestAlgorithm;
 public class DigestAlgorithmConverter implements IStringConverter<DigestAlgorithm> {
     @Override
     public DigestAlgorithm convert(String s) {
-        if ("SHA1".equalsIgnoreCase(s)) {
+        if (!AssertHelper.stringMustBeInList("digest algorithm", s, new String[] {"SHA1", "SHA256", "SHA512"})) {
+            throw new ParameterException(
+                    String.format("Could not recognize %s as a valid digest algorithm.", s));
+        } else if ("SHA1".equals(s)) {
             return DigestAlgorithm.SHA1;
-        } else if ("SHA256".equalsIgnoreCase(s)) {
+        } else if ("SHA256".equals(s)) {
             return DigestAlgorithm.SHA256;
-        } else if ("SHA512".equalsIgnoreCase(s)) {
+        } else {
             return DigestAlgorithm.SHA512;
-        } else throw new ParameterException(
-                String.format("Could not recognize %s as a valid digest algorithm.", s));
+        }
     }
 }

@@ -112,6 +112,10 @@ public class SignatureArgs {
     private List<String> explicitPolicy;
     /* END OF POLICY */
 
+    @Parameter(names = {"-s", "--simulate"},
+            description = "Loads the parameters and validates them, but does not start the actual signing process")
+    private boolean simulate;
+
     /* GETTERS / SETTERS */
     public List<String> getSource() {
         return source;
@@ -223,6 +227,14 @@ public class SignatureArgs {
 
     public void setExplicitPolicy(List<String> explicitPolicy) {
         this.explicitPolicy = explicitPolicy;
+    }
+
+    public boolean isSimulate() {
+        return simulate;
+    }
+
+    public void setSimulate(boolean simulate) {
+        this.simulate = simulate;
     }
 
     /* END OF GETTERS / SETTERS */

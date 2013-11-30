@@ -22,10 +22,11 @@ package it.latraccia.dss.cli.main.argument.converter;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
 import eu.europa.ec.markt.dss.signature.SignaturePackaging;
+import it.latraccia.dss.cli.main.util.AssertHelper;
 
 /**
  * Converter class from {@link String} to {@link SignaturePackaging}.
- * Accepts any case form of "ENVELOPED", "ENVELOPING", "DETACHED".
+ * Accepts the exact strings "ENVELOPED", "ENVELOPING", "DETACHED".
  *
  * @author Francesco Pontillo
  *
@@ -35,14 +36,15 @@ import eu.europa.ec.markt.dss.signature.SignaturePackaging;
 public class PackagingConverter implements IStringConverter<SignaturePackaging> {
     @Override
     public SignaturePackaging convert(String s) {
-        String upperedPackage = s.toUpperCase();
-        if ("ENVELOPED".equals(upperedPackage)) {
+        if (!AssertHelper.stringMustBeInList("signature packaging", s, new String[]{"ENVELOPED", "ENVELOPING", "DETACHED"})) {
+            throw new ParameterException(
+                    String.format("Could not recognize %s as a valid signature packaging.", s));
+        } else if ("ENVELOPED".equals(s)) {
             return SignaturePackaging.ENVELOPED;
-        } else if ("ENVELOPING".equals(upperedPackage)) {
+        } else if ("ENVELOPING".equals(s)) {
             return SignaturePackaging.ENVELOPING;
-        } else if ("DETACHED".equals(upperedPackage)) {
+        } else {
             return SignaturePackaging.DETACHED;
-        } else throw new ParameterException(
-                String.format("Could not recognize %s as a valid signature packaging.", s));
+        }
     }
 }
