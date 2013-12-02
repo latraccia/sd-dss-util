@@ -32,7 +32,7 @@ import it.latraccia.dss.cli.main.argument.SignatureArgs;
 import it.latraccia.dss.cli.main.argument.converter.DigestAlgorithmConverter;
 import it.latraccia.dss.cli.main.exception.*;
 import it.latraccia.dss.cli.main.model.ExplicitSignaturePolicyModel;
-import it.latraccia.dss.cli.main.model.PKCS12Model;
+import it.latraccia.dss.cli.main.model.PKCSModel;
 import it.latraccia.dss.cli.main.model.SignatureCLIModel;
 import it.latraccia.dss.cli.main.util.AssertHelper;
 import it.latraccia.dss.cli.main.util.Util;
@@ -238,13 +238,13 @@ public class SignCLI {
     protected static void setTokenType(SignatureArgs signatureArgs, SignatureCLIModel model) throws SignatureException {
         SignatureTokenType tokenType = null;
         // Get the parameters
-        String pkcs11 = signatureArgs.getPkcs11();
+        List<String> pkcs11 = signatureArgs.getPkcs11();
         List<String> pkcs12 = signatureArgs.getPkcs12();
         boolean mscapi = signatureArgs.isMscapi();
         String mocca = signatureArgs.getMocca();
 
         // Set the token type
-        if (!Util.isNullOrEmpty(pkcs11)) {
+        if (pkcs11 != null && pkcs11.size() == 2) {
             tokenType = SignatureTokenType.PKCS11;
         } else if (pkcs12 != null && pkcs12.size() == 2) {
             tokenType = SignatureTokenType.PKCS12;
@@ -260,7 +260,7 @@ public class SignCLI {
     protected static void setTokenParameters(SignatureArgs signatureArgs, SignatureCLIModel model)
             throws FileNotFoundException, SignatureException {
         // Get the parameters
-        String pkcs11 = signatureArgs.getPkcs11();
+        List<String> pkcs11 = signatureArgs.getPkcs11();
         List<String> pkcs12 = signatureArgs.getPkcs12();
         SignatureTokenType tokenType = model.getTokenType();
         String mocca = signatureArgs.getMocca();
@@ -269,16 +269,20 @@ public class SignCLI {
         File tokenAsset;
         switch (tokenType) {
             case PKCS11:
-                tokenAsset = new File(pkcs11);
+                PKCSModel pkcs11Model = new PKCSModel(pkcs11);
+                tokenAsset = new File(pkcs11Model.getFile());
                 if (tokenAsset.exists()) {
+                    // Set the PKCS11 library file
                     model.setPkcs11LibraryPath(tokenAsset.getAbsolutePath());
+                    // Set the card encryption password
+                    model.setPkcs11Password(pkcs11Model.getPassword().toCharArray());
                 } else {
                     // Throw exception for non existing PKCS11 library
                     throw new FileNotFoundException("The PKCS11 library could not be found.");
                 }
                 break;
             case PKCS12:
-                PKCS12Model pkcs12Model = new PKCS12Model(pkcs12);
+                PKCSModel pkcs12Model = new PKCSModel(pkcs12);
                 tokenAsset = new File(pkcs12Model.getFile());
                 if (tokenAsset.exists()) {
                     // Set the PKCS12 file

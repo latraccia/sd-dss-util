@@ -29,11 +29,11 @@ import java.util.List;
  *
  * @author Francesco Pontillo
  */
-public class PKCS12Model {
+public class PKCSModel {
     private String file;
     private String password;
 
-    public PKCS12Model(List<String> list) {
+    public PKCSModel(List<String> list) {
         setFile(list.get(0));
         setPassword(list.get(1));
     }

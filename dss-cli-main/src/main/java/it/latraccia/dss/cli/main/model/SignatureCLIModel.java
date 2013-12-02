@@ -42,6 +42,8 @@ public class SignatureCLIModel extends SignatureModel {
     protected SignatureTokenConnection signatureTokenConnection;
     protected DigestAlgorithm digestAlgorithm;
 
+    protected char[] pkcs11Password;
+
     public SignatureCLIModel() {
         super();
     }
@@ -52,7 +54,7 @@ public class SignatureCLIModel extends SignatureModel {
     }
 
     public SignatureTokenConnection createTokenConnection() {
-        CLIPasswordInputCallback passwordInput = new CLIPasswordInputCallback();
+        PasswordInputCallback passwordInput = new CLIPasswordStoredCallback();
         SignatureTokenConnection connection = super.createTokenConnection(passwordInput);
         setSignatureTokenConnection(connection);
         return connection;
@@ -92,6 +94,30 @@ public class SignatureCLIModel extends SignatureModel {
         this.digestAlgorithm = digestAlgorithm;
     }
 
+    public char[] getPkcs11Password() {
+        return pkcs11Password;
+    }
+
+    public void setPkcs11Password(char[] pkcs11Password) {
+        this.pkcs11Password = pkcs11Password;
+    }
+
+    /**
+     * Return a previously-read password already stored in the model.
+     */
+    private class CLIPasswordStoredCallback implements PasswordInputCallback {
+        @Override
+        public char[] getPassword() {
+            return getPkcs11Password();
+        }
+    }
+
+    /**
+     * Ask for a password when the token connection is initialized.
+     *
+     * @deprecated asking for a password is redundant
+     * @see {@link CLIPasswordStoredCallback} as new implementation
+     */
     private class CLIPasswordInputCallback implements PasswordInputCallback {
         @Override
         public char[] getPassword() {

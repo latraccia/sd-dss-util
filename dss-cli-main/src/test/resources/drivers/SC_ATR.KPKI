@@ -1,0 +1,120 @@
+[SMART_CARD_001]
+'==========================ST INCARD 1201.....
+ATR=3b9f94401e0067164346495345105266ff819000
+ipmpki32.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_002]
+'==========================ST INCARD 1202.....
+ATR=3bb794008131fe6553504b32339000d1
+ipmpkilc.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_003]
+'==========================ST INCARD 1203...
+ATR=3bf29800ffc11031fe55c80412
+ipmpki32.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_004]
+'==========================Siemens 140......./ 150.........
+ATR=3bfc9800ffc11031fe55c803496e666f63616d65726528
+SI_PKCS11.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_005]
+'==========================Postecom
+ATR=3be200ffc11031fe55c8029c
+gclib.dll
+Manufacturer=Postecom
+
+[SMART_CARD_006]
+'==========================Notai o Actalis
+ATR=3bf29800ffc11031fe55c80315
+CardOS_PKCS11.dll
+Manufacturer=Siemens
+
+[SMART_CARD_007]
+'==========================ST INCARD INCRYPTO V1 32K
+ATR=3bff1100ff81318055006802001010494e43525950544f001a
+ipmpki32.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_008]
+'==========================RTRT
+ATR=3ba70040188065a208010152
+gclib.dll
+Manufacturer=Postecom
+
+[SMART_CARD_009]
+'==========================CryptoVision
+ATR=3bf49800ffc11031fe554d346376b4
+cvp11_M4.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_010]
+'==========================incrypto34v2
+ATR=3bff1800ff8131fe55006b0209020001__01434e53__3180__
+bit4ipki.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_011]
+'==========================CRS/CNS prodotte da Siemens
+ATR=3bff1800ffc10a31fe55006b0508c80501__01434e53__3180__
+cnsPKCS11.dll
+Manufacturer=Siemens
+
+[SMART_CARD_012]
+'==========================Token EUTRON CARDOS M4.3B - Charismatics
+ATR=3bf4180002c10a31fe5856346376c5
+cmp11.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_013]
+'==========================CNS prodotte da Oberthur
+ATR=3bff1800008131fe45006b0405010001__01434e53__3180__
+bit4opki.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_014]
+'==========================incrypto34v2
+ATR=3bff1800ff8131fe55006b0209020001__01445344__3180__
+incryptoki2.dll
+Manufacturer=Postecom
+
+[SMART_CARD_015]
+'==========================Touch & Sign con chiavi DS a 2048 bits
+ATR=3bff1800ff8131fe55006b0209030301__01434e53__3180__
+bit4ipki.dll
+Manufacturer=InfoCamere 
+
+[SMART_CARD_016]
+'==========================new Siemens Card...
+ATR=3bf2180002c10a31fe58c80975
+SI_PKCS11.dll
+Manufacturer=InfoCamere
+
+[SMART_CARD_017]
+'==========================CNS prodotte da Athena
+ATR=3bdf18008131fe7d006b150c____01__01434e53103180__
+asepkcs.dll
+Manufacturer=Athena
+
+ 
+[SMART_CARD_018]
+'==========================CNS prodotte da Oberthur
+ATR=3bff1800008131fe45006b1105070001__01434e53__3180__
+bit4xpki.dll
+Manufacturer=Oberthur
+ 
+[SMART_CARD_022]
+'==========================CNS prodotte da Oberthur
+ATR=3bff1800008131fe45006b0405070001__01434e53__3180__
+bit4ipki.dll
+Manufacturer=Oberthur
+ 
+[SMART_CARD_023]
+'==========================CNS Oberthur Aruba
+ATR=3bdb960080b1fe451f830031c064c30801000f90009b
+bit4xpki.dll
+Manufacturer=Oberthur

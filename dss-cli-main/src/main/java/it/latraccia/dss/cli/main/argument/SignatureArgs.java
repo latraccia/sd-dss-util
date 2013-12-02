@@ -81,10 +81,10 @@ public class SignatureArgs {
     /* END OF SIGNATURE FORMAT PARAMETERS */
 
     /* SIGNATURE TOKEN PARAMETERS */
-    @Parameter(names = {"-p11", "--pkcs11"},
-            description = "Specified if signature token is PKCS#11, evaluated with a previously installed driver " +
-                    "path for the tokens and/or the reader hardware")
-    private String pkcs11;
+    @Parameter(names = {"-p11", "--pkcs11"}, arity = 2,
+            description = "Specified if signature token is PKCS#11, evaluated with a previously installed card driver " +
+                    "and the card encryption password")
+    private List<String> pkcs11;
 
     @Parameter(names = {"-p12", "--pkcs12"}, arity = 2,
             description = "Specified if signature token is PKCS#12, evaluated with a the file containing the desired " +
@@ -187,11 +187,11 @@ public class SignatureArgs {
         this.wrapAsics = wrapAsics;
     }
 
-    public String getPkcs11() {
+    public List<String> getPkcs11() {
         return pkcs11;
     }
 
-    public void setPkcs11(String pkcs11) {
+    public void setPkcs11(List<String> pkcs11) {
         this.pkcs11 = pkcs11;
     }
 

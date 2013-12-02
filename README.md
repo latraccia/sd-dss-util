@@ -68,7 +68,7 @@ The following list contains all of the accepted parameters. The parameters in **
 	* `SHA1`, default
 	* `SHA256`
 	* `SHA512`
-* `--pkcs11` or `-p11`, specified if the signature token is provided via PKCS#11. It has to reference the library path for the SSCD (e.g. smart card)
+* `--pkcs11` or `-p11`, specified if the signature token is provided via PKCS#11. It has to reference both the library path for the SSCD (e.g. smart card) and the password the card is encrypted with
 * `--pkcs12` or `-p12`, specified if the signature token is provided via PKCS#12. It has to reference both the file path and the password the file is encrypted with
 * `--mscapi` or `-ms` with no parameters, if the signature token is MS CAPI
 * `--mocca` or `-m` if the signature token is provided via MOCCA:
@@ -110,7 +110,7 @@ Pull requests and any kind of contribution are welcomed.
 DSS-CLI is released under the LGPL.
 
     DSS-CLI, a Command Line Interface for SD-DSS.
-    Copyright (C) 2013 La Traccia
+    Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
     Developed by Francesco Pontillo
 
     This program is free software: you can redistribute it and/or modify
