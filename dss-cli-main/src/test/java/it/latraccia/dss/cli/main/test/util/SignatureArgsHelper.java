@@ -19,8 +19,6 @@
 
 package it.latraccia.dss.cli.main.test.util;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,157 +31,84 @@ import java.util.List;
  */
 public class SignatureArgsHelper {
 
+    private static String resourceRoot;
+
+    static {
+        resourceRoot = FileHelper.getFileFromResource("test.pdf").getParent();
+    }
+
     // All possibilities to be tested are listed here, then they are combined together
-    public static String[] INPUT = new String[]{
-            Input.getPdfFile(), Input.getDocFile(), Input.getDocxFile(), Input.getOdtFile(), "made_up"
-    };
-    public static String[] OUTPUT = new String[]{
-            Output.getFile("pdf"), Output.getFile("made_up")
-    };
-    public static String[] PKCS12_PATH = new String[]{
-            PKCS12.getKey(), "W:/made/up/path/you/cant/possibly/have/this"
-    };
-    public static String[] PKCS12_PASSWORD = new String[]{
-            PKCS12.getPassword(), "wrong_password"
-    };
-    public static String[] PKCS11_PATH = new String[]{
-            PKCS11.getLibrary(), "W:/made/up/path/you/cant/possibly/have/this"
-    };
-    public static String[] PKCS11_PASSWORD = new String[]{
-            PKCS11.getPassword(), "wrong_password"
-    };
-    public static String[] FORMAT = new String[]{
-            Format.getCades(), Format.getPades(), Format.getXades(), Format.getAsics()
-    };
-    public static String[] LEVEL = new String[]{
-            Level.getBep(), Level.getEpes(), Level.getLTV(), Level.getT(),
-            Level.getC(), Level.getX(), Level.getXL(), Level.getA()
-    };
-    public static String[] PACKAGING = new String[]{
-            Packaging.getEnveloped(), Packaging.getEnveloping(), Packaging.getDetached()
-    };
-    public static String[] DIGEST_ALGORITHM = new String[]{
-            DigestAlgorithm.getSha256()
-    };
 
-    protected static class Input {
-        public static String getFile(String extension) {
-            return FileHelper.getResource("test." + extension);
-        }
+    public static class Input {
+        public static String PDF_FILE = getFile("pdf");
 
-        public static String getPdfFile() {
-            return getFile("pdf");
-        }
+        public static String DOC_FILE = getFile("doc");
 
-        public static String getDocFile() {
-            return getFile("doc");
-        }
+        public static String DOCX_FILE = getFile("docx");
 
-        public static String getDocxFile() {
-            return getFile("docx");
-        }
+        public static String ODT_FILE = getFile("odt");
 
-        public static String getOdtFile() {
-            return getFile("odt");
+        public static String XML_FILE = getFile("xml");
+
+        private static String getFile(String extension) {
+            return resourceRoot + "/test." + extension;
         }
     }
 
-    private static class Output extends Input {
-        public static String getFile(String extension) {
-            return FileHelper.getFileFromResource("test." + extension).getParent();
-        }
+    public static class Output {
+        public static String ROOT = resourceRoot;
     }
 
-    protected static class PKCS12 {
-        public static String getKey() {
-            return FileHelper.getResource("0F.p12");
-        }
+    public static class PKCS12 {
+        public static String KEY = FileHelper.getResource("0F.p12");
 
-        public static String getPassword() {
-            return "password";
-        }
+        public static String PASSWORD = "password";
     }
 
-    protected static class PKCS11 {
-        public static String getLibrary() {
-            throw new NotImplementedException();
-        }
+    public static class PKCS11 {
+        public static String LIBRARY = "";
 
-        public static String getPassword() {
-            throw new NotImplementedException();
-        }
+        public static String PASSWORD = "";
     }
 
-    protected static class Format {
-        public static String getCades() {
-            return "CAdES";
-        }
+    public static class Format {
+        public static String CADES = "CAdES";
 
-        public static String getPades() {
-            return "PAdES";
-        }
+        public static String PADES = "PAdES";
 
-        public static String getXades() {
-            return "XAdES";
-        }
+        public static String XADES = "XAdES";
 
-        public static String getAsics() {
-            return "ASiC-S";
-        }
+        public static String ASICS = "ASiC-S";
     }
 
-    protected static class Level {
-        public static String getBep() {
-            return "BES";
-        }
+    public static class Level {
+        public static String BES = "BES";
 
-        public static String getEpes() {
-            return "EPES";
-        }
+        public static String EPES = "EPES";
 
-        public static String getLTV() {
-            return "LTV";
-        }
+        public static String LTV = "LTV";
 
-        public static String getT() {
-            return "T";
-        }
+        public static String T = "T";
 
-        public static String getC() {
-            return "C";
-        }
+        public static String C = "C";
 
-        public static String getX() {
-            return "X";
-        }
+        public static String X = "X";
 
-        public static String getXL() {
-            return "XL";
-        }
+        public static String XL = "XL";
 
-        public static String getA() {
-            return "A";
-        }
+        public static String A = "A";
     }
 
-    protected static class Packaging {
-        public static String getEnveloped() {
-            return "ENVELOPED";
-        }
+    public static class Packaging {
+        public static String ENVELOPED = "ENVELOPED";
 
-        public static String getEnveloping() {
-            return "ENVELOPING";
-        }
+        public static String ENVELOPING = "ENVELOPING";
 
-        public static String getDetached() {
-            return "DETACHED";
-        }
+        public static String DETACHED = "DETACHED";
     }
 
-    protected static class DigestAlgorithm {
-        public static String getSha256() {
-            return "SHA256";
-        }
+    public static class DigestAlgorithm {
+        public static String SHA256 = "SHA256";
     }
 
     public List<String> getBaseArgs() {

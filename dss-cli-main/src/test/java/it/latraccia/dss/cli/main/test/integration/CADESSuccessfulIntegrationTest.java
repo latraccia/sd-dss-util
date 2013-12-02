@@ -17,19 +17,21 @@
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package it.latraccia.dss.cli.main.test.unit;
+package it.latraccia.dss.cli.main.test.integration;
 
-import it.latraccia.dss.cli.main.test.SignCLIGenericTest;
+import it.latraccia.dss.cli.main.test.CADESSuccessfulGenericTest;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-/**
- * Date: 30/11/13
- * Time: 12.46
- *
- * @author Francesco Pontillo
- */
-public class SignCLISimulationTest extends SignCLIGenericTest {
+@RunWith(value = Parameterized.class)
+public class CADESSuccessfulIntegrationTest extends CADESSuccessfulGenericTest {
+
+    public CADESSuccessfulIntegrationTest(int number, Object[] args) {
+        super(number, args);
+    }
+
     @Override
     public boolean getSimulate() {
-        return true;
+        return false;
     }
 }

@@ -92,7 +92,7 @@ public class AssertHelper {
                 "The %s can't be \"%s\". It must be one of \"%s\"",
                 what,
                 packagingMap.get(packaging),
-                stringifyStringArray(valuesArray)));
+                stringifySignaturePackagingArray(list)));
         return false;
     }
 
@@ -101,7 +101,15 @@ public class AssertHelper {
         for (String s : list) {
             stringified += s + ", ";
         }
-        stringified = stringified.substring(0, stringified.length()-2);
+        stringified = stringified.substring(0, stringified.length() - 2);
         return stringified;
+    }
+
+    public static String stringifySignaturePackagingArray(SignaturePackaging[] list) {
+        String[] stringList = new String[list.length];
+        for (int i = 0; i < list.length; i++) {
+            stringList[i] = list[i].name();
+        }
+        return stringifyStringArray(stringList);
     }
 }

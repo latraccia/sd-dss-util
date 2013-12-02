@@ -1,4 +1,4 @@
-package it.latraccia.dss.cli.main.test.integration;/*
+/*
  * DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia
  * Developed by Francesco Pontillo
@@ -17,17 +17,23 @@ package it.latraccia.dss.cli.main.test.integration;/*
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-import it.latraccia.dss.cli.main.test.SignCLIGenericTest;
+package it.latraccia.dss.cli.main.test;
 
-/**
- * Date: 30/11/13
- * Time: 11.40
- *
- * @author Francesco Pontillo
- */
-public class SignCLIIntegrationTest extends SignCLIGenericTest {
-    @Override
-    public boolean getSimulate() {
-        return false;
+import java.util.*;
+
+public abstract class GenericTest {
+
+    public abstract boolean getSimulate();
+
+    protected void handleSimulate(List<String> strings) {
+        if (getSimulate()) {
+            strings.add("-s");
+        }
+    }
+
+    protected String[] listToArray(List<String> list) {
+        String[] array = new String[0];
+        array = list.toArray(array);
+        return array;
     }
 }
