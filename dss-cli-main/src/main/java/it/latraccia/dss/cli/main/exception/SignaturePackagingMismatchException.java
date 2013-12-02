@@ -1,6 +1,6 @@
 /*
  * DSS-CLI, a Command Line Interface for SD-DSS.
- * Copyright (C) 2013 La Traccia
+ * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,8 @@
 package it.latraccia.dss.cli.main.exception;
 
 /**
+ * Exception thrown when there's an incompatible option colliding with the signing packaging.
+ *
  * Date: 30/11/13
  * Time: 11.01
  *

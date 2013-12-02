@@ -1,6 +1,6 @@
 /*
  * DSS-CLI, a Command Line Interface for SD-DSS.
- * Copyright (C) 2013 La Traccia
+ * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,10 +29,12 @@ import it.latraccia.dss.cli.main.argument.converter.PackagingConverter;
 import java.util.List;
 
 /**
- * @author Francesco Pontillo
+ * Signature arguments, to be processed by JCommander.
  *
  * Date: 27/11/13
  * Time: 10.25
+ *
+ * @author Francesco Pontillo
  */
 @Parameters(separators = "=")
 public class SignatureArgs {

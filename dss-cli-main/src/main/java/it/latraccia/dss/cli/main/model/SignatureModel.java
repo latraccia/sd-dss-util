@@ -1,6 +1,6 @@
 /*
  * DSS-CLI, a Command Line Interface for SD-DSS.
- * Copyright (C) 2013 La Traccia
+ * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
  * This program is free software: you can redistribute it and/or modify
@@ -67,11 +67,14 @@ import eu.europa.ec.markt.dss.signature.xades.XAdESService;
 import eu.europa.ec.markt.dss.validation.TrustedListCertificateVerifier;
 
 /**
- * Contains all the information of the wizard for creating/validating a Signature.
+ * Contains all the information of the model for creating/validating a Signature.
+ * Derived from the original WizardSignatureModel by ARHS Developments and included
+ * in the original DSS source code.
  *
  * @version $Revision: 2742 $ - $Date: 2013-10-17 12:32:08 +0200 (jeu., 17 oct. 2013) $
+ *
+ * @author ARHS Developments, Francesco Pontillo
  */
-
 public class SignatureModel {
 
     /* Do we follow strictly the RFC3370 ? */

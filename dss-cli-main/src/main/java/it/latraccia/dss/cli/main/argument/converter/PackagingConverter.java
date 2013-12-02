@@ -1,6 +1,6 @@
 /*
  * DSS-CLI, a Command Line Interface for SD-DSS.
- * Copyright (C) 2013 La Traccia
+ * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,10 +28,10 @@ import it.latraccia.dss.cli.main.util.AssertHelper;
  * Converter class from {@link String} to {@link SignaturePackaging}.
  * Accepts the exact strings "ENVELOPED", "ENVELOPING", "DETACHED".
  *
- * @author Francesco Pontillo
- *
  * Date: 27/11/13
  * Time: 11.26
+ *
+ * @author Francesco Pontillo
  */
 public class PackagingConverter implements IStringConverter<SignaturePackaging> {
     @Override

@@ -1,6 +1,6 @@
 /*
  * DSS-CLI, a Command Line Interface for SD-DSS.
- * Copyright (C) 2013 La Traccia
+ * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,10 +27,10 @@ import java.security.cert.X509Certificate;
 /**
  * Utility class for {@link String}, {@link java.io.File} and console handling.
  *
- * @author Francesco Pontillo
- *
  * Date: 27/11/13
  * Time: 13.14
+ *
+ * @author Francesco Pontillo
  */
 public class Util {
 
