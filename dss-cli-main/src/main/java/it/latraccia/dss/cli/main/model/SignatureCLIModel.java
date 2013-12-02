@@ -42,7 +42,12 @@ public class SignatureCLIModel extends SignatureModel {
     protected SignatureTokenConnection signatureTokenConnection;
     protected DigestAlgorithm digestAlgorithm;
 
+    public SignatureCLIModel() {
+        super();
+    }
+
     public SignatureCLIModel(String serviceUrl) {
+        super();
         this.setServiceUrl(serviceUrl);
     }
 

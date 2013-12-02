@@ -40,6 +40,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // All files, BES, ENVELOPING
                         {"DOC, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -50,6 +51,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         }},
                         {"PDF, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -60,6 +62,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         }},
                             {"XML, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -71,6 +74,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // All files, EPES, ENVELOPING
                         {"DOC, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -81,6 +85,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         }},
                         {"PDF, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -91,6 +96,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         }},
                         {"XML, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -102,6 +108,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // All files, BES, DETACHED
                         {"DOC, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -112,6 +119,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         }},
                         {"PDF, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -122,6 +130,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         }},
                         {"XML, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -133,6 +142,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // All files, EPES, DETACHED
                         {"DOC, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -143,6 +153,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         }},
                         {"PDF, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -153,6 +164,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         }},
                         {"XML, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,

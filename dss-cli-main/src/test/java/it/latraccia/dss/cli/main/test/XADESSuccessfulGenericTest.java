@@ -40,6 +40,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // PDF, BES, ENVELOPING
                         {"PDF, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -51,6 +52,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // XML, BES, ENVELOPING
                         {"XML, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -62,6 +64,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // DOC, BES, ENVELOPING
                         {"DOC, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -73,6 +76,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // PDF, BES, DETACHED
                         {"PDF, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -84,6 +88,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // XML, BES, DETACHED
                         {"XML, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -95,6 +100,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // DOC, BES, DETACHED
                         {"DOC, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -106,6 +112,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // XML, BES, ENVELOPED
                         {"XML, BES, ENVELOPED", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,
@@ -117,6 +124,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // PDF, EPES, ENVELOPING
                         {"PDF, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -128,6 +136,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // XML, EPES, ENVELOPING
                         {"XML, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -139,6 +148,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // DOC, EPES, ENVELOPING
                         {"DOC, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
@@ -150,6 +160,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // PDF, EPES, DETACHED
                         {"PDF, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -161,6 +172,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // XML, EPES, DETACHED
                         {"XML, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -172,6 +184,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // DOC, EPES, DETACHED
                         {"DOC, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
@@ -183,6 +196,7 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // XML, EPES, ENVELOPED
                         {"XML, EPES, ENVELOPED", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.XADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,

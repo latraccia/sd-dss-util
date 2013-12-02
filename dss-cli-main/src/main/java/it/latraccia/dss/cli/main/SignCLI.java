@@ -75,9 +75,10 @@ public class SignCLI {
     private static FileOutputStream execute(SignatureArgs signatureArgs)
             throws FileNotFoundException, SignatureException {
         // Create the signature wizard model
-        SignatureCLIModel model = new SignatureCLIModel("http://localhost:9090/service");
+        SignatureCLIModel model = new SignatureCLIModel();
 
         // Set the parameters inside the SignatureModel, step by step
+        setServiceUrl(signatureArgs, model);
         setSourceFile(signatureArgs, model);
         setSignatureFormatLevelPackaging(signatureArgs, model);
         setDigestAlgorithm(signatureArgs, model);
@@ -197,6 +198,10 @@ public class SignCLI {
                 throw new SignaturePolicyAlgorithmMismatchException();
             }
         }
+    }
+
+    protected static void setServiceUrl(SignatureArgs signatureArgs, SignatureCLIModel model) {
+        model.setServiceUrl(signatureArgs.getUrl());
     }
 
     protected static void setSourceFile(SignatureArgs signatureArgs, SignatureCLIModel model) {

@@ -40,6 +40,7 @@ public abstract class PADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // PDF, BES, ENVELOPED
                         {"PDF, BES, ENVELOPED", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.PADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,
@@ -51,6 +52,7 @@ public abstract class PADESSuccessfulGenericTest extends SuccessfulGenericTest {
                         // PDF, EPES, ENVELOPED
                         {"PDF, EPES, ENVELOPED", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
+                                "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.PADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,

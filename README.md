@@ -41,16 +41,17 @@ To sign a document, simply call the `SignCLI` class on the `dss-cli-main.jar` wi
     java dss-cli-main.jar SignCli
 
 ### Parameters
-The following list contains all of the accepted parameters.
+The following list contains all of the accepted parameters. The parameters in **bold** are required.
 
 * input file, passed as first nameless parameter
+* **`--url`** or `-u`, required, the DSS server URL
 * `--output` or `-o`, the destination path (optionally, with a file name)
-* `--format` or `-f`, the signature format
+* **`--format`** or `-f`, required, the signature format
 	* `CAdES`
 	* `PAdES`, for PDF files only
 	* `XAdES`
 	* `ASiC-S`
-* `--level` or `-l`, the signature level
+* **`--level`** or `-l`, required, the signature level
 	* `BES`, available for every format
 	* `EPES`, available for every format
 	* `LTV`, only for `PAdES`
@@ -59,7 +60,7 @@ The following list contains all of the accepted parameters.
 	* `X`, only for `CAdES`, `XAdES`
 	* `XL`, only for `CAdES`, `XAdES`
 	* `A`, only for `CAdES`, `XAdES`
-* `--packaging` or `-p`, the packaging kind for the signed file(s)
+* **`--packaging`** or `-p`, required, the packaging kind for the signed file(s)
 	* `ENVELOPING`, only for `CAdES`, `XAdES`
 	* `ENVELOPED`, only for `PAdES` (PDF files), `XAdES` (XML files)
 	* `DETACHED`, only for `CAdES`, `XAdES`
@@ -80,6 +81,8 @@ The following list contains all of the accepted parameters.
 	* the hash value of the signature policy in base64 format
 	* the algorithm used to produce it (only available option for now is `SHA1`)
 * `--simulate` or `-s`, validates the parameters but doesn't start the actual signing process
+
+Even if `--pkcs11`, `--pkcs12`, `--mscapi`, `--mocca` are not required, one of them has to be specified in order to provide the signature token provider.
 
 ### Example
 
