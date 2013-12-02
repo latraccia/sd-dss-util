@@ -152,8 +152,14 @@ public class SignCLI {
         HashMap<String, SignaturePackaging[]> allowedPackagingMap = new HashMap<String, SignaturePackaging[]>();
         allowedPackagingMap.put("PAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPED});
         allowedPackagingMap.put("CAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
-        allowedPackagingMap.put("XAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
         allowedPackagingMap.put("ASiC-S", new SignaturePackaging[]{SignaturePackaging.DETACHED});
+
+        // If the file is not an XML, the XAdES ENVELOPED can't be selected
+        if (model.getOriginalFiletype() != Filetype.XML) {
+            allowedPackagingMap.put("XAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
+        } else {
+            allowedPackagingMap.put("XAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED, SignaturePackaging.ENVELOPED});
+        }
 
         // Validate the level for the format set
         if (!AssertHelper.packageMustBeInList(
