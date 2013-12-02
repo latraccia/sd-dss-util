@@ -17,35 +17,22 @@
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package it.latraccia.dss.cli.main.test;
+package it.latraccia.dss.cli.main.test.integration;
 
-import it.latraccia.dss.cli.main.SignCLI;
-import it.latraccia.dss.cli.main.exception.SignatureException;
-import org.junit.Test;
+import it.latraccia.dss.cli.main.test.CADESSuccessfulGenericTest;
+import it.latraccia.dss.cli.main.test.PADESSuccessfulGenericTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.FileNotFoundException;
-import java.util.*;
-
 @RunWith(value = Parameterized.class)
-public abstract class SuccessfulGenericTest extends GenericTest {
-    String[] args;
-    String description;
+public class PADESSuccessfulIntegrationTest extends PADESSuccessfulGenericTest {
 
-    public SuccessfulGenericTest(String description, Object[] args) {
-        this.args = (String[]) args;
-        this.description = description;
+    public PADESSuccessfulIntegrationTest(String description, Object[] args) {
+        super(description, args);
     }
 
-    @Test
-    public void successfulTest()
-            throws FileNotFoundException, SignatureException {
-        // Eventually add the simulation parameter
-        List<String> arguments = new ArrayList<String>();
-        Collections.addAll(arguments, args);
-        handleSimulate(arguments);
-
-        SignCLI.main(listToArray(arguments));
+    @Override
+    public boolean getSimulate() {
+        return false;
     }
 }

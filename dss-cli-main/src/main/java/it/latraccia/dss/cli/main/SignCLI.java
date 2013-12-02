@@ -75,7 +75,7 @@ public class SignCLI {
     private static FileOutputStream execute(SignatureArgs signatureArgs)
             throws FileNotFoundException, SignatureException {
         // Create the signature wizard model
-        SignatureCLIModel model = new SignatureCLIModel();
+        SignatureCLIModel model = new SignatureCLIModel("http://localhost:9090/service");
 
         // Set the parameters inside the SignatureModel, step by step
         setSourceFile(signatureArgs, model);

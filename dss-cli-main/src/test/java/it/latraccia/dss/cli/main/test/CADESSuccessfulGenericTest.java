@@ -29,8 +29,8 @@ import java.util.Collection;
 @RunWith(value = Parameterized.class)
 public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
 
-    public CADESSuccessfulGenericTest(int number, Object[] args) {
-        super(number, args);
+    public CADESSuccessfulGenericTest(String description, Object[] args) {
+        super(description, args);
     }
 
     @Parameterized.Parameters
@@ -38,7 +38,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
         final Object[][] params =
                 {
                         // All files, BES, ENVELOPING
-                        {0, new String[] {
+                        {"DOC, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
@@ -48,7 +48,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                        {0, new String[] {
+                        {"PDF, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
@@ -58,7 +58,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                        {0, new String[] {
+                            {"XML, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
@@ -69,7 +69,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
                         // All files, EPES, ENVELOPING
-                        {0, new String[] {
+                        {"DOC, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
@@ -79,7 +79,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                        {0, new String[] {
+                        {"PDF, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
@@ -89,7 +89,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                        {0, new String[] {
+                        {"XML, EPES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
@@ -100,7 +100,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
                         // All files, BES, DETACHED
-                        {0, new String[] {
+                        {"DOC, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
@@ -110,7 +110,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                        {0, new String[] {
+                        {"PDF, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
@@ -120,7 +120,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                        {0, new String[] {
+                        {"XML, BES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
@@ -131,7 +131,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
                         // All files, EPES, DETACHED
-                        {0, new String[] {
+                        {"DOC, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.DOC_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
@@ -141,7 +141,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                        {0, new String[] {
+                        {"PDF, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.PDF_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
@@ -151,7 +151,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                        {0, new String[] {
+                        {"XML, EPES, DETACHED", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,

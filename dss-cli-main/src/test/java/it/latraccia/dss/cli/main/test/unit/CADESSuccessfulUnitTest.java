@@ -26,8 +26,8 @@ import org.junit.runners.Parameterized;
 @RunWith(value = Parameterized.class)
 public class CADESSuccessfulUnitTest extends CADESSuccessfulGenericTest {
 
-    public CADESSuccessfulUnitTest(int number, Object[] args) {
-        super(number, args);
+    public CADESSuccessfulUnitTest(String description, Object[] args) {
+        super(description, args);
     }
 
     @Override

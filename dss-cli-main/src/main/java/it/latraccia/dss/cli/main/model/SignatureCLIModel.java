@@ -38,6 +38,10 @@ public class SignatureCLIModel extends SignatureModel {
     protected SignatureTokenConnection signatureTokenConnection;
     protected DigestAlgorithm digestAlgorithm;
 
+    public SignatureCLIModel(String serviceUrl) {
+        this.setServiceUrl(serviceUrl);
+    }
+
     public SignatureTokenConnection createTokenConnection() {
         CLIPasswordInputCallback passwordInput = new CLIPasswordInputCallback();
         SignatureTokenConnection connection = super.createTokenConnection(passwordInput);
