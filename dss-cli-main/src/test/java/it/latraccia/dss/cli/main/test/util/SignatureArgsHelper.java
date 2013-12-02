@@ -70,7 +70,7 @@ public class SignatureArgsHelper {
     }
 
     public static class PKCS11 {
-        public static String LIBRARY = "";
+        public static String LIBRARY = FileHelper.getResource("drivers/bit4ipki.dll");
 
         public static String PASSWORD = "";
     }

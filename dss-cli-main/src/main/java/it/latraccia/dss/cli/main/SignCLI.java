@@ -207,6 +207,7 @@ public class SignCLI {
     protected static void setSourceFile(SignatureArgs signatureArgs, SignatureCLIModel model) {
         // Set the FileDocument from the user source path
         String sourceFile = signatureArgs.getSource().get(0);
+        // TODO: search in resources, then absolute path
         model.setOriginalFile(new FileDocument(sourceFile));
     }
 
@@ -270,6 +271,7 @@ public class SignCLI {
         switch (tokenType) {
             case PKCS11:
                 PKCSModel pkcs11Model = new PKCSModel(pkcs11);
+                // TODO: search in resources, then absolute path
                 tokenAsset = new File(pkcs11Model.getFile());
                 if (tokenAsset.exists()) {
                     // Set the PKCS11 library file
@@ -283,6 +285,7 @@ public class SignCLI {
                 break;
             case PKCS12:
                 PKCSModel pkcs12Model = new PKCSModel(pkcs12);
+                // TODO: search in resources, then absolute path
                 tokenAsset = new File(pkcs12Model.getFile());
                 if (tokenAsset.exists()) {
                     // Set the PKCS12 file
@@ -400,6 +403,7 @@ public class SignCLI {
             outputFile = getSuggestedFileName(model);
             destinationFile = new File(outputDir, outputFile);
         } else {
+            // TODO: search for directory in resources, then absolute path
             // Tries to understand what destination is
             File outFileOrDir = new File(destination);
 
