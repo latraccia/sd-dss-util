@@ -20,29 +20,44 @@
 package it.latraccia.dss.cli.main.model;
 
 import eu.europa.ec.markt.dss.DigestAlgorithm;
-import eu.europa.ec.markt.dss.signature.token.PasswordInputCallback;
-import eu.europa.ec.markt.dss.signature.token.SignatureTokenConnection;
+import eu.europa.ec.markt.dss.applet.io.*;
+import eu.europa.ec.markt.dss.applet.util.MOCCAAdapter;
+import eu.europa.ec.markt.dss.signature.token.*;
+import eu.europa.ec.markt.dss.validation.CertificateVerifier;
+import eu.europa.ec.markt.dss.validation.TrustedListCertificateVerifier;
+import eu.europa.ec.markt.dss.validation.certificate.CertificateSource;
+import eu.europa.ec.markt.dss.validation.certificate.RemoteCertificateSource;
+import eu.europa.ec.markt.dss.validation.crl.CRLSource;
+import eu.europa.ec.markt.dss.validation.ocsp.OCSPSource;
+import eu.europa.ec.markt.dss.validation.tsp.TSPSource;
+import eu.europa.ec.markt.dss.validation102853.CommonCertificateVerifier;
+import eu.europa.ec.markt.dss.validation102853.TrustedCertificateSource;
+import eu.europa.ec.markt.dss.validation102853.ValidationResourceManager;
 import it.latraccia.dss.cli.main.util.Util;
 
-import java.io.IOException;
+import java.io.File;
+import java.net.URL;
+import java.security.KeyStoreException;
 
 /**
  * Model for containing and pre-processing the signature parameters.
- *
+ * <p/>
  * Date: 28/11/13
  * Time: 11.07
  *
- * @see SignatureModel
- *
  * @author Francesco Pontillo
+ * @see SignatureModel
  */
-public class SignatureCLIModel extends SignatureModel {
-    protected String signatureSimpleFormat;
-    protected String signatureLevel;
-    protected SignatureTokenConnection signatureTokenConnection;
+public class SignatureCLIModel extends eu.europa.ec.markt.dss.applet.model.SignatureModel {
     protected DigestAlgorithm digestAlgorithm;
+    protected String serviceURL;
+    protected boolean strictRFC3370;
+    protected URL defaultPolicyUrl;
 
-    protected char[] pkcs11Password;
+    private static final String TSP_CONTEXT = "/tsp";
+    private static final String OCSP_CONTEXT = "/ocsp";
+    private static final String CRL_CONTEXT = "/crl";
+    private static final String CERTIFICATE_CONTEXT = "/certificate";
 
     public SignatureCLIModel() {
         super();
@@ -50,40 +65,101 @@ public class SignatureCLIModel extends SignatureModel {
 
     public SignatureCLIModel(String serviceUrl) {
         super();
-        this.setServiceUrl(serviceUrl);
+        setServiceURL(serviceUrl);
     }
 
-    public SignatureTokenConnection createTokenConnection() {
+    public String getServiceURL() {
+        return serviceURL;
+    }
+
+    /**
+     * @param serviceURL the serviceURL to set
+     */
+    public void setServiceURL(final String serviceURL) {
+        this.serviceURL = serviceURL;
+    }
+
+    public boolean isStrictRFC3370() {
+        return strictRFC3370;
+    }
+
+    /**
+     * @param strictRFC3370 the strictRFC3370 to set
+     */
+    public void setStrictRFC3370(final boolean strictRFC3370) {
+        this.strictRFC3370 = strictRFC3370;
+    }
+
+    /**
+     * @return the defaultPolicyUrl for validation. Can be null.
+     */
+    public URL getDefaultPolicyUrl() {
+        if (defaultPolicyUrl == null) {
+            return getClass().getResource(ValidationResourceManager.defaultPolicyConstraintsLocation);
+        } else {
+            return defaultPolicyUrl;
+        }
+    }
+
+    /**
+     * Set the default policy URL for validation. Can be null.
+     *
+     * @param defaultPolicyUrl the default policy URL to be used
+     */
+    public void setDefaultPolicyUrl(URL defaultPolicyUrl) {
+        this.defaultPolicyUrl = defaultPolicyUrl;
+    }
+
+    public boolean hasPkcs11File() {
+        final File file = getPkcs11File();
+        return file != null && file.exists() && file.isFile();
+    }
+
+    public boolean hasPkcs12File() {
+        final File file = getPkcs12File();
+        return file != null && file.exists() && file.isFile();
+    }
+
+    public boolean hasSignaturePolicyAlgo() {
+        return !Util.isNullOrEmpty(getSignaturePolicyAlgo());
+    }
+
+    public boolean hasSignaturePolicyValue() {
+        return !Util.isNullOrEmpty(getSignaturePolicyValue());
+    }
+
+    public boolean hasSignatureTokenType() {
+        return getTokenType() != null;
+    }
+
+    public SignatureTokenConnection createTokenConnection() throws KeyStoreException {
         PasswordInputCallback passwordInput = new CLIPasswordStoredCallback();
-        SignatureTokenConnection connection = super.createTokenConnection(passwordInput);
-        setSignatureTokenConnection(connection);
+        SignatureTokenConnection connection;
+
+        switch (getTokenType()) {
+            case MSCAPI: {
+                connection = new MSCAPISignatureToken();
+                break;
+            }
+            case MOCCA: {
+                connection = new MOCCAAdapter().createSignatureToken(passwordInput);
+                break;
+            }
+            case PKCS11:
+                final File file = getPkcs11File();
+                connection = new Pkcs11SignatureToken(file.getAbsolutePath(), getPkcs11Password().toCharArray());
+                break;
+            case PKCS12:
+                connection = new Pkcs12SignatureToken(getPkcs12Password(), getPkcs12File());
+                break;
+            default:
+                throw new RuntimeException("No token connection selected");
+        }
+
+        setTokenConnection(connection);
+        setPrivateKeys(connection.getKeys());
+        setTokenConnection(connection);
         return connection;
-    }
-
-    public String getSignatureSimpleFormat() {
-        return signatureSimpleFormat;
-    }
-
-    public void setSignatureSimpleFormat(String signatureSimpleFormat) {
-        this.signatureSimpleFormat = signatureSimpleFormat;
-        setSignatureFormat(signatureSimpleFormat + "-" + signatureLevel);
-    }
-
-    public String getSignatureLevel() {
-        return signatureLevel;
-    }
-
-    public void setSignatureLevel(String signatureLevel) {
-        this.signatureLevel = signatureLevel;
-        setSignatureFormat(signatureSimpleFormat + "-" + signatureLevel);
-    }
-
-    public SignatureTokenConnection getSignatureTokenConnection() {
-        return signatureTokenConnection;
-    }
-
-    public void setSignatureTokenConnection(SignatureTokenConnection signatureTokenConnection) {
-        this.signatureTokenConnection = signatureTokenConnection;
     }
 
     public DigestAlgorithm getDigestAlgorithm() {
@@ -94,42 +170,64 @@ public class SignatureCLIModel extends SignatureModel {
         this.digestAlgorithm = digestAlgorithm;
     }
 
-    public char[] getPkcs11Password() {
-        return pkcs11Password;
+    public CRLSource getCRLSource() {
+        RemoteCRLSource crlSource = new RemoteCRLSource();
+        crlSource.setDataLoader(new NativeHTTPDataLoader());
+        crlSource.setUrl(getServiceURL() + CRL_CONTEXT);
+        return crlSource;
     }
 
-    public void setPkcs11Password(char[] pkcs11Password) {
-        this.pkcs11Password = pkcs11Password;
+    public OCSPSource getOSCPSource() {
+        RemoteOCSPSource ocspSource = new RemoteOCSPSource();
+        ocspSource.setUrl(getServiceURL() + OCSP_CONTEXT);
+        ocspSource.setDataLoader(new NativeHTTPDataLoader());
+        return ocspSource;
+    }
+
+    public CertificateSource getCertificateSource(TrustedCertificateSource certificateSource) {
+        final RemoteCertificateSource tslCertSource = new RemoteCertificateSource();
+        tslCertSource.setDelegate(certificateSource);
+        return tslCertSource;
+    }
+
+    public CertificateVerifier getCertificateVerifier(CRLSource crlSource, OCSPSource ocspSource,
+                                               CertificateSource certificatesSource) {
+        eu.europa.ec.markt.dss.validation.TrustedListCertificateVerifier certificateVerifier = new TrustedListCertificateVerifier();
+        certificateVerifier.setCrlSource(crlSource);
+        certificateVerifier.setOcspSource(ocspSource);
+        certificateVerifier.setTrustedListCertificatesSource(certificatesSource);
+        return certificateVerifier;
+    }
+
+    public TSPSource getTSPSource() {
+        final RemoteTSPSource remoteTSPSource = new RemoteTSPSource();
+        remoteTSPSource.setUrl(getServiceURL() + TSP_CONTEXT);
+        remoteTSPSource.setDataLoader(new NativeHTTPDataLoader());
+        return remoteTSPSource;
+    }
+
+    public TrustedCertificateSource getCertificateSource102853() {
+        final RemoteAppletTSLCertificateSource trustedListsCertificateSource = new RemoteAppletTSLCertificateSource();
+        trustedListsCertificateSource.setDataLoader(new NativeHTTPDataLoader());
+        trustedListsCertificateSource.setServiceUrl(getServiceURL() + CERTIFICATE_CONTEXT);
+        return trustedListsCertificateSource;
+    }
+
+    public CommonCertificateVerifier getTrustedListCertificateVerifier102853(CRLSource crlSource, OCSPSource ocspSource,
+                                                                      TrustedCertificateSource certificateSource) {
+        final CommonCertificateVerifier trustedListCertificateVerifier = new CommonCertificateVerifier();
+        trustedListCertificateVerifier.setCrlSource(crlSource);
+        trustedListCertificateVerifier.setOcspSource(ocspSource);
+        trustedListCertificateVerifier.setTrustedCertSource(certificateSource);
+        return trustedListCertificateVerifier;
     }
 
     /**
      * Return a previously-read password already stored in the model.
      */
     private class CLIPasswordStoredCallback implements PasswordInputCallback {
-        @Override
         public char[] getPassword() {
-            return getPkcs11Password();
-        }
-    }
-
-    /**
-     * Ask for a password when the token connection is initialized.
-     *
-     * @deprecated asking for a password is redundant
-     * @see {@link CLIPasswordStoredCallback} as new implementation
-     */
-    private class CLIPasswordInputCallback implements PasswordInputCallback {
-        @Override
-        public char[] getPassword() {
-            String password;
-            System.out.print("Password: ");
-            try {
-                password = Util.readln();
-            } catch (IOException e) {
-                e.printStackTrace();
-                password = "";
-            }
-            return password.toCharArray();
+            return getPkcs11Password().toCharArray();
         }
     }
 }
