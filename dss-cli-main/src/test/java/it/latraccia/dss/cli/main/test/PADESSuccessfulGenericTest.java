@@ -44,8 +44,6 @@ public abstract class PADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.PADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -56,8 +54,6 @@ public abstract class PADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.PADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }}

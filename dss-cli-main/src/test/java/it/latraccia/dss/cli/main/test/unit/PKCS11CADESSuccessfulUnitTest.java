@@ -17,38 +17,30 @@
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package it.latraccia.dss.cli.main.test;
+package it.latraccia.dss.cli.main.test.unit;
 
-import it.latraccia.dss.cli.main.SignCLI;
-import it.latraccia.dss.cli.main.exception.SignatureException;
-import org.junit.Test;
+import it.latraccia.dss.cli.main.test.CADESSuccessfulGenericTest;
+import it.latraccia.dss.cli.main.test.util.SignatureArgsHelper;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.FileNotFoundException;
-import java.util.*;
-
 @RunWith(value = Parameterized.class)
-public abstract class SuccessfulGenericTest extends GenericTest {
-    String[] args;
-    String description;
+public class PKCS11CADESSuccessfulUnitTest extends CADESSuccessfulGenericTest {
 
-    public abstract String[] getClassArgs();
-
-    public SuccessfulGenericTest(String description, Object[] args) {
-        this.args = (String[]) args;
-        this.description = description;
+    public PKCS11CADESSuccessfulUnitTest(String description, Object[] args) {
+        super(description, args);
     }
 
-    @Test
-    public void successfulTest()
-            throws FileNotFoundException, SignatureException {
-        // Eventually add the simulation parameter
-        List<String> arguments = new ArrayList<String>();
-        Collections.addAll(arguments, getClassArgs());
-        Collections.addAll(arguments, args);
-        handleSimulate(arguments);
+    @Override
+    public boolean getSimulate() {
+        return true;
+    }
 
-        SignCLI.main(listToArray(arguments));
+    @Override
+    public String[] getClassArgs() {
+        return new String[] {
+                "-p11=\"" + SignatureArgsHelper.PKCS11.LIBRARY + "\"",
+                "\"" + SignatureArgsHelper.PKCS11.PASSWORD + "\"",
+        };
     }
 }

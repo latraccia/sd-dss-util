@@ -34,7 +34,7 @@ public class SignatureArgsHelper {
     private static String resourceRoot;
 
     static {
-        resourceRoot = FileHelper.getFileFromResource("test.pdf").getParent();
+        resourceRoot = "";
     }
 
     // All possibilities to be tested are listed here, then they are combined together
@@ -55,7 +55,7 @@ public class SignatureArgsHelper {
         public static String XML_FILE = getFile("xml");
 
         private static String getFile(String extension) {
-            return resourceRoot + "/test." + extension;
+            return "test." + extension;
         }
     }
 
@@ -72,7 +72,7 @@ public class SignatureArgsHelper {
     public static class PKCS11 {
         public static String LIBRARY = FileHelper.getResource("drivers/bit4ipki.dll");
 
-        public static String PASSWORD = "";
+        public static String PASSWORD = "16061981";
     }
 
     public static class Format {

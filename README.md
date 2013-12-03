@@ -68,8 +68,8 @@ The following list contains all of the accepted parameters. The parameters in **
 	* `SHA1`, default
 	* `SHA256`
 	* `SHA512`
-* `--pkcs11` or `-p11`, specified if the signature token is provided via PKCS#11. It has to reference both the library path for the SSCD (e.g. smart card) and the password the card is encrypted with
-* `--pkcs12` or `-p12`, specified if the signature token is provided via PKCS#12. It has to reference both the file path and the password the file is encrypted with
+* `--pkcs11` or `-p11`, specified if the signature token is provided via PKCS#11. It has to reference both the library path for the SSCD (e.g. smart card) and the password the card is encrypted with. The library path can be absolute or relative to the `jar` resources folder
+* `--pkcs12` or `-p12`, specified if the signature token is provided via PKCS#12. It has to reference both the file path and the password the file is encrypted with. The file path can be absolute or relative to the `jar` resources folder
 * `--mscapi` or `-ms` with no parameters, if the signature token is MS CAPI
 * `--mocca` or `-m` if the signature token is provided via MOCCA:
 	* `SHA1`

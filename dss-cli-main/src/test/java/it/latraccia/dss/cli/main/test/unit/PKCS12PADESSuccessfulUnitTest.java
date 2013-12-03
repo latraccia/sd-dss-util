@@ -17,21 +17,31 @@
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package it.latraccia.dss.cli.main.test.integration;
+package it.latraccia.dss.cli.main.test.unit;
 
 import it.latraccia.dss.cli.main.test.CADESSuccessfulGenericTest;
+import it.latraccia.dss.cli.main.test.PADESSuccessfulGenericTest;
+import it.latraccia.dss.cli.main.test.util.SignatureArgsHelper;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(value = Parameterized.class)
-public class CADESSuccessfulIntegrationTest extends CADESSuccessfulGenericTest {
+public class PKCS12PADESSuccessfulUnitTest extends PADESSuccessfulGenericTest {
 
-    public CADESSuccessfulIntegrationTest(String description, Object[] args) {
+    public PKCS12PADESSuccessfulUnitTest(String description, Object[] args) {
         super(description, args);
     }
 
     @Override
     public boolean getSimulate() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public String[] getClassArgs() {
+        return new String[] {
+                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
+                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
+        };
     }
 }

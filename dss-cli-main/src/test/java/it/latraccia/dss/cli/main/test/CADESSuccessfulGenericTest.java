@@ -44,8 +44,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -55,8 +53,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -66,8 +62,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -78,8 +72,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -89,8 +81,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -100,8 +90,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -112,8 +100,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -123,8 +109,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -134,8 +118,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -146,8 +128,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -157,8 +137,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
@@ -168,8 +146,6 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-f=" + SignatureArgsHelper.Format.CADES,
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
-                                "-p12=\"" + SignatureArgsHelper.PKCS12.KEY + "\"",
-                                "\"" + SignatureArgsHelper.PKCS12.PASSWORD + "\"",
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }}

@@ -20,8 +20,10 @@
 package it.latraccia.dss.cli.main.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.security.cert.X509Certificate;
 
 /**
@@ -139,5 +141,50 @@ public class Util {
             simpleFileName = fileName.substring(0, i2);
         }
         return simpleFileName;
+    }
+
+    /**
+     * Search a file in the resources, and return its absolute path if it exists,
+     * otherwise return a null {@link String}.
+     *
+     * @param fileName The name of the file in the resources
+     * @return The path {@link String} of the file, if any, or null
+     */
+    public static String getFileInResources(String fileName) {
+        URL fileURL = Util.class.getClassLoader().getResource(fileName);
+        String filePath = null;
+        if (fileURL != null) {
+            filePath = fileURL.getFile();
+        }
+        return filePath;
+    }
+
+    /**
+     * Search for a file in an absolute path, and always returns a {@link String},
+     * even if the file does not exist.
+     *
+     * @param fileName The file absolute path
+     * @return The path {@link String} of the file
+     */
+    public static String getFileInAbsolutePath(String fileName) {
+        File file = new File(fileName);
+        return file.getAbsolutePath();
+    }
+
+    /**
+     * Search for a given file path:
+     *  - in resources, returns it if it exists
+     *  - fallback handling the fileName as an absolute path
+     *
+     * @param fileName File name or path of a file in resources or an absolute path
+     * @return  The file absolute path as a {@link String}, if it was found anywhere
+     *          in the resources or as absolute path
+     */
+    public static String getFileInResourcesOrAbsolutePath(String fileName) {
+        String filePath = getFileInResources(fileName);
+        if (Util.isNullOrEmpty(filePath)) {
+            filePath = getFileInAbsolutePath(fileName);
+        }
+        return filePath;
     }
 }
