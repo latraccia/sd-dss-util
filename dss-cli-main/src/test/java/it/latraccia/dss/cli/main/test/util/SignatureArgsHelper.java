@@ -40,7 +40,7 @@ public class SignatureArgsHelper {
     // All possibilities to be tested are listed here, then they are combined together
 
     public static class Url {
-        public static String DSS = "http://localhost:9090/service";
+        public static String DSS = "http://localhost:8080/service";
     }
 
     public static class Input {

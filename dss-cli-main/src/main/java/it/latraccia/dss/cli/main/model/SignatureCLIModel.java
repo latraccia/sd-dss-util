@@ -48,11 +48,12 @@ import java.security.KeyStoreException;
  * @author Francesco Pontillo
  * @see SignatureModel
  */
-public class SignatureCLIModel extends eu.europa.ec.markt.dss.applet.model.SignatureModel {
+public class SignatureCLIModel extends SignatureModel {
     protected DigestAlgorithm digestAlgorithm;
     protected String serviceURL;
     protected boolean strictRFC3370;
     protected URL defaultPolicyUrl;
+    protected String simpleLevel;
 
     private static final String TSP_CONTEXT = "/tsp";
     private static final String OCSP_CONTEXT = "/ocsp";
@@ -66,6 +67,15 @@ public class SignatureCLIModel extends eu.europa.ec.markt.dss.applet.model.Signa
     public SignatureCLIModel(String serviceUrl) {
         super();
         setServiceURL(serviceUrl);
+    }
+
+    public String getSimpleLevel() {
+        return simpleLevel;
+    }
+
+    public void setSimpleLevel(String simpleLevel) {
+        this.simpleLevel = simpleLevel;
+        super.setLevel(getFormat() + "_" + getSimpleLevel());
     }
 
     public String getServiceURL() {

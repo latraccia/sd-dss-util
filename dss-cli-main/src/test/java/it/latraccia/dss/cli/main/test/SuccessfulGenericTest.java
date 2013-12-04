@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.FileNotFoundException;
+import java.security.KeyStoreException;
 import java.util.*;
 
 @RunWith(value = Parameterized.class)
@@ -42,7 +43,7 @@ public abstract class SuccessfulGenericTest extends GenericTest {
 
     @Test
     public void successfulTest()
-            throws FileNotFoundException, SignatureException {
+            throws FileNotFoundException, SignatureException, KeyStoreException {
         // Eventually add the simulation parameter
         List<String> arguments = new ArrayList<String>();
         Collections.addAll(arguments, getClassArgs());

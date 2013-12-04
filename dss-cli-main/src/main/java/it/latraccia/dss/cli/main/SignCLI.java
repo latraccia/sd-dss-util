@@ -65,7 +65,8 @@ import java.util.List;
  */
 public class SignCLI {
 
-    public static void main(String[] args) throws FileNotFoundException, SignatureException, KeyStoreException {
+    public static void main(String[] args)
+            throws FileNotFoundException, SignatureException, KeyStoreException {
         // Read and parse the arguments
         SignatureArgs signatureArgs = new SignatureArgs();
         new JCommander(signatureArgs, args);
@@ -104,6 +105,12 @@ public class SignCLI {
         return null;
     }
 
+    protected static void validateSourceFile(SignatureCLIModel model) throws FileNotFoundException {
+        if (!model.getSelectedFile().exists()) {
+            throw new FileNotFoundException("The source file was not found.");
+        }
+    }
+
     protected static void validateSignatureFormat(SignatureCLIModel model) throws SignatureException {
         String signatureFormat = model.getFormat();
 
@@ -127,7 +134,7 @@ public class SignCLI {
     protected static void validateSignatureLevel(SignatureCLIModel model) throws SignatureException {
         // Validate the level
         String signatureFormat = model.getFormat();
-        String signatureLevel = model.getLevel();
+        String signatureLevel = model.getSimpleLevel();
 
         // The map of allowed levels for each simple format
         HashMap<String, String[]> allowedLevelsMap = new HashMap<String, String[]>();
@@ -205,12 +212,13 @@ public class SignCLI {
         model.setServiceURL(signatureArgs.getUrl());
     }
 
-    protected static void setSourceFile(SignatureArgs signatureArgs, SignatureCLIModel model) {
+    protected static void setSourceFile(SignatureArgs signatureArgs, SignatureCLIModel model) throws FileNotFoundException {
         // Set the FileDocument from the user source path
         String sourceFile = signatureArgs.getSource().get(0);
         // Search in resources, then absolute path
         String foundFile = Util.getFileInResourcesOrAbsolutePath(sourceFile);
         model.setSelectedFile(new File(foundFile));
+        validateSourceFile(model);
     }
 
     protected static void setSignatureFormatLevelPackaging(SignatureArgs signatureArgs, SignatureCLIModel model)
@@ -220,7 +228,7 @@ public class SignCLI {
         String level = signatureArgs.getLevel();
         SignaturePackaging packaging = signatureArgs.getPackaging();
         model.setFormat(format);
-        model.setLevel(level);
+        model.setSimpleLevel(level);
         model.setPackaging(packaging);
 
         // Validate the parts of the model
@@ -388,7 +396,7 @@ public class SignCLI {
             }
         }
 
-        final boolean levelBES = model.getLevel().toUpperCase().endsWith("-BES");
+        final boolean levelBES = model.getLevel().toUpperCase().endsWith("_BES");
         model.setSignaturePolicyVisible(!levelBES);
     }
 
@@ -446,10 +454,8 @@ public class SignCLI {
 
         String moccaSignatureAlgorithm = model.getMoccaSignatureAlgorithm();
         if ("sha256".equalsIgnoreCase(moccaSignatureAlgorithm)) {
-
             parameters.setDigestAlgorithm(DigestAlgorithm.SHA256);
         } else {
-
             parameters.setDigestAlgorithm(DigestAlgorithm.SHA1);
         }
 
@@ -478,87 +484,6 @@ public class SignCLI {
         System.out.println(String.format("Signed file: %s", model.getTargetFile().getAbsoluteFile()));
         return output;
     }
-
-    /*
-    private static FileOutputStream signAndSaveFile(SignatureCLIModel model)
-            throws NoSuchAlgorithmException, IOException {
-        SignatureTokenConnection connection;
-
-        DocumentSignatureService service = model.createDocumentSignatureService();
-
-        Document document = model.getSelectedFile();
-
-        SignatureParameters parameters = new SignatureParameters();
-        parameters.setSigningDate(new Date());
-        parameters.setSigningCertificate(model.getSelectedPrivateKey().getCertificate());
-        if (model.getSelectedPrivateKey().getCertificateChain() != null) {
-            parameters.setCertificateChain(Arrays.asList((X509Certificate[]) model.getSelectedPrivateKey().getCertificateChain()));
-        }
-
-        //noinspection deprecation
-        parameters.setSignatureFormat(model.getFormat());
-        parameters.setSignaturePackaging(model.getPackaging());
-
-        // BEGIN: Added to 2.0.2
-
-        String moccaSignatureAlgorithm = model.getMoccaSignatureAlgorithm();
-        if (moccaSignatureAlgorithm != null && "sha256".equalsIgnoreCase(moccaSignatureAlgorithm)) {
-            parameters.setDigestAlgorithm(new DigestAlgorithmConverter().convert(model.getMoccaSignatureAlgorithm()));
-        } else {
-            parameters.setDigestAlgorithm(model.getDigestAlgorithm());
-        }
-        parameters.setSignatureAlgorithm(model.getSelectedPrivateKey().getSignatureAlgorithm());
-
-        // END:
-        parameters.setClaimedSignerRole(model.getClaimedRole());
-        parameters.setSignaturePolicy(model.getSignaturePolicyType());
-        parameters.setSignaturePolicyId(model.getSignaturePolicy());
-        parameters.setSignaturePolicyHashValue(model.getSignaturePolicyValue());
-        parameters.setSignaturePolicyHashAlgo(model.getSignaturePolicyAlgo());
-
-        connection = model.createTokenConnection();
-
-        Document contentInCMS = null;
-        if (service instanceof CAdESService && parameters.getSignaturePackaging() == SignaturePackaging.ENVELOPING) {
-
-            FileInputStream original = null;
-            try {
-                CMSSignedData cmsData = new CMSSignedData(model.getSelectedFile().openStream());
-                if (cmsData.getSignedContent() != null && cmsData.getSignedContent().getContent() != null) {
-                    ByteArrayOutputStream buf = new ByteArrayOutputStream();
-                    cmsData.getSignedContent().write(buf);
-                    contentInCMS = new InMemoryDocument(buf.toByteArray());
-                }
-            } catch (CMSException ex) {
-                // Do nothing
-            } finally {
-                //noinspection ConstantConditions
-                if (original != null) {
-                    original.close();
-                }
-            }
-        }
-
-        Document signedDocument;
-        if (contentInCMS != null) {
-            byte[] signatureValue = connection
-                    .sign(service.toBeSigned(contentInCMS, parameters), parameters.getDigestAlgorithm(), model.getSelectedPrivateKey());
-            CAdESService cadesService = (CAdESService) service;
-            signedDocument = cadesService.addASignatureToDocument(document, parameters, signatureValue);
-        } else {
-            byte[] signatureValue = connection
-                    .sign(service.toBeSigned(document, parameters), parameters.getDigestAlgorithm(), model.getSelectedPrivateKey());
-            signedDocument = service.signDocument(document, parameters, signatureValue);
-        }
-
-        FileOutputStream output = new FileOutputStream(model.getTargetFile());
-        IOUtils.copy(signedDocument.openStream(), output);
-        output.close();
-        System.out.println("SUCCESS.");
-        System.out.println(String.format("Signed file: %s", model.getTargetFile().getAbsoluteFile()));
-        return output;
-    }
-    */
 
     private static String getSuggestedFileName(SignatureCLIModel model) {
         // The original filename
