@@ -48,6 +48,7 @@
     <orderEntry type="library" name="Maven: com.beust:jcommander:1.32" level="project" />
     <orderEntry type="module" module-name="dss-demo-applet-v2" />
     <orderEntry type="module" module-name="dss-demo-remoting-client" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
   </component>
 </module>
 

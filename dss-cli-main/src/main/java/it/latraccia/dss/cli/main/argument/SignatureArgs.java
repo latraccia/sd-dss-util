@@ -108,6 +108,9 @@ public class SignatureArgs {
     /* END OF SIGNER CLAIMED ROLE */
 
     /* POLICY */
+    /**
+     * @deprecated Implicit policy does not exist as of DSS 3.0.2
+     */
     @Parameter(names = {"-spi", "--signature-policy-implicit"},
             description = "If there is a signature policy to be implicitly inferred from the certificate/token")
     private boolean implicitPolicy;
@@ -227,10 +230,16 @@ public class SignatureArgs {
         this.claimedRole = claimedRole;
     }
 
+    /**
+     * @deprecated Implicit policy does not exist as of DSS 3.0.2
+     */
     public boolean isImplicitPolicy() {
         return implicitPolicy;
     }
 
+    /**
+     * @deprecated Implicit policy does not exist as of DSS 3.0.2
+     */
     public void setImplicitPolicy(boolean implicitPolicy) {
         this.implicitPolicy = implicitPolicy;
     }

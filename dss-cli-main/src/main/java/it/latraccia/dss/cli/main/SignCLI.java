@@ -41,6 +41,7 @@ import it.latraccia.dss.cli.main.util.AssertHelper;
 import it.latraccia.dss.cli.main.util.Util;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -105,12 +106,25 @@ public class SignCLI {
         return null;
     }
 
+    /**
+     * Validate a source file.
+     * Validation from {@link eu.europa.ec.markt.dss.applet.wizard.signature.FileStep#isValid()}
+     *
+     * @param model The signature model
+     * @throws FileNotFoundException Thrown if the file does not exists or the path is not a file
+     */
     protected static void validateSourceFile(SignatureCLIModel model) throws FileNotFoundException {
-        if (!model.getSelectedFile().exists()) {
-            throw new FileNotFoundException("The source file was not found.");
+        if (!model.getSelectedFile().exists() || !model.getSelectedFile().isFile()) {
+            throw new FileNotFoundException("The source file was not found or it is not a valid file.");
         }
     }
 
+    /**
+     * Validate signature format, level and packaging.
+     *
+     * @param model The signature model
+     * @throws SignatureException If there is a mismatch of any kind between format, level and packaging
+     */
     protected static void validateSignatureFormat(SignatureCLIModel model) throws SignatureException {
         String signatureFormat = model.getFormat();
 
@@ -131,6 +145,12 @@ public class SignCLI {
         }
     }
 
+    /**
+     * Validate the signature level accordingly to the format.
+     *
+     * @param model The signature model
+     * @throws SignatureException   Thrown if there is a level mismatch with the selected format
+     */
     protected static void validateSignatureLevel(SignatureCLIModel model) throws SignatureException {
         // Validate the level
         String signatureFormat = model.getFormat();
@@ -152,6 +172,12 @@ public class SignCLI {
         }
     }
 
+    /**
+     * Validate the signature packaging according to the signature format.
+     *
+     * @param model The signature model
+     * @throws SignatureException Thrown if there is a packaging mismatch
+     */
     protected static void validateSignaturePackaging(SignatureCLIModel model) throws SignatureException {
         // Validate the packaging
         String signatureFormat = model.getFormat();
@@ -179,6 +205,13 @@ public class SignCLI {
         }
     }
 
+    /**
+     * Validate the MOCCA availability.
+     * Some of the code has been taken from {@link eu.europa.ec.markt.dss.applet.view.signature.TokenView#doLayout()}.
+     *
+     * @param model The signature model
+     * @throws SignatureException   Thrown if MOCCA is not available
+     */
     protected static void validateMoccaAvailability(SignatureCLIModel model) throws SignatureException {
         boolean isMoccaSet = !Util.isNullOrEmpty(model.getMoccaSignatureAlgorithm());
         boolean isMoccaAvailable = new MOCCAAdapter().isMOCCAAvailable();
@@ -188,6 +221,12 @@ public class SignCLI {
         }
     }
 
+    /**
+     * Validate the MOCCA algorithm if it is SHA1.
+     *
+     * @param model The signature model
+     * @throws SignatureException Thrown if the MOCCA algorithm is not SHA1
+     */
     protected static void validateMoccaAlgorithm(SignatureCLIModel model) throws SignatureException {
         if (!AssertHelper.stringMustBeInList(
                 "MOCCA algorithm",
@@ -197,6 +236,15 @@ public class SignCLI {
         }
     }
 
+    /**
+     * Validate the policy by checking:
+     * - signature policy algorithm, must be SHA1
+     * - signature level, must be different than BES
+     * Some of this code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.PersonalDataStep#init()}.
+     *
+     * @param model The signature model
+     * @throws SignatureException Thrown if the policy algorithm or the signature level doesn't match
+     */
     protected static void validatePolicy(SignatureCLIModel model) throws SignatureException {
         if (!Util.isNullOrEmpty(model.getSignaturePolicyAlgo())) {
             if (!AssertHelper.stringMustBeInList(
@@ -206,12 +254,31 @@ public class SignCLI {
                 throw new SignaturePolicyAlgorithmMismatchException();
             }
         }
+
+        boolean levelBES = model.getSimpleLevel().equalsIgnoreCase("-BES");
+        if (model.isSignaturePolicyCheck() && levelBES) {
+            throw new SignaturePolicyLevelMismatch();
+        }
     }
 
+    /**
+     * Set the service URL.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     */
     protected static void setServiceUrl(SignatureArgs signatureArgs, SignatureCLIModel model) {
         model.setServiceURL(signatureArgs.getUrl());
+        // TODO: find a way to validate the service URL
     }
 
+    /**
+     * Set the source file to be signed.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     * @throws FileNotFoundException Thrown if the input file hasn't been found or it is not valid
+     */
     protected static void setSourceFile(SignatureArgs signatureArgs, SignatureCLIModel model) throws FileNotFoundException {
         // Set the FileDocument from the user source path
         String sourceFile = signatureArgs.getSource().get(0);
@@ -221,15 +288,30 @@ public class SignCLI {
         validateSourceFile(model);
     }
 
+    /**
+     * Set the signature format, level and packaging.
+     * Some of the code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.SignatureStep#init()}.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     * @throws SignatureException Thrown if there is some kind of signature parameter mismatch
+     */
     protected static void setSignatureFormatLevelPackaging(SignatureArgs signatureArgs, SignatureCLIModel model)
             throws SignatureException {
         // Set the signature format
         String format = signatureArgs.getFormat();
         String level = signatureArgs.getLevel();
         SignaturePackaging packaging = signatureArgs.getPackaging();
-        model.setFormat(format);
-        model.setSimpleLevel(level);
-        model.setPackaging(packaging);
+
+        if (format != null) {
+            model.setFormat(format);
+            if (packaging != null) {
+                model.setPackaging(packaging);
+                if (StringUtils.isNotEmpty(level)) {
+                    model.setSimpleLevel(level);
+                }
+            }
+        }
 
         // Validate the parts of the model
         validateSignatureFormat(model);
@@ -237,6 +319,12 @@ public class SignCLI {
         validateSignaturePackaging(model);
     }
 
+    /**
+     * Set the custom digest algorithm.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     */
     protected static void setDigestAlgorithm(SignatureArgs signatureArgs, SignatureCLIModel model) {
         // Set the digest algorithm, to SHA1 if null
         if (signatureArgs.getDigestAlgorithm() != null) {
@@ -246,6 +334,14 @@ public class SignCLI {
         }
     }
 
+    /**
+     * Set the token (certificate) type; PKCS11, PKCS12, MOCCA, MSAPI.
+     * Some of this code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.SignatureStep#getNextStep()}.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     * @throws SignatureException
+     */
     protected static void setTokenType(SignatureArgs signatureArgs, SignatureCLIModel model) throws SignatureException {
         SignatureTokenType tokenType = null;
         // Get the parameters
@@ -268,6 +364,20 @@ public class SignCLI {
         model.setTokenType(tokenType);
     }
 
+    /**
+     * Set some token-specific parameters for getting the certificate:
+     * - PKCS11: library file and password
+     * - PKCS12: certificate file and password
+     * - MOCCA: signature algorithm
+     * <p/>
+     * Some of the code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.PKCS11Step#isValid()}
+     * and from {@link eu.europa.ec.markt.dss.applet.wizard.signature.PKCS12Step#isValid()}.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     * @throws FileNotFoundException If any of the files doesn't exist
+     * @throws SignatureException    Thrown if the MOCCA algorithm is not valid
+     */
     protected static void setTokenParameters(SignatureArgs signatureArgs, SignatureCLIModel model)
             throws FileNotFoundException, SignatureException {
         // Get the parameters
@@ -315,9 +425,17 @@ public class SignCLI {
         }
     }
 
+    /**
+     * Open the connection to the keystore, read the keys and ask the user for a key.
+     * This method executes code taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.CertificateStep#init()}.
+     * If no exception is thrown, this method guarantees that a private key has been selected.
+     *
+     * @param model The signature model
+     * @throws KeyStoreException If there are errors accessing the keystore
+     */
     protected static void setPrivateKey(SignatureCLIModel model) throws KeyStoreException {
-        // Set the connection to the keystore provider
         SignatureTokenConnection connection;
+        // Set the connection to the keystore provider
         connection = model.createTokenConnection();
         try {
             connection.getKeys();
@@ -367,39 +485,58 @@ public class SignCLI {
         model.setSelectedPrivateKey(key);
     }
 
+    /**
+     * Set the claimed role of the user.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     */
     protected static void setClaimedRole(SignatureArgs signatureArgs, SignatureCLIModel model) {
         model.setClaimedRole(signatureArgs.getClaimedRole());
     }
 
-    protected static void setPolicy(SignatureArgs signatureArgs, SignatureCLIModel model) throws SignatureException {
+    /**
+     * Set the user personal data.
+     * Part of the code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.PersonalDataStep#init()}.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     * @throws SignatureException Thrown if any of the policy parameters are invalid
+     */
+    protected static void setPolicy(SignatureArgs signatureArgs, SignatureCLIModel model)
+            throws SignatureException {
+
         // Default to no policy
         model.setSignaturePolicyCheck(false);
 
-        if (signatureArgs.isImplicitPolicy()) {
-            // Set the implicit policy
-            // model.setSignaturePolicyType(SignaturePolicy.IMPLICIT);
-            // TODO: remove?
-        } else {
-            // Convert explicit policy data
-            ExplicitSignaturePolicyModel explicitPolicy =
-                    new ExplicitSignaturePolicyModel(signatureArgs.getExplicitPolicy());
-            // If the explicit policy data are valid
-            if (explicitPolicy.getOID() != null
-                    && explicitPolicy.getOID().trim().length() > 0
-                    && explicitPolicy.getHashAlgo() != null) {
-                // Set the explicit policy
-                model.setSignaturePolicyId(explicitPolicy.getOID());
-                model.setSignaturePolicyAlgo(explicitPolicy.getHashAlgo());
-                model.setSignaturePolicyValue(explicitPolicy.getHash());
-                // Validate explicit policy parameters
-                validatePolicy(model);
-            }
-        }
+        // Convert explicit policy data
+        ExplicitSignaturePolicyModel explicitPolicy =
+                new ExplicitSignaturePolicyModel(signatureArgs.getExplicitPolicy());
 
-        final boolean levelBES = model.getLevel().toUpperCase().endsWith("_BES");
-        model.setSignaturePolicyVisible(!levelBES);
+        // If the explicit policy data are valid
+        if (explicitPolicy.getOID() != null
+                && explicitPolicy.getOID().trim().length() > 0
+                && explicitPolicy.getHashAlgo() != null) {
+            // Set the explicit policy
+            model.setSignaturePolicyId(explicitPolicy.getOID());
+            model.setSignaturePolicyAlgo(explicitPolicy.getHashAlgo());
+            model.setSignaturePolicyValue(explicitPolicy.getHash());
+
+            model.setSignaturePolicyCheck(true);
+
+            // Validate explicit policy parameters
+            validatePolicy(model);
+        }
     }
 
+    /**
+     * Sets the output file path, starting from the original file name and path, the signature format, level and packaging.
+     * Some of the called code has been taken from
+     * {@link eu.europa.ec.markt.dss.applet.wizard.signature.SaveStep#prepareTargetFileName(java.io.File, eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     */
     protected static void setOutputFile(SignatureArgs signatureArgs, SignatureCLIModel model) {
         // The output path if and as requested by the user
         String destination = signatureArgs.getOutput();
@@ -436,7 +573,18 @@ public class SignCLI {
         model.setTargetFile(destinationFile);
     }
 
-    private static FileOutputStream signDocument(SignatureCLIModel model) throws IOException, NoSuchAlgorithmException {
+    /**
+     * Sign the document after all of the parameters have been loaded into the {@link SignatureCLIModel}.
+     * Some of the code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.SignatureWizardController#signDocument()}.
+     *
+     * @param model The signature model
+     * @return The {@link FileOutputStream} of the signed document
+     * @throws IOException              Thrown if there is an input/output exception while/reading a file or a
+     *                                  network stream
+     * @throws NoSuchAlgorithmException Thrown if a specified algorithm isn't available
+     */
+    private static FileOutputStream signDocument(SignatureCLIModel model)
+            throws IOException, NoSuchAlgorithmException {
         final File fileToSign = model.getSelectedFile();
         final SignatureTokenConnection tokenConnection = model.getTokenConnection();
         final DSSPrivateKeyEntry privateKey = model.getSelectedPrivateKey();
@@ -451,12 +599,13 @@ public class SignCLI {
             parameters.setClaimedSignerRole(model.getClaimedRole());
         }
 
-
         String moccaSignatureAlgorithm = model.getMoccaSignatureAlgorithm();
-        if ("sha256".equalsIgnoreCase(moccaSignatureAlgorithm)) {
+        // If a MOCCA algorithm is selected, ensure it is SHA256
+        if ("SHA256".equalsIgnoreCase(moccaSignatureAlgorithm)) {
             parameters.setDigestAlgorithm(DigestAlgorithm.SHA256);
         } else {
-            parameters.setDigestAlgorithm(DigestAlgorithm.SHA1);
+            // Set the custom digest algorithm
+            parameters.setDigestAlgorithm(model.getDigestAlgorithm());
         }
 
         if (model.isSignaturePolicyCheck()) {
@@ -470,7 +619,6 @@ public class SignCLI {
 
         FileOutputStream output = new FileOutputStream(model.getTargetFile());
 
-        // TODO: test this list
         final TrustedListCertificateVerifier certificateVerifier = (TrustedListCertificateVerifier) model.getCertificateVerifier(
                 model.getCRLSource(), model.getOSCPSource(), model.getCertificateSource(model.getCertificateSource102853())
         );
@@ -485,35 +633,51 @@ public class SignCLI {
         return output;
     }
 
+
+    /**
+     * Get the suggested target file name.
+     *
+     * @param model The signature model
+     * @return The suggested target File
+     */
     private static String getSuggestedFileName(SignatureCLIModel model) {
-        // The original filename
-        String originalName = model.getSelectedFile().getName();
+        return prepareTargetFileName(
+                model.getSelectedFile(),
+                model.getPackaging(),
+                model.getLevel()).getName();
+    }
 
-        // Delete the extension from the original name
-        originalName = Util.getFileNameWithoutExtension(originalName);
+    /**
+     * Prepare the target file name.
+     * Original code in {@link eu.europa.ec.markt.dss.applet.wizard.signature.SaveStep#prepareTargetFileName(java.io.File, eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}
+     *
+     * @param file               The selected file to sign
+     * @param signaturePackaging The selected packaging
+     * @param signatureLevel     The complete signature level (e.g. "CAdES-BES")
+     * @return The suggested target File
+     */
+    private static File prepareTargetFileName(final File file,
+                                              final SignaturePackaging signaturePackaging,
+                                              final String signatureLevel) {
 
-        // Build the new suggested name
-        String newName;
-        if (model.getPackaging() == SignaturePackaging.ENVELOPING
-                && model.getFormat().startsWith("XAdES")) {
-            newName = originalName + "-signed" + ".xml";
-        } else if (model.getPackaging() == SignaturePackaging.DETACHED
-                && model.getFormat().startsWith("XAdES")) {
-            newName = originalName + "-signed" + ".xml";
-        } else if (model.getFormat().startsWith("CAdES-")
-                && !model.getSelectedFile().getName().endsWith(".p7m")) {
-            newName = model.getSelectedFile().getName() + ".p7m";
-        } else if (model.getFormat().startsWith("ASiC-")) {
-            newName = model.getSelectedFile().getName() + ".asics";
-        } else {
-            int i = model.getSelectedFile().getName().lastIndexOf(".");
-            if (i > 0) {
-                newName = model.getSelectedFile().getName().substring(0, i) + "-signed"
-                        + model.getSelectedFile().getName().substring(i);
-            } else {
-                newName = model.getSelectedFile().getName() + "-signed";
-            }
+        final File parentDir = file.getParentFile();
+        final String originalName = StringUtils.substringBeforeLast(file.getName(), ".");
+        final String originalExtension = "." + StringUtils.substringAfterLast(file.getName(), ".");
+        final String format = signatureLevel.toUpperCase();
+
+        if ((SignaturePackaging.ENVELOPING == signaturePackaging || SignaturePackaging.DETACHED == signaturePackaging) && format.startsWith("XADES")) {
+            return new File(parentDir, originalName + "-signed" + ".xml");
         }
-        return newName;
+
+        if (format.startsWith("CADES") && !originalExtension.toLowerCase().equals(".p7m")) {
+            return new File(parentDir, originalName + originalExtension + ".p7m");
+        }
+
+        if (format.startsWith("ASIC")) {
+            return new File(parentDir, originalName + originalExtension + ".asics");
+        }
+
+        return new File(parentDir, originalName + "-signed" + originalExtension);
+
     }
 }

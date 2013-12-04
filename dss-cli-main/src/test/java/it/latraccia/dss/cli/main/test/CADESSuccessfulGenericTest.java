@@ -56,7 +56,7 @@ public abstract class CADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
                                 "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
                         }},
-                            {"XML, BES, ENVELOPING", new String[] {
+                        {"XML, BES, ENVELOPING", new String[] {
                                 SignatureArgsHelper.Input.XML_FILE,
                                 "-u=" + SignatureArgsHelper.Url.DSS,
                                 "-f=" + SignatureArgsHelper.Format.CADES,

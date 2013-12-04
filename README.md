@@ -75,7 +75,6 @@ The following list contains all of the accepted parameters. The parameters in **
 	* `SHA1`
 	* `SHA256`
 * `--signer-role` or `-sr`, the claimed role of the signer, optional
-* `--signature-policy-implicit` or `-spi`, optional, if there is a signature policy to be implicitly inferred from the certificate/token
 * `--signature-policy-explicit` or `-spe`, optional, if the policy is specified with the following required data:
 	* the policy OID as a dot-separated digits string
 	* the hash value of the signature policy in base64 format

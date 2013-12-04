@@ -142,6 +142,12 @@ public class SignatureCLIModel extends SignatureModel {
         return getTokenType() != null;
     }
 
+    /**
+     * Create the token connection.
+     * Part of this code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.CertificateStep#init()}.
+     * @return the {@link SignatureTokenConnection} created, if any
+     * @throws KeyStoreException In case of errors accessing the keystore
+     */
     public SignatureTokenConnection createTokenConnection() throws KeyStoreException {
         PasswordInputCallback passwordInput = new CLIPasswordStoredCallback();
         SignatureTokenConnection connection;
