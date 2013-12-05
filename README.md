@@ -40,7 +40,7 @@ To sign a document, simply call the `SignCLI` class on the `dss-cli-main.jar` wi
 The following list contains all of the accepted parameters. The parameters in **bold** are required.
 
 * input file, passed as first nameless parameter
-* **`--url`** or `-u`, required, the DSS server URL
+* **`--url`** or `-u`, the DSS server URL, required for `PAdES` (all levels) and for levels other than `BES`, `EPES` in other formats
 * `--output` or `-o`, the destination path (optionally, with a file name)
 * **`--format`** or `-f`, required, the signature format
 	* `CAdES`

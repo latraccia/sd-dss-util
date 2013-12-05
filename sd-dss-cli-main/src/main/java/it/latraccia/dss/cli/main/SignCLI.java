@@ -25,6 +25,7 @@ import eu.europa.ec.markt.dss.applet.main.FileType;
 import eu.europa.ec.markt.dss.applet.util.MOCCAAdapter;
 import eu.europa.ec.markt.dss.applet.util.SigningUtils;
 import eu.europa.ec.markt.dss.common.SignatureTokenType;
+import eu.europa.ec.markt.dss.exception.DSSException;
 import eu.europa.ec.markt.dss.signature.DSSDocument;
 import eu.europa.ec.markt.dss.signature.SignatureFormat;
 import eu.europa.ec.markt.dss.signature.SignaturePackaging;
@@ -70,7 +71,6 @@ public class SignCLI {
         SignatureCLIModel model = new SignatureCLIModel();
 
         // Set the parameters inside the SignatureModel, step by step
-        setServiceUrl(signatureArgs, model);
         setSourceFile(signatureArgs, model);
         setSignatureFormatLevelPackaging(signatureArgs, model);
         setDigestAlgorithm(signatureArgs, model);
@@ -80,6 +80,7 @@ public class SignCLI {
         setClaimedRole(signatureArgs, model);
         setPolicy(signatureArgs, model);
         setOutputFile(signatureArgs, model);
+        setServiceUrl(signatureArgs, model);
 
         // If simulate is off
         if (!signatureArgs.isSimulate()) {
@@ -250,17 +251,19 @@ public class SignCLI {
         }
     }
 
-    /**
-     * Set the service URL.
-     *
-     * @param signatureArgs The input arguments
-     * @param model         The signature model
-     */
-    protected static void setServiceUrl(SignatureArgs signatureArgs, SignatureCLIModel model) {
-        model.setServiceURL(signatureArgs.getUrl());
-        // TODO: find a way to validate the service URL
-    }
+    protected static void validateServiceUrl(SignatureCLIModel model) throws SignatureException {
+        String serviceUrl = model.getServiceURL();
+        if (Util.isNullOrEmpty(serviceUrl)) {
+            // If the format is PAdES or the level is not one of the accepted
+            if (model.getFormat().startsWith("PAdES")
+                    || !AssertHelper.isStringInList(
+                    model.getSimpleLevel(),
+                    new String[] {"BES", "EPES"})) {
+                throw new SignatureServiceUrlException();
+            }
+        }
 
+    }
     /**
      * Set the source file to be signed.
      *
@@ -563,6 +566,17 @@ public class SignCLI {
     }
 
     /**
+     * Set the service URL.
+     *
+     * @param signatureArgs The input arguments
+     * @param model         The signature model
+     */
+    protected static void setServiceUrl(SignatureArgs signatureArgs, SignatureCLIModel model) throws SignatureException {
+        model.setServiceURL(signatureArgs.getUrl());
+        validateServiceUrl(model);
+    }
+
+    /**
      * Sign the document after all of the parameters have been loaded into the {@link SignatureCLIModel}.
      * Some of the code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.SignatureWizardController#signDocument()}.
      *
@@ -612,16 +626,21 @@ public class SignCLI {
                 model.getCRLSource(), model.getOSCPSource(), model.getCertificateSource(model.getCertificateSource102853())
         );
 
-        final DSSDocument signedDocument = SigningUtils
-                .signDocument(fileToSign, parameters, model.getTSPSource(), certificateVerifier, tokenConnection, privateKey);
-        IOUtils.copy(signedDocument.openStream(), output);
+        final DSSDocument signedDocument;
+        try {
+            signedDocument = SigningUtils
+                    .signDocument(fileToSign, parameters, model.getTSPSource(), certificateVerifier, tokenConnection, privateKey);
+        } catch (DSSException exception) {
+            System.err.println(exception.getMessage());
+            throw exception;
+        }
 
+        IOUtils.copy(signedDocument.openStream(), output);
         output.close();
         System.out.println("SUCCESS.");
         System.out.println(String.format("Signed file: %s", model.getTargetFile().getAbsoluteFile()));
         return output;
     }
-
 
     /**
      * Get the suggested target file name.

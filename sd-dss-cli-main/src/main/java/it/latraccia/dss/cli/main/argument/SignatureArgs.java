@@ -39,7 +39,7 @@ public class SignatureArgs {
             description = "Destination path or file name for the signed document")
     private String output;
 
-    @Parameter(names = {"-u", "--url"}, required = true,
+    @Parameter(names = {"-u", "--url"},
             description = "URL of the DSS Web Service")
     private String url;
     /* END OF MAIN PARAMETERS */

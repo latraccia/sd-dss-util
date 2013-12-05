@@ -50,6 +50,28 @@ public class AssertHelper {
             return false;
         }
 
+        if (!isStringInList(string, list)) {System.err.println(String.format(
+                "The %s can't be \"%s\". It must be one of \"%s\"",
+                what, string,
+                stringifyStringArray(list)));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if a {@link String} is in a {@link String} array.
+     *
+     * @param string The {@link String} to look for
+     * @param list The array of {@link String}s to search in
+     * @return true, if the {@link String} exists, false otherwise
+     */
+    public static boolean isStringInList(String string, String[] list) {
+        if (Util.isNullOrEmpty(string)) {
+            return false;
+        }
+
         if (list != null) {
             for (String s : list) {
                 if (s.equals(string)) {
@@ -58,12 +80,7 @@ public class AssertHelper {
             }
         }
 
-        System.err.println(String.format(
-                "The %s can't be \"%s\". It must be one of \"%s\"",
-                what, string,
-                stringifyStringArray(list)));
         return false;
-
     }
 
     public static boolean packageMustBeInList(String what, SignaturePackaging packaging, SignaturePackaging[] list) {
