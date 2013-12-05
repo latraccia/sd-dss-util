@@ -1,4 +1,4 @@
-# DSS-CLI
+# SD-DSS-CLI
 -------
 *A Command Line Interface for SD-DSS.*
 
@@ -26,13 +26,9 @@ For more information about SD-DSS, please refer to the [official page](https://j
 
 ## How to build
 
-The project is based on `pom.xml` files, so you need to have Maven installed and configured.
+The project is based on `pom.xml` files, so you need to have Maven installed and configured. Then, simply call `maven clean install` on the main `pom.xml` to clean and build the project.
 
-DSS-CLI references, in its main `pom.xml` the module `submods/dss/dss-src`; this means you need to include the version of SD-DSS you want to use inside the `submods` directory. To do so, you may consider using a git submodule. This kind of reference will probably be removed as soon as the [DSS is released on a maven repository](https://joinup.ec.europa.eu/software/sd-dss/topic/how-contribute#comment-15030), and will be replaced by a regular maven module reference.
-
-Then, simply call `maven clean install` on the main `pom.xml` to clean and build the project.
-
-**Important:** the project is structured to allow you to change the original SD-DSS sources in order to comply with the LGPL v3, but DSS-CLI is currently tested on SD-DSS v2.0.2.
+**Important:** you can change the SD-DSS reference with your sources, but SD-DSS-CLI is currently tested on SD-DSS v2.0.2.
 
 ## How to use
 
@@ -95,7 +91,7 @@ Even if `--pkcs11`, `--pkcs12`, `--mscapi`, `--mocca` are not required, one of t
 
 ## Future development and contribution
 
-DSS-CLI aims to be an implementation reference for DSS clients, thus more work will be done to:
+SD-DSS-CLI aims to be an implementation reference for DSS clients, thus more work will be done to:
 
 * unit-test the whole project
 * generalize the signing behaviour in a library
@@ -106,9 +102,9 @@ Pull requests and any kind of contribution are welcomed.
 
 ## License
 
-DSS-CLI is released under the LGPL.
+SD-DSS-CLI is released under the LGPL.
 
-    DSS-CLI, a Command Line Interface for SD-DSS.
+    SD-DSS-CLI, a Command Line Interface for SD-DSS.
     Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
     Developed by Francesco Pontillo
 

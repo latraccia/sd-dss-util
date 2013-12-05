@@ -1,5 +1,5 @@
 /*
- * DSS-CLI, a Command Line Interface for SD-DSS.
+ * SD-DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
@@ -21,14 +21,6 @@ package it.latraccia.dss.cli.main.model;
 
 import java.util.List;
 
-/**
- * Model containing the explicit signature parameters, when specified.
- *
- * Date: 28/11/13
- * Time: 13.21
- *
- * @author Francesco Pontillo
- */
 public class ExplicitSignaturePolicyModel {
     private String OID;
     private String hash;

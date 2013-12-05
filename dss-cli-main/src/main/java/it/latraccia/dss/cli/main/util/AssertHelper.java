@@ -1,5 +1,5 @@
 /*
- * DSS-CLI, a Command Line Interface for SD-DSS.
+ * SD-DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
@@ -23,14 +23,6 @@ import eu.europa.ec.markt.dss.signature.SignaturePackaging;
 
 import java.util.HashMap;
 
-/**
- * Helper for asserting some properties and validating the signature parameters.
- *
- * Date: 30/11/13
- * Time: 8.46
- *
- * @author Francesco Pontillo
- */
 public class AssertHelper {
     public static boolean stringMustEqual(String what, String string, String equalToThis) {
         if (!(string == null && equalToThis == null)

@@ -1,5 +1,5 @@
 /*
- * DSS-CLI, a Command Line Interface for SD-DSS.
+ * SD-DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
@@ -26,14 +26,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 
-/**
- * Utility class for {@link String}, {@link java.io.File} and console handling.
- *
- * Date: 27/11/13
- * Time: 13.14
- *
- * @author Francesco Pontillo
- */
 public class Util {
 
     /**

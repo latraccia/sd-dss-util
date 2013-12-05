@@ -1,5 +1,5 @@
 /*
- * DSS-CLI, a Command Line Interface for SD-DSS.
+ * SD-DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
@@ -53,17 +53,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * CLI for signing documents by using the DSS server and libraries.
- * Call this CLI with
- * java SignCLI [parameters]
- * See README.md for the complete documentation.
- * <p/>
- * Date: 26/11/13
- * Time: 11.30
- *
- * @author Francesco Pontillo
- */
 public class SignCLI {
 
     public static void main(String[] args)

@@ -1,5 +1,5 @@
 /*
- * DSS-CLI, a Command Line Interface for SD-DSS.
+ * SD-DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
@@ -19,13 +19,5 @@
 
 package it.latraccia.dss.cli.main.exception;
 
-/**
- * Exception thrown when the specified MOCCA algorithm isn't supported.
- *
- * Date: 30/11/13
- * Time: 11.03
- *
- * @author Francesco Pontillo
- */
 public class SignatureMoccaAlgorithmMismatchException extends SignatureException {
 }

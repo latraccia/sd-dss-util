@@ -1,5 +1,5 @@
 /*
- * DSS-CLI, a Command Line Interface for SD-DSS.
+ * SD-DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
@@ -21,14 +21,6 @@ package it.latraccia.dss.cli.main.model;
 
 import java.util.List;
 
-/**
- * Model containing the PKCS12 parameters: file and password.
- *
- * Date: 27/11/13
- * Time: 13.22
- *
- * @author Francesco Pontillo
- */
 public class PKCSModel {
     private String file;
     private String password;

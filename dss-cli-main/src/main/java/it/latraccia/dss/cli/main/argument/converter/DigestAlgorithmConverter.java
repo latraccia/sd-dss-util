@@ -1,5 +1,5 @@
 /*
- * DSS-CLI, a Command Line Interface for SD-DSS.
+ * SD-DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
@@ -24,15 +24,6 @@ import com.beust.jcommander.ParameterException;
 import eu.europa.ec.markt.dss.DigestAlgorithm;
 import it.latraccia.dss.cli.main.util.AssertHelper;
 
-/**
- * Converter class from {@link String} to {@link eu.europa.ec.markt.dss.DigestAlgorithm}.
- * Accepts the exact strings "SHA1", "SHA256", "SHA512".
- *
- * Date: 29/11/13
- * Time: 12.01
- *
- * @author Francesco Pontillo
- */
 public class DigestAlgorithmConverter implements IStringConverter<DigestAlgorithm> {
     @Override
     public DigestAlgorithm convert(String s) {

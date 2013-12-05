@@ -1,5 +1,5 @@
 /*
- * DSS-CLI, a Command Line Interface for SD-DSS.
+ * SD-DSS-CLI, a Command Line Interface for SD-DSS.
  * Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
  * Developed by Francesco Pontillo
  *
@@ -21,12 +21,6 @@ package it.latraccia.dss.cli.main.test.util;
 
 import java.io.File;
 
-/**
- * Date: 30/11/13
- * Time: 12.01
- *
- * @author Francesco Pontillo
- */
 public class FileHelper {
     /**
      * Load a file from a given resource name.
