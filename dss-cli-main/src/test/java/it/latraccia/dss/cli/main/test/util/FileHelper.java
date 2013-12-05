@@ -19,8 +19,6 @@
 
 package it.latraccia.dss.cli.main.test.util;
 
-import it.latraccia.dss.cli.main.SignCLI;
-
 import java.io.File;
 
 /**

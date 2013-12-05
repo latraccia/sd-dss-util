@@ -1,4 +1,4 @@
-[submodule "submods/dss"]
-	path = submods/dss
-url=git@github.com:latraccia/sd-dss.git
+[submodule "submods/sd-dss"]
+	path = submods/sd-dss
+	url = git@github.com:latraccia/sd-dss.git
 	branch = develop

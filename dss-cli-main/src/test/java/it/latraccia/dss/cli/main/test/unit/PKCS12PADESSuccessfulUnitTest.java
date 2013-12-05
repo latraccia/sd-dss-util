@@ -19,7 +19,6 @@
 
 package it.latraccia.dss.cli.main.test.unit;
 
-import it.latraccia.dss.cli.main.test.CADESSuccessfulGenericTest;
 import it.latraccia.dss.cli.main.test.PADESSuccessfulGenericTest;
 import it.latraccia.dss.cli.main.test.util.SignatureArgsHelper;
 import org.junit.runner.RunWith;

@@ -32,9 +32,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>eu.europa.ec.markt.dss</groupId>
-            <artifactId>applet-package</artifactId>
-            <version>2.0.2</version>
+            <groupId>eu.europa.ec.joinup.sd-dss</groupId>
+            <artifactId>dss-demo-applet-package</artifactId>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.beust</groupId>

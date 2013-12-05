@@ -19,7 +19,7 @@
 
 package it.latraccia.dss.cli.main.test;
 
-import java.util.*;
+import java.util.List;
 
 public abstract class GenericTest {
 
