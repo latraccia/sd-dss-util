@@ -24,7 +24,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.latraccia.dss</groupId>
-    <artifactId>dss-cli</artifactId>
+    <artifactId>sd-dss-cli</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>Digital Signature Services CLI</name>
     <packaging>pom</packaging>
@@ -35,7 +35,7 @@
             <name>Francesco</name>
             <email>francescopontillo@gmail.com</email>
             <organization>La Traccia</organization>
-            <organizationUrl>http://www.latraccia.it/</organizationUrl>
+            <organizationUrl>http://www.latraccia.it/en/</organizationUrl>
             <roles>
                 <role>manager</role>
                 <role>developer</role>

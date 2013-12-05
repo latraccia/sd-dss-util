@@ -88,6 +88,7 @@ Even if `--pkcs11`, `--pkcs12`, `--mscapi`, `--mocca` are not required, one of t
 		--packaging=ENVELOPING
 		--pkcs12="path/to/the/pkcs12/key.p12" "pkcs12filepassword"
 		--output="output/file.pdf"
+		--url="http://localhost:8080/service"
 
 ## Future development and contribution
 
