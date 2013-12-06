@@ -20,4 +20,8 @@
 package it.latraccia.dss.cli.main.exception;
 
 public class SignatureMoccaAlgorithmMismatchException extends SignatureException {
+    @Override
+    public String getMessage() {
+        return "The selected MOCCA algorithm is not valid!";
+    }
 }

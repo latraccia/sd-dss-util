@@ -97,174 +97,6 @@ public class SignCLI {
     }
 
     /**
-     * Validate a source file.
-     * Validation from {@link eu.europa.ec.markt.dss.applet.wizard.signature.FileStep#isValid()}
-     *
-     * @param model The signature model
-     * @throws FileNotFoundException Thrown if the file does not exists or the path is not a file
-     */
-    protected static void validateSourceFile(SignatureCLIModel model) throws FileNotFoundException {
-        if (!model.getSelectedFile().exists() || !model.getSelectedFile().isFile()) {
-            throw new FileNotFoundException("The source file was not found or it is not a valid file.");
-        }
-    }
-
-    /**
-     * Validate signature format, level and packaging.
-     *
-     * @param model The signature model
-     * @throws SignatureException If there is a mismatch of any kind between format, level and packaging
-     */
-    protected static void validateSignatureFormat(SignatureCLIModel model) throws SignatureException {
-        String signatureFormat = model.getFormat();
-
-        // Validate the simple format
-        String[] allowedFormats = new String[]{"PAdES", "CAdES", "XAdES", "ASiC-S"};
-        if (!AssertHelper.stringMustBeInList(
-                "signature format",
-                signatureFormat,
-                allowedFormats)) {
-            throw new SignatureFormatMismatchException();
-        }
-
-        // If the file is not a PDF, the PAdES cannot be selected
-        if (model.getFileType() != FileType.PDF) {
-            if (!AssertHelper.stringMustNotEqual("signature level", signatureFormat, "PAdES")) {
-                throw new SignatureFormatMismatchException();
-            }
-        }
-    }
-
-    /**
-     * Validate the signature level accordingly to the format.
-     *
-     * @param model The signature model
-     * @throws SignatureException   Thrown if there is a level mismatch with the selected format
-     */
-    protected static void validateSignatureLevel(SignatureCLIModel model) throws SignatureException {
-        // Validate the level
-        String signatureFormat = model.getFormat();
-        String signatureLevel = model.getSimpleLevel();
-
-        // The map of allowed levels for each simple format
-        HashMap<String, String[]> allowedLevelsMap = new HashMap<String, String[]>();
-        allowedLevelsMap.put("PAdES", new String[]{"BES", "EPES", "LTV"});
-        allowedLevelsMap.put("CAdES", new String[]{"BES", "EPES", "T", "C", "X", "XL", "A"});
-        allowedLevelsMap.put("XAdES", new String[]{"BES", "EPES", "T", "C", "X", "XL", "A"});
-        allowedLevelsMap.put("ASiC-S", new String[]{"BES", "EPES", "T"});
-
-        // Validate the level for the format set
-        if (!AssertHelper.stringMustBeInList(
-                "signature level for " + signatureFormat,
-                signatureLevel,
-                allowedLevelsMap.get(signatureFormat))) {
-            throw new SignatureLevelMismatchException();
-        }
-    }
-
-    /**
-     * Validate the signature packaging according to the signature format.
-     *
-     * @param model The signature model
-     * @throws SignatureException Thrown if there is a packaging mismatch
-     */
-    protected static void validateSignaturePackaging(SignatureCLIModel model) throws SignatureException {
-        // Validate the packaging
-        String signatureFormat = model.getFormat();
-        SignaturePackaging signaturePackaging = model.getPackaging();
-
-        // The map of allowed packaging for each simple format
-        HashMap<String, SignaturePackaging[]> allowedPackagingMap = new HashMap<String, SignaturePackaging[]>();
-        allowedPackagingMap.put("PAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPED});
-        allowedPackagingMap.put("CAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
-        allowedPackagingMap.put("ASiC-S", new SignaturePackaging[]{SignaturePackaging.DETACHED});
-
-        // If the file is not an XML, the XAdES ENVELOPED can't be selected
-        if (model.getFileType() != FileType.XML) {
-            allowedPackagingMap.put("XAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
-        } else {
-            allowedPackagingMap.put("XAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED, SignaturePackaging.ENVELOPED});
-        }
-
-        // Validate the level for the format set
-        if (!AssertHelper.packageMustBeInList(
-                "packaging for " + signatureFormat,
-                signaturePackaging,
-                allowedPackagingMap.get(signatureFormat))) {
-            throw new SignaturePackagingMismatchException();
-        }
-    }
-
-    /**
-     * Validate the MOCCA availability.
-     * Some of the code has been taken from {@link eu.europa.ec.markt.dss.applet.view.signature.TokenView#doLayout()}.
-     *
-     * @param model The signature model
-     * @throws SignatureException   Thrown if MOCCA is not available
-     */
-    protected static void validateMoccaAvailability(SignatureCLIModel model) throws SignatureException {
-        boolean isMoccaSet = !Util.isNullOrEmpty(model.getMoccaSignatureAlgorithm());
-        boolean isMoccaAvailable = new MOCCAAdapter().isMOCCAAvailable();
-        if (isMoccaSet && !isMoccaAvailable) {
-            System.err.println("MOCCA is not available, please choose another token provider.");
-            throw new SignatureMoccaUnavailabilityException();
-        }
-    }
-
-    /**
-     * Validate the MOCCA algorithm if it is SHA1.
-     *
-     * @param model The signature model
-     * @throws SignatureException Thrown if the MOCCA algorithm is not SHA1
-     */
-    protected static void validateMoccaAlgorithm(SignatureCLIModel model) throws SignatureException {
-        if (!AssertHelper.stringMustBeInList(
-                "MOCCA algorithm",
-                model.getMoccaSignatureAlgorithm(),
-                new String[]{"SHA1", "SHA"})) {
-            throw new SignatureMoccaAlgorithmMismatchException();
-        }
-    }
-
-    /**
-     * Validate the policy by checking:
-     * - signature policy algorithm, must be SHA1
-     * - signature level, must be different than BES
-     * Some of this code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.PersonalDataStep#init()}.
-     *
-     * @param model The signature model
-     * @throws SignatureException Thrown if the policy algorithm or the signature level doesn't match
-     */
-    protected static void validatePolicy(SignatureCLIModel model) throws SignatureException {
-        if (!Util.isNullOrEmpty(model.getSignaturePolicyAlgo())) {
-            if (!AssertHelper.stringMustBeInList(
-                    "explicit policy algorithm",
-                    model.getSignaturePolicyAlgo(),
-                    new String[]{"SHA1"})) {
-                throw new SignaturePolicyAlgorithmMismatchException();
-            }
-        }
-
-        boolean levelBES = model.getSimpleLevel().equalsIgnoreCase("-BES");
-        if (model.isSignaturePolicyCheck() && levelBES) {
-            throw new SignaturePolicyLevelMismatch();
-        }
-    }
-
-    protected static void validateServiceUrl(SignatureCLIModel model) throws SignatureException {
-        String serviceUrl = model.getServiceURL();
-        if (Util.isNullOrEmpty(serviceUrl)) {
-            // If the format is PAdES or the level is not one of the accepted
-            if (model.getFormat().startsWith("PAdES")
-                    || !AssertHelper.isStringInList(
-                    model.getSimpleLevel(),
-                    new String[] {"BES", "EPES"})) {
-                throw new SignatureServiceUrlException();
-            }
-        }
-
-    }
-    /**
      * Set the source file to be signed.
      *
      * @param signatureArgs The input arguments
@@ -466,7 +298,7 @@ public class SignCLI {
                 key = entries.get(keyIndex - 1);
                 System.out.println(
                         String.format("Certificate selected: %s",
-                                Util.getSubjectDN(key.getCertificate())));
+                                      Util.getSubjectDN(key.getCertificate())));
             } else {
                 // Use the first one
                 key = entries.get(0);
@@ -522,9 +354,11 @@ public class SignCLI {
     }
 
     /**
-     * Sets the output file path, starting from the original file name and path, the signature format, level and packaging.
+     * Sets the output file path, starting from the original file name and path, the signature format, level and
+     * packaging.
      * Some of the called code has been taken from
-     * {@link eu.europa.ec.markt.dss.applet.wizard.signature.SaveStep#prepareTargetFileName(java.io.File, eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}.
+     * {@link eu.europa.ec.markt.dss.applet.wizard.signature.SaveStep#prepareTargetFileName(java.io.File,
+     * eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}.
      *
      * @param signatureArgs The input arguments
      * @param model         The signature model
@@ -657,7 +491,8 @@ public class SignCLI {
 
     /**
      * Prepare the target file name.
-     * Original code in {@link eu.europa.ec.markt.dss.applet.wizard.signature.SaveStep#prepareTargetFileName(java.io.File, eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}
+     * Original code in {@link eu.europa.ec.markt.dss.applet.wizard.signature.SaveStep#prepareTargetFileName(java.io.File,
+     * eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}
      *
      * @param file               The selected file to sign
      * @param signaturePackaging The selected packaging
@@ -688,4 +523,182 @@ public class SignCLI {
         return new File(parentDir, originalName + "-signed" + originalExtension);
 
     }
+
+    /**
+     * Validate a source file.
+     * Validation from {@link eu.europa.ec.markt.dss.applet.wizard.signature.FileStep#isValid()}
+     *
+     * @param model The signature model
+     * @throws FileNotFoundException Thrown if the file does not exists or the path is not a file
+     */
+    protected static void validateSourceFile(SignatureCLIModel model) throws FileNotFoundException {
+        if (!model.getSelectedFile().exists() || !model.getSelectedFile().isFile()) {
+            throw new FileNotFoundException("The source file was not found or it is not a valid file.");
+        }
+    }
+
+    /**
+     * Validate signature format, level and packaging.
+     *
+     * @param model The signature model
+     * @throws SignatureFormatMismatchException If there is a mismatch of any kind between format, level and packaging
+     */
+    protected static void validateSignatureFormat(SignatureCLIModel model) throws SignatureFormatMismatchException {
+        String signatureFormat = model.getFormat();
+
+        // Validate the simple format
+        String[] allowedFormats = new String[]{"PAdES", "CAdES", "XAdES", "ASiC-S"};
+        if (!AssertHelper.stringMustBeInList(
+                "signature format",
+                signatureFormat,
+                allowedFormats)) {
+            throw new SignatureFormatMismatchException();
+        }
+
+        // If the file is not a PDF, the PAdES cannot be selected
+        if (model.getFileType() != FileType.PDF) {
+            if (!AssertHelper.stringMustNotEqual("signature level", signatureFormat, "PAdES")) {
+                throw new SignatureFormatMismatchException();
+            }
+        }
+    }
+
+    /**
+     * Validate the signature level accordingly to the format.
+     *
+     * @param model The signature model
+     * @throws SignatureLevelMismatchException Thrown if there is a level mismatch with the selected format
+     */
+    protected static void validateSignatureLevel(SignatureCLIModel model) throws SignatureLevelMismatchException {
+        // Validate the level
+        String signatureFormat = model.getFormat();
+        String signatureLevel = model.getSimpleLevel();
+
+        // The map of allowed levels for each simple format
+        HashMap<String, String[]> allowedLevelsMap = new HashMap<String, String[]>();
+        allowedLevelsMap.put("PAdES", new String[]{"BES", "EPES", "LTV"});
+        allowedLevelsMap.put("CAdES", new String[]{"BES", "EPES", "T", "C", "X", "XL", "A"});
+        allowedLevelsMap.put("XAdES", new String[]{"BES", "EPES", "T", "C", "X", "XL", "A"});
+        allowedLevelsMap.put("ASiC-S", new String[]{"BES", "EPES", "T"});
+
+        // Validate the level for the format set
+        if (!AssertHelper.stringMustBeInList(
+                "signature level for " + signatureFormat,
+                signatureLevel,
+                allowedLevelsMap.get(signatureFormat))) {
+            throw new SignatureLevelMismatchException();
+        }
+    }
+
+    /**
+     * Validate the signature packaging according to the signature format.
+     *
+     * @param model The signature model
+     * @throws SignaturePackagingMismatchException Thrown if there is a packaging mismatch
+     */
+    protected static void validateSignaturePackaging(SignatureCLIModel model) throws SignaturePackagingMismatchException {
+        // Validate the packaging
+        String signatureFormat = model.getFormat();
+        SignaturePackaging signaturePackaging = model.getPackaging();
+
+        // The map of allowed packaging for each simple format
+        HashMap<String, SignaturePackaging[]> allowedPackagingMap = new HashMap<String, SignaturePackaging[]>();
+        allowedPackagingMap.put("PAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPED});
+        allowedPackagingMap.put("CAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
+        allowedPackagingMap.put("ASiC-S", new SignaturePackaging[]{SignaturePackaging.DETACHED});
+
+        // If the file is not an XML, the XAdES ENVELOPED can't be selected
+        if (model.getFileType() != FileType.XML) {
+            allowedPackagingMap.put("XAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED});
+        } else {
+            allowedPackagingMap.put("XAdES", new SignaturePackaging[]{SignaturePackaging.ENVELOPING, SignaturePackaging.DETACHED, SignaturePackaging.ENVELOPED});
+        }
+
+        // Validate the level for the format set
+        if (!AssertHelper.packageMustBeInList(
+                "packaging for " + signatureFormat,
+                signaturePackaging,
+                allowedPackagingMap.get(signatureFormat))) {
+            throw new SignaturePackagingMismatchException();
+        }
+    }
+
+    /**
+     * Validate the MOCCA availability.
+     * Some of the code has been taken from {@link eu.europa.ec.markt.dss.applet.view.signature.TokenView#doLayout()}.
+     *
+     * @param model The signature model
+     * @throws SignatureMoccaUnavailabilityException Thrown if MOCCA is not available
+     */
+    protected static void validateMoccaAvailability(SignatureCLIModel model) throws SignatureMoccaUnavailabilityException {
+        boolean isMoccaSet = !Util.isNullOrEmpty(model.getMoccaSignatureAlgorithm());
+        boolean isMoccaAvailable = new MOCCAAdapter().isMOCCAAvailable();
+        if (isMoccaSet && !isMoccaAvailable) {
+            System.err.println("MOCCA is not available, please choose another token provider.");
+            throw new SignatureMoccaUnavailabilityException();
+        }
+    }
+
+    /**
+     * Validate the MOCCA algorithm if it is SHA1.
+     *
+     * @param model The signature model
+     * @throws SignatureMoccaAlgorithmMismatchException Thrown if the MOCCA algorithm is not SHA1
+     */
+    protected static void validateMoccaAlgorithm(SignatureCLIModel model) throws SignatureMoccaAlgorithmMismatchException {
+        if (!AssertHelper.stringMustBeInList(
+                "MOCCA algorithm",
+                model.getMoccaSignatureAlgorithm(),
+                new String[]{"SHA1", "SHA"})) {
+            throw new SignatureMoccaAlgorithmMismatchException();
+        }
+    }
+
+    /**
+     * Validate the policy by checking:
+     * - signature policy algorithm, must be SHA1
+     * - signature level, must be different than BES
+     * Some of this code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.PersonalDataStep#init()}.
+     *
+     * @param model The signature model
+     * @throws SignaturePolicyLevelMismatch              Thrown if the signature level doesn't match
+     * @throws SignaturePolicyAlgorithmMismatchException Thrown if the policy algorithm doesn't match
+     */
+    protected static void validatePolicy(SignatureCLIModel model) throws SignaturePolicyLevelMismatch, SignaturePolicyAlgorithmMismatchException {
+        if (!Util.isNullOrEmpty(model.getSignaturePolicyAlgo())) {
+            if (!AssertHelper.stringMustBeInList(
+                    "explicit policy algorithm",
+                    model.getSignaturePolicyAlgo(),
+                    new String[]{"SHA1"})) {
+                throw new SignaturePolicyAlgorithmMismatchException();
+            }
+        }
+
+        boolean levelBES = model.getSimpleLevel().equalsIgnoreCase("-BES");
+        if (model.isSignaturePolicyCheck() && levelBES) {
+            throw new SignaturePolicyLevelMismatch();
+        }
+    }
+
+    /**
+     * Validate the service URL by requiring it if PAdES is selected as format or
+     * the level is any different then BES, EPES.
+     *
+     * @param model The signature model
+     * @throws SignatureServiceUrlException Thrown if the service URL is required but was not specified
+     */
+    protected static void validateServiceUrl(SignatureCLIModel model) throws SignatureServiceUrlException {
+        String serviceUrl = model.getServiceURL();
+        if (Util.isNullOrEmpty(serviceUrl)) {
+            // If the format is PAdES or the level is not one of the accepted
+            if (model.getFormat().startsWith("PAdES")
+                    || !AssertHelper.isStringInList(
+                    model.getSimpleLevel(),
+                    new String[]{"BES", "EPES"})) {
+                throw new SignatureServiceUrlException();
+            }
+        }
+
+    }
+
 }

@@ -20,4 +20,8 @@
 package it.latraccia.dss.cli.main.exception;
 
 public class SignatureMoccaUnavailabilityException extends SignatureException {
+    @Override
+    public String getMessage() {
+        return "MOCCA is not available!";
+    }
 }

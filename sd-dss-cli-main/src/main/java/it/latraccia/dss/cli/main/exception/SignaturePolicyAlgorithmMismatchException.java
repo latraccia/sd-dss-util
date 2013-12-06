@@ -20,4 +20,8 @@
 package it.latraccia.dss.cli.main.exception;
 
 public class SignaturePolicyAlgorithmMismatchException extends SignatureException {
+    @Override
+    public String getMessage() {
+        return "The selected explicit policy algorithm is not available!";
+    }
 }

@@ -95,7 +95,7 @@ Even if `--pkcs11`, `--pkcs12`, `--mscapi`, `--mocca` are not required, one of t
 SD-DSS-CLI aims to be an implementation reference for DSS clients, thus more work will be done to:
 
 * unit-test the whole project
-* generalize the signing behaviour in a library
+* generalize the signing behaviour in a builder library
 * extend document signatures
 * validate document signatures
 
@@ -134,5 +134,6 @@ DSS-CLI directly uses the following libraries/modules:
 
 * [**SD-DSS**](https://joinup.ec.europa.eu/software/sd-dss), developed by [**ARHS Developments S.A.**](http://www.arhs-developments.com) (rue Nicolas Bové 2B, L-1253 Luxembourg), released by 2011 European Commission, Directorate-General Internal Market and Services (DG MARKT), B-1049 Bruxelles/Brussel under **LGPL v3**.
 * [**JCommander**](http://jcommander.org/), developed by [**Cédric Beust**](mailto:cedric@beust.com), released under **Apache 2.0 license**.
+* [**Apache Commons IO**](http://commons.apache.org/proper/commons-io/), developed by [**Apache**](http://www.apache.org/), released under **Apache 2.0 license**.
 
 You can find a list of referenced libraries' licenses in the `licenses` directory and the related notices in the `NOTICE` file in the root of the project.

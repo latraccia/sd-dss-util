@@ -20,4 +20,8 @@
 package it.latraccia.dss.cli.main.exception;
 
 public class SignatureFormatMismatchException extends SignatureException {
+    @Override
+    public String getMessage() {
+        return "The selected signature format collides with other options!";
+    }
 }

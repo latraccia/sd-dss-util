@@ -20,4 +20,8 @@
 package it.latraccia.dss.cli.main.exception;
 
 public class SignaturePackagingMismatchException extends SignatureException {
+    @Override
+    public String getMessage() {
+        return "The selected signature packaging collides with other options!";
+    }
 }
