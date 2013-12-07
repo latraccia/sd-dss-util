@@ -1,19 +1,27 @@
-# SD-DSS-CLI
+# SD-DSS-Util
 -------
-*A Command Line Interface for SD-DSS.*
+*A Utility library and a Command Line Interface for SD-DSS.*
 
 
 ## Introduction
 
+### SD-DSS Util
+
+SD-DSS Util is a utility library for making the signing process easier. The library implements the builder pattern to
+guide the developer through the process.
+
+It is based on the DSS Applet you can find in the
+[original sources of DSS](https://joinup.ec.europa.eu/software/sd-dss/release/all).
+
 ### SD-DSS CLI
 
-SD-DSS CLI is a Command Line Interface for handling communication with a DSS server, and therefore signing, validating and extending documents.
-
-It is based on the DSS Applet you can find in the [original sources of DSS](https://joinup.ec.europa.eu/software/sd-dss/release/all).
+SD-DSS CLI is a Command Line Interface for handling communication with a DSS server, and therefore signing, validating
+and extending documents.
 
 ### SD-DSS
 
-The DSS software allows Member States to create and verify X/CAdES forms up to the `-A` form and PAdES forms up to `LTV` originating from other MS when used with documents.
+The DSS software allows Member States to create and verify X/CAdES forms up to the `-A` form and PAdES forms up to
+`LTV` originating from other MS when used with documents.
 
 In particular it:
 
@@ -26,9 +34,11 @@ For more information about SD-DSS, please refer to the [official page](https://j
 
 ## How to build
 
-The project is based on `pom.xml` files, so you need to have Maven installed and configured. Then, simply call `maven clean install` on the main `pom.xml` to clean and build the project.
+The project is based on `pom.xml` files, so you need to have Maven installed and configured. Then, simply call
+`maven clean install` on the main `pom.xml` to clean and build the project.
 
-**Important:** you can change the SD-DSS reference with your sources, but SD-DSS-CLI is currently tested on SD-DSS v2.0.2.
+**Important:** you can change the SD-DSS reference with your sources, but SD-DSS-CLI is currently tested on SD-DSS
+v3.0.2.
 
 ## How to use
 
@@ -40,13 +50,14 @@ To sign a document, simply call the `SignCLI` class on the `dss-cli-main.jar` wi
 The following list contains all of the accepted parameters. The parameters in **bold** are required.
 
 * input file, passed as first nameless parameter
-* **`--url`** or `-u`, the DSS server URL, required for `PAdES` (all levels) and for levels other than `BES`, `EPES` in other formats
+* **`--url`** or `-u`, the DSS server URL, required for `PAdES` (all levels) and for levels other than `BES`, `EPES` in
+other formats
 * `--output` or `-o`, the destination path (optionally, with a file name)
 * **`--format`** or `-f`, required, the signature format
 	* `CAdES`
 	* `PAdES`, for PDF files only
 	* `XAdES`
-	* `ASiC-S`
+	* `ASiC-S`, not yet implemented
 * **`--level`** or `-l`, required, the signature level
 	* `BES`, available for every format
 	* `EPES`, available for every format
@@ -64,8 +75,10 @@ The following list contains all of the accepted parameters. The parameters in **
 	* `SHA1`, default
 	* `SHA256`
 	* `SHA512`
-* `--pkcs11` or `-p11`, specified if the signature token is provided via PKCS#11. It has to reference both the library path for the SSCD (e.g. smart card) and the password the card is encrypted with. The library path can be absolute or relative to the `jar` resources folder
-* `--pkcs12` or `-p12`, specified if the signature token is provided via PKCS#12. It has to reference both the file path and the password the file is encrypted with. The file path can be absolute or relative to the `jar` resources folder
+* `--pkcs11` or `-p11`, specified if the signature token is provided via PKCS#11. It has to reference both the library
+path for the SSCD (e.g. smart card) and the password the card is encrypted with. The library path can be absolute or relative to the `jar` resources folder
+* `--pkcs12` or `-p12`, specified if the signature token is provided via PKCS#12. It has to reference both the file
+path and the password the file is encrypted with. The file path can be absolute or relative to the `jar` resources folder
 * `--mscapi` or `-ms` with no parameters, if the signature token is MS CAPI
 * `--mocca` or `-m` if the signature token is provided via MOCCA:
 	* `SHA1`
@@ -77,7 +90,8 @@ The following list contains all of the accepted parameters. The parameters in **
 	* the algorithm used to produce it (only available option for now is `SHA1`)
 * `--simulate` or `-s`, validates the parameters but doesn't start the actual signing process
 
-Even if `--pkcs11`, `--pkcs12`, `--mscapi`, `--mocca` are not required, one of them has to be specified in order to provide the signature token provider.
+Even if `--pkcs11`, `--pkcs12`, `--mscapi`, `--mocca` are not required, one of them has to be specified in order to
+provide the signature token provider.
 
 ### Example
 
@@ -94,8 +108,7 @@ Even if `--pkcs11`, `--pkcs12`, `--mscapi`, `--mocca` are not required, one of t
 
 SD-DSS-CLI aims to be an implementation reference for DSS clients, thus more work will be done to:
 
-* unit-test the whole project
-* generalize the signing behaviour in a builder library
+* unit-test the whole project and all of the use cases
 * extend document signatures
 * validate document signatures
 
@@ -103,9 +116,9 @@ Pull requests and any kind of contribution are welcomed.
 
 ## License
 
-SD-DSS-CLI is released under the LGPL.
+SD-DSS-Util is released under the LGPL.
 
-    SD-DSS-CLI, a Command Line Interface for SD-DSS.
+    SD-DSS-Util, a Utility Library and a Command Line Interface for SD-DSS.
     Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
     Developed by Francesco Pontillo
 
@@ -124,16 +137,24 @@ SD-DSS-CLI is released under the LGPL.
 
 ### Authors
 
-The original **SD-DSS** project has been commissioned by the European Commission (DG MARKT, Directorate E, Services), financed under the ISA Work Programme (DG DIGIT) in the framework of the implementation of Services Directive.
+The original **SD-DSS** project has been commissioned by the European Commission (DG MARKT, Directorate E, Services),
+financed under the ISA Work Programme (DG DIGIT) in the framework of the implementation of Services Directive.
 
-**DSS-CLI** has been developed by [Francesco Pontillo](mailto:francescopontillo@gmail.com) ([La Traccia](http://www.latraccia.it/en/)).
+**DSS-CLI** has been developed by [Francesco Pontillo](mailto:francescopontillo@gmail.com)
+([La Traccia](http://www.latraccia.it/en/)).
 
 ### Used libraries
 
 DSS-CLI directly uses the following libraries/modules:
 
-* [**SD-DSS**](https://joinup.ec.europa.eu/software/sd-dss), developed by [**ARHS Developments S.A.**](http://www.arhs-developments.com) (rue Nicolas Bové 2B, L-1253 Luxembourg), released by 2011 European Commission, Directorate-General Internal Market and Services (DG MARKT), B-1049 Bruxelles/Brussel under **LGPL v3**.
-* [**JCommander**](http://jcommander.org/), developed by [**Cédric Beust**](mailto:cedric@beust.com), released under **Apache 2.0 license**.
-* [**Apache Commons IO**](http://commons.apache.org/proper/commons-io/), developed by [**Apache**](http://www.apache.org/), released under **Apache 2.0 license**.
+* [**SD-DSS**](https://joinup.ec.europa.eu/software/sd-dss), developed by
+[**ARHS Developments S.A.**](http://www.arhs-developments.com) (rue Nicolas Bové 2B, L-1253 Luxembourg), released by
+2011 European Commission, Directorate-General Internal Market and Services (DG MARKT), B-1049 Bruxelles/Brussel
+under **LGPL v3**.
+* [**JCommander**](http://jcommander.org/), developed by [**Cédric Beust**](mailto:cedric@beust.com), released under
+**Apache 2.0 license**.
+* [**Apache Commons IO**](http://commons.apache.org/proper/commons-io/), developed by
+[**Apache**](http://www.apache.org/), released under **Apache 2.0 license**.
 
-You can find a list of referenced libraries' licenses in the `licenses` directory and the related notices in the `NOTICE` file in the root of the project.
+You can find a list of referenced libraries' licenses in the `licenses` directory and the related notices in the
+`NOTICE` file in the root of the project.
