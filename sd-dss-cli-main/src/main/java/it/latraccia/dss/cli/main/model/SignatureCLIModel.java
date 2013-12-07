@@ -22,6 +22,7 @@ package it.latraccia.dss.cli.main.model;
 import eu.europa.ec.markt.dss.DigestAlgorithm;
 import eu.europa.ec.markt.dss.applet.io.*;
 import eu.europa.ec.markt.dss.applet.util.MOCCAAdapter;
+import eu.europa.ec.markt.dss.signature.SignaturePackaging;
 import eu.europa.ec.markt.dss.signature.token.*;
 import eu.europa.ec.markt.dss.validation.CertificateVerifier;
 import eu.europa.ec.markt.dss.validation.TrustedListCertificateVerifier;
@@ -175,6 +176,14 @@ public class SignatureCLIModel extends SignatureModel {
 
     public void setDigestAlgorithm(DigestAlgorithm digestAlgorithm) {
         this.digestAlgorithm = digestAlgorithm;
+    }
+
+    public void setDigestAlgorithm(String digestAlgorithm) {
+        setDigestAlgorithm(DigestAlgorithm.valueOf(digestAlgorithm));
+    }
+
+    public void setPackaging(String packaging) {
+        setPackaging(SignaturePackaging.valueOf(packaging));
     }
 
     public CRLSource getCRLSource() {

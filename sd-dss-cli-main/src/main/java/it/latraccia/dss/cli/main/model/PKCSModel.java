@@ -30,6 +30,11 @@ public class PKCSModel {
         setPassword(list.get(1));
     }
 
+    public PKCSModel(String file, String password) {
+        this.file = file;
+        this.password = password;
+    }
+
     public String getFile() {
         return file;
     }
