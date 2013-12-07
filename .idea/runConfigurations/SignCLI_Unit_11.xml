@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SignCLI-Unit-11" type="JUnit" factoryName="JUnit">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-    <module name="sd-dss-cli-main" />
+    <module name="sd-dss-util-cli" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="PACKAGE_NAME" value="it.latraccia.dss.cli.main.test.unit" />
@@ -18,7 +18,7 @@
     </option>
     <envs />
     <patterns>
-      <pattern testClass="it.latraccia.dss.cli.main.test.unit.PKCS11.*" />
+      <pattern testClass="it.latraccia.dss.util.cli.test.unit.PKCS11.*" />
     </patterns>
     <RunnerSettings RunnerId="Run" />
     <ConfigurationWrapper RunnerId="Run" />

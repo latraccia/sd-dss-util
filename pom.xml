@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ DSS-CLI, a Command Line Interface for SD-DSS.
+  ~ SD-DSS-Util, a Utility Library and a Command Line Interface for SD-DSS.
   ~ Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
   ~ Developed by Francesco Pontillo
   ~
@@ -24,9 +24,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.latraccia.dss</groupId>
-    <artifactId>sd-dss-cli</artifactId>
+    <artifactId>sd-dss-util</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <name>Digital Signature Services CLI</name>
+    <name>Digital Signature Services Util</name>
     <packaging>pom</packaging>
 
     <developers>
@@ -46,5 +46,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>eu.europa.ec.joinup.sd-dss</groupId>
+            <artifactId>dss-demo-applet-package</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+    </dependencies>
 
 </project>

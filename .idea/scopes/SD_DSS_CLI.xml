@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="SD-DSS-CLI" pattern="file[dss-cli-main]:src/main/java//*||file[dss-cli-main]:src/test/java//*" />
+  <scope name="SD-DSS-CLI" pattern="file[sd-dss-util-lib]:src/main/java//*||file[sd-dss-util-cli]:src/main/java//*||file[sd-dss-util-cli]:src/test/java//*||file[sd-dss-util-cli]:pom.xml||file[sd-dss-util-lib]:pom.xml||file[sd-dss-util]:pom.xml||file[sd-dss-util]:README.md||file[sd-dss-util]:NOTICE" />
 </component>
