@@ -5,17 +5,17 @@
 
 ## Introduction
 
-### SD-DSS Util
+### SD-DSS-Util
 
-SD-DSS Util is a utility library for making the signing process easier. The library implements the builder pattern to
+SD-DSS-Util is a utility library for making the signing process easier. The library implements the builder pattern to
 guide the developer through the process.
 
 It is based on the DSS Applet you can find in the
 [original sources of DSS](https://joinup.ec.europa.eu/software/sd-dss/release/all).
 
-### SD-DSS CLI
+### SD-DSS-CLI
 
-SD-DSS CLI is a Command Line Interface for handling communication with a DSS server, and therefore signing, validating
+SD-DSS-CLI is a Command Line Interface for handling communication with a DSS server, and therefore signing, validating
 and extending documents.
 
 ### SD-DSS
@@ -42,9 +42,9 @@ v3.0.2.
 
 ## How to use
 
-To sign a document, simply call the `SignCLI` class on the `dss-cli-main.jar` with the proper parameters:
+To sign a document, simply call the `SignCLI` class on the `sd-dss-util-cli.jar` with the proper parameters:
 
-    java dss-cli-main.jar SignCli
+    java sd-dss-util-cli.jar SignCli
 
 ### Parameters
 The following list contains all of the accepted parameters. The parameters in **bold** are required.
@@ -76,9 +76,11 @@ other formats
 	* `SHA256`
 	* `SHA512`
 * `--pkcs11` or `-p11`, specified if the signature token is provided via PKCS#11. It has to reference both the library
-path for the SSCD (e.g. smart card) and the password the card is encrypted with. The library path can be absolute or relative to the `jar` resources folder
+path for the SSCD (e.g. smart card) and the password the card is encrypted with. The library path can be absolute or
+relative to the `jar` resources folder
 * `--pkcs12` or `-p12`, specified if the signature token is provided via PKCS#12. It has to reference both the file
-path and the password the file is encrypted with. The file path can be absolute or relative to the `jar` resources folder
+path and the password the file is encrypted with. The file path can be absolute or relative to the `jar` resources
+folder
 * `--mscapi` or `-ms` with no parameters, if the signature token is MS CAPI
 * `--mocca` or `-m` if the signature token is provided via MOCCA:
 	* `SHA1`
@@ -95,7 +97,7 @@ provide the signature token provider.
 
 ### Example
 
-    java dss-cli-main.jar SignCli
+    java sd-dss-util-cli.jar SignCli
 		"input/file.pdf"
 		--format=CAdES
 		--level=BES
@@ -106,7 +108,7 @@ provide the signature token provider.
 
 ## Future development and contribution
 
-SD-DSS-CLI aims to be an implementation reference for DSS clients, thus more work will be done to:
+SD-DSS-Util and CLI aim to be implementation references for DSS clients, thus more work will be done to:
 
 * unit-test the whole project and all of the use cases
 * extend document signatures
@@ -140,12 +142,12 @@ SD-DSS-Util is released under the LGPL.
 The original **SD-DSS** project has been commissioned by the European Commission (DG MARKT, Directorate E, Services),
 financed under the ISA Work Programme (DG DIGIT) in the framework of the implementation of Services Directive.
 
-**DSS-CLI** has been developed by [Francesco Pontillo](mailto:francescopontillo@gmail.com)
+**SD-DSS-Util** has been developed by [Francesco Pontillo](mailto:francescopontillo@gmail.com)
 ([La Traccia](http://www.latraccia.it/en/)).
 
 ### Used libraries
 
-DSS-CLI directly uses the following libraries/modules:
+SD-DSS-Util directly uses the following libraries/modules:
 
 * [**SD-DSS**](https://joinup.ec.europa.eu/software/sd-dss), developed by
 [**ARHS Developments S.A.**](http://www.arhs-developments.com) (rue Nicolas Bové 2B, L-1253 Luxembourg), released by
