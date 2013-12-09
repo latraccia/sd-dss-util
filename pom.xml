@@ -27,7 +27,15 @@
     <artifactId>sd-dss-util</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>Digital Signature Services Util</name>
+    <description>A Utility library and a Command Line Interface for SD-DSS</description>
     <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>https://www.gnu.org/licenses/lgpl.html</url>
+        </license>
+    </licenses>
 
     <developers>
         <developer>
