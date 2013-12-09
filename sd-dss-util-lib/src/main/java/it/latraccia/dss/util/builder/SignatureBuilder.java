@@ -69,38 +69,6 @@ import java.util.List;
  */
 public class SignatureBuilder implements IBuilder<File> {
 
-    static {
-        try {
-            new SignatureBuilder().setSource("inputfile")
-                    .setFormatBuilder(
-                            new CAdESFormatBuilder().BES().detached()
-                    )
-                    .setFormatBuilder(
-                            new XAdESFormatBuilder().C("http://localhost:8080").enveloping()
-                    )
-                    .setDigestAlgorithm(DigestAlgorithm.SHA256)
-                    .setTokenBuilder(
-                            new PKCS11TokenBuilder().setFile("path/to/library").setPassword("12345")
-                    )
-                    .setTokenBuilder(
-                            new PKCS11TokenBuilder().setFile("path/to/library").setPasswordCallback(new PKCS11TokenBuilder.PKCS11TokenPasswordCallback() {
-                                @Override
-                                public String getPassword() {
-                                    return "87878";
-                                }
-                            })
-                    )
-                    .setTokenBuilder(
-                            new PKCS12TokenBuilder().setFile("path/to/file").setPassword("12345")
-                    )
-                    .setTokenBuilder(
-                            new MoccaTokenBuilder().setMoccaAlgorithm(MoccaAlgorithm.SHA1)
-                    );
-        } catch (SignatureServiceUrlException e) {
-            e.printStackTrace();
-        }
-    }
-
     // All of the signature parameters
     private String source;
     private String target;
