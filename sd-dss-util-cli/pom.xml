@@ -58,12 +58,36 @@
 
     <build>
         <plugins>
+            <!-- Test configuration, run only unit tests -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
                 <configuration>
                     <groups>it.latraccia.dss.util.cli.test.unit.UnitTest</groups>
                 </configuration>
+            </plugin>
+            <!-- Assembly configuration, package everything in a single jar -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>dss-cli-bundle</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>full</descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>it.latraccia.dss.util.cli.SignCLI</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
