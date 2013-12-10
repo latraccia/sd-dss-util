@@ -19,30 +19,11 @@
 
 package it.latraccia.dss.util.cli.test.unit;
 
-import it.latraccia.dss.util.cli.test.XADESSuccessfulGenericTest;
-import it.latraccia.dss.util.cli.test.util.SignatureArgsHelper;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-@RunWith(value = Parameterized.class)
-@Category(value = it.latraccia.dss.util.cli.test.unit.UnitTest.class)
-public class PKCS11XADESSuccessfulUnitTest extends XADESSuccessfulGenericTest {
-
-    public PKCS11XADESSuccessfulUnitTest(String description, Object[] args) {
-        super(description, args);
-    }
-
-    @Override
-    public boolean getSimulate() {
-        return true;
-    }
-
-    @Override
-    public String[] getClassArgs() {
-        return new String[] {
-                "-p11=\"" + SignatureArgsHelper.PKCS11.LIBRARY + "\"",
-                "\"" + SignatureArgsHelper.PKCS11.PASSWORD + "\"",
-        };
-    }
+/**
+ * Date: 10/12/13
+ * Time: 11.10
+ *
+ * @author Francesco Pontillo
+ */
+public interface UnitTest {
 }

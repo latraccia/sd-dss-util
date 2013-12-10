@@ -21,10 +21,12 @@ package it.latraccia.dss.util.cli.test.unit;
 
 import it.latraccia.dss.util.cli.test.CADESSuccessfulGenericTest;
 import it.latraccia.dss.util.cli.test.util.SignatureArgsHelper;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(value = Parameterized.class)
+@Category(value = it.latraccia.dss.util.cli.test.unit.UnitTest.class)
 public class PKCS11CADESSuccessfulUnitTest extends CADESSuccessfulGenericTest {
 
     public PKCS11CADESSuccessfulUnitTest(String description, Object[] args) {

@@ -30,6 +30,11 @@
     <description>A Utility library and a Command Line Interface for SD-DSS</description>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>sd-dss-util-lib</module>
+        <module>sd-dss-util-cli</module>
+    </modules>
+
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
