@@ -54,7 +54,7 @@ public class PKCS12TokenBuilder extends PKCSTokenBuilder {
     public SignatureToken build() throws SignatureMoccaAlgorithmMismatchException, SignatureMoccaUnavailabilityException, FileNotFoundException {
         SignatureToken token = super.build();
 
-        File tokenAsset = new File(Util.getFileInResourcesOrAbsolutePath(getFile()));
+        File tokenAsset = new File(Util.getFileInAbsolutePathOrResources(getFile()));
         if (tokenAsset.exists()) {
             // Save the token asset file
             token.setTokenAsset(new File(tokenAsset.getAbsolutePath()));

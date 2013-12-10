@@ -165,17 +165,18 @@ public class Util {
 
     /**
      * Search for a given file path:
-     *  - in resources, returns it if it exists
-     *  - fallback handling the fileName as an absolute path
+     *  - handling the fileName as an absolute path
+     *  - fallback in resources, returns it if it exists
      *
      * @param fileName File name or path of a file in resources or an absolute path
      * @return  The file absolute path as a {@link String}, if it was found anywhere
-     *          in the resources or as absolute path
+     *          in the absolute path or in the resources
      */
-    public static String getFileInResourcesOrAbsolutePath(String fileName) {
-        String filePath = getFileInResources(fileName);
-        if (Util.isNullOrEmpty(filePath)) {
-            filePath = getFileInAbsolutePath(fileName);
+    public static String getFileInAbsolutePathOrResources(String fileName) {
+        File file = new File(fileName);
+        String filePath = file.getAbsolutePath();
+        if (!file.exists()) {
+             filePath = getFileInResources(fileName);
         }
         return filePath;
     }

@@ -63,7 +63,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
                 <configuration>
-                    <groups>it.latraccia.dss.util.cli.test.unit.UnitTest</groups>
+                    <groups>it.latraccia.dss.util.cli.test.unit.PKCS12UnitTest</groups>
                 </configuration>
             </plugin>
             <!-- Assembly configuration, package everything in a single jar -->

@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(value = Parameterized.class)
-@Category(value = it.latraccia.dss.util.cli.test.integration.IntegrationTest.class)
+@Category(value = it.latraccia.dss.util.cli.test.integration.PKCS11IntegrationTest.class)
 public class PKCS11PADESSuccessfulIntegrationTest extends PADESSuccessfulGenericTest {
 
     public PKCS11PADESSuccessfulIntegrationTest(String description, Object[] args) {

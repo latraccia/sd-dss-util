@@ -67,7 +67,7 @@ public class PKCS11TokenBuilder extends PKCSTokenBuilder {
         SignatureToken token = super.build();
 
         // Get the token asset
-        File tokenAsset = new File(Util.getFileInResourcesOrAbsolutePath(getFile()));
+        File tokenAsset = new File(Util.getFileInAbsolutePathOrResources(getFile()));
         if (tokenAsset.exists()) {
             // Save the token asset file
             token.setTokenAsset(new File(tokenAsset.getAbsolutePath()));

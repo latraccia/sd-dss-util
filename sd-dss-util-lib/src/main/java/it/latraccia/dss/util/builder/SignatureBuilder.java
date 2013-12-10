@@ -30,16 +30,10 @@ import eu.europa.ec.markt.dss.signature.SignatureParameters;
 import eu.europa.ec.markt.dss.signature.token.DSSPrivateKeyEntry;
 import eu.europa.ec.markt.dss.signature.token.SignatureTokenConnection;
 import eu.europa.ec.markt.dss.validation.TrustedListCertificateVerifier;
-import it.latraccia.dss.util.builder.format.CAdESFormatBuilder;
 import it.latraccia.dss.util.builder.format.FormatBuilder;
-import it.latraccia.dss.util.builder.format.XAdESFormatBuilder;
 import it.latraccia.dss.util.builder.policy.PolicyBuilder;
-import it.latraccia.dss.util.builder.token.MoccaTokenBuilder;
-import it.latraccia.dss.util.builder.token.PKCS11TokenBuilder;
-import it.latraccia.dss.util.builder.token.PKCS12TokenBuilder;
 import it.latraccia.dss.util.builder.token.TokenBuilder;
 import it.latraccia.dss.util.entity.DigestAlgorithm;
-import it.latraccia.dss.util.entity.MoccaAlgorithm;
 import it.latraccia.dss.util.entity.level.SignaturePAdESLevel;
 import it.latraccia.dss.util.exception.*;
 import it.latraccia.dss.util.model.SignatureCLIModel;
@@ -253,7 +247,7 @@ public class SignatureBuilder implements IBuilder<File> {
          */
         protected void setSourceFile(String sourceFile, SignatureCLIModel model) throws FileNotFoundException {
             // Search in resources, then absolute path
-            String foundFile = Util.getFileInResourcesOrAbsolutePath(sourceFile);
+            String foundFile = Util.getFileInAbsolutePathOrResources(sourceFile);
             model.setSelectedFile(new File(foundFile));
         }
 
