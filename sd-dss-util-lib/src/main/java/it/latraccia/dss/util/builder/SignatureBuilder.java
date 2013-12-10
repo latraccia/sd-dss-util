@@ -109,6 +109,9 @@ public class SignatureBuilder implements IBuilder<File> {
     }
 
     public SignatureBuilder setDigestAlgorithm(DigestAlgorithm digestAlgorithm) {
+        if (digestAlgorithm == null) {
+            digestAlgorithm = DigestAlgorithm.SHA1;
+        }
         this.digestAlgorithm = digestAlgorithm;
         return this;
     }

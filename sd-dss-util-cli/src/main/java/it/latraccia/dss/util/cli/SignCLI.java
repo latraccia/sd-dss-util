@@ -133,8 +133,10 @@ public class SignCLI {
      * @param builder           The signature builder
      */
     protected static void setDigestAlgorithm(SignatureArgs signatureArgs, SignatureBuilder builder) {
-        builder.setDigestAlgorithm(
-                new it.latraccia.dss.util.entity.DigestAlgorithm(signatureArgs.getDigestAlgorithm().name()));
+        if (signatureArgs.getDigestAlgorithm() != null) {
+            builder.setDigestAlgorithm(
+                    new it.latraccia.dss.util.entity.DigestAlgorithm(signatureArgs.getDigestAlgorithm().name()));
+        }
     }
 
     /**
