@@ -30,9 +30,9 @@ public class DigestAlgorithmConverter implements IStringConverter<DigestAlgorith
         if (!AssertHelper.stringMustBeInList("digest algorithm", s, new String[] {"SHA1", "SHA256", "SHA512"})) {
             throw new ParameterException(
                     String.format("Could not recognize %s as a valid digest algorithm.", s));
-        } else if ("SHA1".equals(s)) {
+        } else if ("SHA1".equalsIgnoreCase(s)) {
             return DigestAlgorithm.SHA1;
-        } else if ("SHA256".equals(s)) {
+        } else if ("SHA256".equalsIgnoreCase(s)) {
             return DigestAlgorithm.SHA256;
         } else {
             return DigestAlgorithm.SHA512;

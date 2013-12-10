@@ -74,7 +74,7 @@ public class AssertHelper {
 
         if (list != null) {
             for (String s : list) {
-                if (s.equals(string)) {
+                if (s.equalsIgnoreCase(string)) {
                     return true;
                 }
             }

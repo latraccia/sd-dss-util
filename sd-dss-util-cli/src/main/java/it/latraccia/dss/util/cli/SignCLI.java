@@ -106,17 +106,17 @@ public class SignCLI {
 
         if (format != null) {
             FormatBuilder formatBuilder = null;
-            if (format.equals(it.latraccia.dss.util.entity.format.SignatureFormat.CAdES_NAME)) {
+            if (format.equalsIgnoreCase(it.latraccia.dss.util.entity.format.SignatureFormat.CAdES_NAME)) {
                 formatBuilder = new CAdESFormatBuilder();
-                formatBuilder.setLevel(new SignatureCAdESLevel(level));
+                formatBuilder.setLevel(new SignatureCAdESLevel(level.toUpperCase()));
                 formatBuilder.setPackaging(new SignatureCAdESPackaging(packaging.name()));
-            } else if (format.equals(it.latraccia.dss.util.entity.format.SignatureFormat.PAdES_NAME)) {
+            } else if (format.equalsIgnoreCase(it.latraccia.dss.util.entity.format.SignatureFormat.PAdES_NAME)) {
                 formatBuilder = new PAdESFormatBuilder();
-                formatBuilder.setLevel(new SignaturePAdESLevel(level));
+                formatBuilder.setLevel(new SignaturePAdESLevel(level.toUpperCase()));
                 formatBuilder.setPackaging(new SignaturePAdESPackaging(packaging.name()));
-            } else if (format.equals(it.latraccia.dss.util.entity.format.SignatureFormat.XAdES_NAME)) {
+            } else if (format.equalsIgnoreCase(it.latraccia.dss.util.entity.format.SignatureFormat.XAdES_NAME)) {
                 formatBuilder = new XAdESFormatBuilder();
-                formatBuilder.setLevel(new SignatureXAdESLevel(level));
+                formatBuilder.setLevel(new SignatureXAdESLevel(level.toUpperCase()));
                 formatBuilder.setPackaging(new SignatureXAdESPackaging(packaging.name()));
             }
             if (formatBuilder != null) {

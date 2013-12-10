@@ -30,9 +30,9 @@ public class PackagingConverter implements IStringConverter<SignaturePackaging> 
         if (!AssertHelper.stringMustBeInList("signature packaging", s, new String[]{"ENVELOPED", "ENVELOPING", "DETACHED"})) {
             throw new ParameterException(
                     String.format("Could not recognize %s as a valid signature packaging.", s));
-        } else if ("ENVELOPED".equals(s)) {
+        } else if ("ENVELOPED".equalsIgnoreCase(s)) {
             return SignaturePackaging.ENVELOPED;
-        } else if ("ENVELOPING".equals(s)) {
+        } else if ("ENVELOPING".equalsIgnoreCase(s)) {
             return SignaturePackaging.ENVELOPING;
         } else {
             return SignaturePackaging.DETACHED;

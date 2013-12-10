@@ -78,7 +78,7 @@
                         </goals>
                         <configuration>
                             <descriptorRefs>
-                                <descriptorRef>full</descriptorRef>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
                             <archive>
                                 <manifest>
