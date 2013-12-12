@@ -1,7 +1,5 @@
-# SD-DSS-Util
--------
+# SD-DSS-Util [![Build Status](https://travis-ci.org/latraccia/sd-dss-util.png?branch=develop)](https://travis-ci.org/latraccia/sd-dss-util)
 *A Utility library and a Command Line Interface for SD-DSS.*
-
 
 ## Introduction
 
