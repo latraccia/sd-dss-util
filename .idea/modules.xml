@@ -2,10 +2,30 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/sd-dss-cli-main/sd-dss-cli-main.iml" filepath="$PROJECT_DIR$/sd-dss-cli-main/sd-dss-cli-main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/app-dss.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/app-dss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/dss.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/dss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-common/dss-common.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-common/dss-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-core.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-applet-package/dss-demo-applet-package.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-applet-package/dss-demo-applet-package.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-applet-v2/dss-demo-applet-v2.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-applet-v2/dss-demo-applet-v2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-remoting-client/dss-demo-remoting-client.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-remoting-client/dss-demo-remoting-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-remoting-common/dss-demo-remoting-common.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-remoting-common/dss-demo-remoting-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-remoting-service/dss-demo-remoting-service.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-remoting-service/dss-demo-remoting-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-webapp/dss-demo-webapp.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/demo/dss-demo-webapp/dss-demo-webapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-document/dss-document.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-document/dss-document.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-itext/dss-itext.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-itext/dss-itext.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-report/dss-report.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-report/dss-report.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-service/dss-service.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-service/dss-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-spi/dss-spi.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-spi/dss-spi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-test-support/dss-test-support.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/core/dss-test-support/dss-test-support.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/dss/integration/dss-webservices/dss-webservices.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/dss/integration/dss-webservices/dss-webservices.iml" />
       <module fileurl="file://$PROJECT_DIR$/sd-dss-util.iml" filepath="$PROJECT_DIR$/sd-dss-util.iml" />
       <module fileurl="file://$PROJECT_DIR$/sd-dss-util-cli/sd-dss-util-cli.iml" filepath="$PROJECT_DIR$/sd-dss-util-cli/sd-dss-util-cli.iml" />
       <module fileurl="file://$PROJECT_DIR$/sd-dss-util-lib/sd-dss-util-lib.iml" filepath="$PROJECT_DIR$/sd-dss-util-lib/sd-dss-util-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/tlmanager/tlmanager.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/tlmanager/tlmanager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/tlmanager/tlmanager-app/tlmanager-app.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/tlmanager/tlmanager-app/tlmanager-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss/dss-src/apps/tlmanager/tlmanager-package/tlmanager-package.iml" filepath="$PROJECT_DIR$/sd-dss/dss-src/apps/tlmanager/tlmanager-package/tlmanager-package.iml" />
     </modules>
   </component>
 </project>

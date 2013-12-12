@@ -33,6 +33,7 @@
     <modules>
         <module>sd-dss-util-lib</module>
         <module>sd-dss-util-cli</module>
+        <module>sd-dss/dss-src</module>
     </modules>
 
     <licenses>

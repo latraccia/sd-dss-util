@@ -34,8 +34,17 @@ For more information about SD-DSS, please refer to the [official page](https://j
 
 ## How to build
 
-The project is based on `pom.xml` files, so you need to have Maven installed and configured. Then, simply call
-`maven clean install` on the main `pom.xml` to clean and build the project.
+The project is based on `pom.xml` files, so you need to have Maven installed and configured.
+
+Since `SD-DSS` is not yet available on maven, you need to call, after cloning the repo:
+
+```shell
+    git submodule update --init --recursive
+    maven clean install
+```
+
+This will, in turn, update to the latest version of `SD-DSS` and regularly proceed on the main `pom.xml` to clean
+and build the project.
 
 **Important:** you can change the SD-DSS reference with your sources, but SD-DSS-CLI is currently tested on SD-DSS
 v3.0.2.
