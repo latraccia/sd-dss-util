@@ -34,18 +34,15 @@ For more information about SD-DSS, please refer to the [official page](https://j
 
 The project is based on `pom.xml` files, so you need to have Maven installed and configured.
 
-Since `SD-DSS` is not yet available on maven, you need to call, after cloning the repo:
+`SD-DSS` is available on Maven since `3.0.3`, so you can simply call, after cloning the repo:
 
 ```shell
-    git submodule update --init --recursive
     maven clean install
 ```
 
-This will, in turn, update to the latest version of `SD-DSS` and regularly proceed on the main `pom.xml` to clean
-and build the project.
+This will proceed on the main `pom.xml` to clean and build the project.
 
-**Important:** you can change the SD-DSS reference with your sources, but SD-DSS-CLI is currently tested on SD-DSS
-v3.0.2.
+**Important:** SD-DSS-CLI is currently tested on SD-DSS v3.0.3.
 
 ## How to use
 
@@ -57,15 +54,15 @@ To sign a document, simply call the `SignCLI` class on the `sd-dss-util-cli.jar`
 The following list contains all of the accepted parameters. The parameters in **bold** are required.
 
 * input file, passed as first nameless parameter
-* **`--url`** or `-u`, the DSS server URL, required for `PAdES` (all levels) and for levels other than `BES`, `EPES` in
+* `**--url**` or `-u`, the DSS server URL, required for `PAdES` (all levels) and for levels other than `BES`, `EPES` in
 other formats
 * `--output` or `-o`, the destination path (optionally, with a file name)
-* **`--format`** or `-f`, required, the signature format
+* `**--format**` or `-f`, required, the signature format
 	* `CAdES`
 	* `PAdES`, for PDF files only
 	* `XAdES`
 	* `ASiC-S`, not yet implemented
-* **`--level`** or `-l`, required, the signature level
+* `**--level**` or `-l`, required, the signature level
 	* `BES`, available for every format
 	* `EPES`, available for every format
 	* `LTV`, only for `PAdES`
@@ -74,7 +71,7 @@ other formats
 	* `X`, only for `CAdES`, `XAdES`
 	* `XL`, only for `CAdES`, `XAdES`
 	* `A`, only for `CAdES`, `XAdES`
-* **`--packaging`** or `-p`, required, the packaging kind for the signed file(s)
+* `**--packaging**` or `-p`, required, the packaging kind for the signed file(s)
 	* `ENVELOPING`, only for `CAdES`, `XAdES`
 	* `ENVELOPED`, only for `PAdES` (PDF files), `XAdES` (XML files)
 	* `DETACHED`, only for `CAdES`, `XAdES`

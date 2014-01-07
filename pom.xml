@@ -33,7 +33,6 @@
     <modules>
         <module>sd-dss-util-lib</module>
         <module>sd-dss-util-cli</module>
-        <module>sd-dss/dss-src</module>
     </modules>
 
     <licenses>
@@ -61,11 +60,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>joinup</id>
+            <url>https://joinup.ec.europa.eu/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>eu.europa.ec.joinup.sd-dss</groupId>
             <artifactId>dss-demo-applet-package</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.3</version>
         </dependency>
     </dependencies>
 
