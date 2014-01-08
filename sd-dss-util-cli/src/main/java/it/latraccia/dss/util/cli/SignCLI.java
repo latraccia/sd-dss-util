@@ -295,7 +295,7 @@ public class SignCLI {
      *            -6 {@link SignaturePolicyAlgorithmMismatchException}: The selected explicit policy algorithm is not available.
      *            -7 {@link SignaturePolicyLevelMismatch}: The selected signature level collides with the policy options.
      *            -8 {@link SignatureTokenException}: The PKCS12 private key could not be found.
-     *            -9 {@link KeyStoreException}: The selected keystore failed
+     *            -9 {@link KeyStoreException}: The selected keystore failed (device not connected, no drivers, etc.).
      *            -10 {@link eu.europa.ec.markt.dss.exception.BadPasswordException}: The password was not valid.
      *            -11 {@link NoSuchAlgorithmException}: The selected digest algorithm could not be loaded.
      *            -12 {@link SignatureTargetFileException} The target output file could not be written.
