@@ -1,4 +1,0 @@
-[submodule "submods/dss"]
-	path = submods/dss
-	url = git@bitbucket.org:latraccia/dss.git
-	branch = develop

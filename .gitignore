@@ -1,4 +1,9 @@
-dss-cli-main/**/target/
+**/target/*
 !.idea
 .idea/*
 !.idea/runConfigurations/
+!.idea/copyright/
+!.idea/scopes/
+!.idea/.name
+!.idea/modules.xml
+build/

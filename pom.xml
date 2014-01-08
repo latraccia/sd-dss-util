@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ DSS-CLI, a Command Line Interface for SD-DSS.
+  ~ SD-DSS-Util, a Utility Library and a Command Line Interface for SD-DSS.
   ~ Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
   ~ Developed by Francesco Pontillo
   ~
@@ -24,10 +24,23 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.latraccia.dss</groupId>
-    <artifactId>dss-cli</artifactId>
-    <version>0.1-SNAPSHOT</version>
-    <name>Digital Signature Services CLI</name>
+    <artifactId>sd-dss-util</artifactId>
+    <version>0.2-alpha.1</version>
+    <name>Digital Signature Services Util</name>
+    <description>A Utility library and a Command Line Interface for SD-DSS</description>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>sd-dss-util-lib</module>
+        <module>sd-dss-util-cli</module>
+    </modules>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>https://www.gnu.org/licenses/lgpl.html</url>
+        </license>
+    </licenses>
 
     <developers>
         <developer>
@@ -35,9 +48,10 @@
             <name>Francesco</name>
             <email>francescopontillo@gmail.com</email>
             <organization>La Traccia</organization>
-            <organizationUrl>http://www.latraccia.it/</organizationUrl>
+            <organizationUrl>http://www.latraccia.it/en/</organizationUrl>
             <roles>
                 <role>manager</role>
+                <role>developer</role>
             </roles>
         </developer>
     </developers>
@@ -45,5 +59,20 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>joinup</id>
+            <url>https://joinup.ec.europa.eu/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>eu.europa.ec.joinup.sd-dss</groupId>
+            <artifactId>dss-demo-applet-package</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+    </dependencies>
 
 </project>

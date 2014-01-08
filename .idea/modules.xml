@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/sd-dss-util.iml" filepath="$PROJECT_DIR$/sd-dss-util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss-util-cli/sd-dss-util-cli.iml" filepath="$PROJECT_DIR$/sd-dss-util-cli/sd-dss-util-cli.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sd-dss-util-lib/sd-dss-util-lib.iml" filepath="$PROJECT_DIR$/sd-dss-util-lib/sd-dss-util-lib.iml" />
+    </modules>
+  </component>
+</project>
+
