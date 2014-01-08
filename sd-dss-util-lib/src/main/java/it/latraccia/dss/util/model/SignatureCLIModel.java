@@ -22,6 +22,7 @@ package it.latraccia.dss.util.model;
 import eu.europa.ec.markt.dss.DigestAlgorithm;
 import eu.europa.ec.markt.dss.applet.io.*;
 import eu.europa.ec.markt.dss.applet.util.MOCCAAdapter;
+import eu.europa.ec.markt.dss.exception.BadPasswordException;
 import eu.europa.ec.markt.dss.signature.SignaturePackaging;
 import eu.europa.ec.markt.dss.signature.token.*;
 import eu.europa.ec.markt.dss.validation.CertificateVerifier;
@@ -139,8 +140,9 @@ public class SignatureCLIModel extends SignatureModel {
      * Part of this code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.CertificateStep#init()}.
      * @return the {@link SignatureTokenConnection} created, if any
      * @throws KeyStoreException In case of errors accessing the keystore
+     * @throws eu.europa.ec.markt.dss.exception.BadPasswordException If a bad password was given for the token
      */
-    public SignatureTokenConnection createTokenConnection() throws KeyStoreException {
+    public SignatureTokenConnection createTokenConnection() throws KeyStoreException, BadPasswordException {
         PasswordInputCallback passwordInput = new CLIPasswordStoredCallback();
         SignatureTokenConnection connection;
 

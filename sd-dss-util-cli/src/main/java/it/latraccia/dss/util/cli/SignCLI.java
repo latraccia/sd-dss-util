@@ -20,6 +20,7 @@
 package it.latraccia.dss.util.cli;
 
 import com.beust.jcommander.JCommander;
+import eu.europa.ec.markt.dss.exception.BadPasswordException;
 import eu.europa.ec.markt.dss.signature.SignaturePackaging;
 import eu.europa.ec.markt.dss.signature.token.DSSPrivateKeyEntry;
 import it.latraccia.dss.util.cli.argument.SignatureArgs;
@@ -38,30 +39,53 @@ import it.latraccia.dss.util.entity.level.SignatureXAdESLevel;
 import it.latraccia.dss.util.entity.packaging.SignatureCAdESPackaging;
 import it.latraccia.dss.util.entity.packaging.SignaturePAdESPackaging;
 import it.latraccia.dss.util.entity.packaging.SignatureXAdESPackaging;
-import it.latraccia.dss.util.exception.SignatureException;
+import it.latraccia.dss.util.exception.*;
 import it.latraccia.dss.util.model.ExplicitSignaturePolicyModel;
 import it.latraccia.dss.util.model.PKCSModel;
 import it.latraccia.dss.util.util.Util;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class SignCLI {
+    private static Class[] possibleExceptions = new Class[] {
+            SignatureSourceFileNotFoundException.class,
+            SignatureFormatMismatchException.class,
+            SignatureLevelMismatchException.class,
+            SignaturePackagingMismatchException.class,
+            SignatureServiceUrlException.class,
+            SignaturePolicyAlgorithmMismatchException.class,
+            SignaturePolicyLevelMismatch.class,
+            SignatureTokenException.class,
+            KeyStoreException.class,
+            BadPasswordException.class,
+            NoSuchAlgorithmException.class,
+            SignatureTargetFileException.class
+    };
 
-    public static void main(String[] args)
-            throws IOException, SignatureException, KeyStoreException, NoSuchAlgorithmException {
+    public static void main(String[] args) throws FileNotFoundException {
         // Read and parse the arguments
         SignatureArgs signatureArgs = new SignatureArgs();
         new JCommander(signatureArgs, args);
+        Exception returnedException = null;
 
-        execute(signatureArgs);
+        try {
+            execute(signatureArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnedException = e;
+        }
+        writeLogFile(signatureArgs, returnedException);
     }
 
-    private static FileOutputStream execute(SignatureArgs signatureArgs)
-            throws IOException, SignatureException, KeyStoreException, NoSuchAlgorithmException {
+    private static File execute(SignatureArgs signatureArgs) throws NoSuchAlgorithmException, SignaturePolicyLevelMismatch,
+                                                                    SignatureFormatMismatchException, SignatureServiceUrlException,
+                                                                    SignatureLevelMismatchException, SignatureSourceFileNotFoundException,
+                                                                    SignaturePackagingMismatchException, SignaturePolicyAlgorithmMismatchException,
+                                                                    KeyStoreException, SignatureTargetFileException, SignatureTokenException,
+                                                                    SignatureMoccaUnavailabilityException, SignatureMoccaAlgorithmMismatchException {
         // Create the signature wizard builder
         SignatureBuilder signatureBuilder = new SignatureBuilder();
 
@@ -75,16 +99,14 @@ public class SignCLI {
         setPolicy(signatureArgs, signatureBuilder);
         setOutputFile(signatureArgs, signatureBuilder);
 
-        signatureBuilder.build(signatureArgs.isSimulate());
-
-        return null;
+        return signatureBuilder.build(signatureArgs.isSimulate());
     }
 
     /**
      * Set the source file to be signed.
      *
-     * @param signatureArgs     The input arguments
-     * @param builder           The signature builder
+     * @param signatureArgs The input arguments
+     * @param builder       The signature builder
      */
     protected static void setSourceFile(SignatureArgs signatureArgs, SignatureBuilder builder) {
         // Set the FileDocument from the user source path
@@ -95,8 +117,8 @@ public class SignCLI {
     /**
      * Set the signature format, level and packaging.
      *
-     * @param signatureArgs     The input arguments
-     * @param builder           The signature builder
+     * @param signatureArgs The input arguments
+     * @param builder       The signature builder
      */
     protected static void setSignatureFormatLevelPackagingServiceUrl(SignatureArgs signatureArgs, SignatureBuilder builder) {
         // Set the signature format
@@ -129,8 +151,8 @@ public class SignCLI {
     /**
      * Set the custom digest algorithm.
      *
-     * @param signatureArgs     The input arguments
-     * @param builder           The signature builder
+     * @param signatureArgs The input arguments
+     * @param builder       The signature builder
      */
     protected static void setDigestAlgorithm(SignatureArgs signatureArgs, SignatureBuilder builder) {
         if (signatureArgs.getDigestAlgorithm() != null) {
@@ -142,8 +164,8 @@ public class SignCLI {
     /**
      * Set the key token.
      *
-     * @param signatureArgs     The input arguments
-     * @param builder           The signature builder
+     * @param signatureArgs The input arguments
+     * @param builder       The signature builder
      */
     protected static void setToken(SignatureArgs signatureArgs, SignatureBuilder builder) {
         // Get the parameters
@@ -187,8 +209,8 @@ public class SignCLI {
     /**
      * Set the claimed role of the user.
      *
-     * @param signatureArgs     The input arguments
-     * @param builder           The signature builder
+     * @param signatureArgs The input arguments
+     * @param builder       The signature builder
      */
     protected static void setClaimedRole(SignatureArgs signatureArgs, SignatureBuilder builder) {
         builder.setClaimedRole(signatureArgs.getClaimedRole());
@@ -197,8 +219,8 @@ public class SignCLI {
     /**
      * Set the user personal data.
      *
-     * @param signatureArgs     The input arguments
-     * @param builder           The signature builder
+     * @param signatureArgs The input arguments
+     * @param builder       The signature builder
      */
     protected static void setPolicy(SignatureArgs signatureArgs, SignatureBuilder builder) {
         // Convert explicit policy data
@@ -206,17 +228,17 @@ public class SignCLI {
                 new ExplicitSignaturePolicyModel(signatureArgs.getExplicitPolicy());
 
         builder.setPolicyBuilder(new PolicyBuilder()
-                .setOid(explicitPolicy.getOID())
-                .setPolicyAlgorithm(new PolicyAlgorithm(explicitPolicy.getHashAlgo()))
-                .setHash(explicitPolicy.getHash()));
+                                         .setOid(explicitPolicy.getOID())
+                                         .setPolicyAlgorithm(new PolicyAlgorithm(explicitPolicy.getHashAlgo()))
+                                         .setHash(explicitPolicy.getHash()));
     }
 
     /**
      * Sets the output file path, starting from the original file name and path, the signature format, level and
      * packaging.
      *
-     * @param signatureArgs     The input arguments
-     * @param builder           The signature builder
+     * @param signatureArgs The input arguments
+     * @param builder       The signature builder
      */
     protected static void setOutputFile(SignatureArgs signatureArgs, SignatureBuilder builder) {
         // Set the user-selected destination path or file
@@ -259,5 +281,58 @@ public class SignCLI {
             }
             return key;
         }
+    }
+
+    /**
+     * Get the return code, given an Exception.
+     * @param e The {@link java.lang.Exception} to check against
+     * @return  0 for no error, a negative number for an exception, in order:
+     *            -1 {@link SignatureSourceFileNotFoundException}: The source file could not be found.
+     *            -2 {@link SignatureFormatMismatchException}: The selected signature format collides with the file type.
+     *            -3 {@link SignatureLevelMismatchException}: The selected signature level collides with other options.
+     *            -4 {@link SignaturePackagingMismatchException}: The selected signature packaging collides with the file type.
+     *            -5 {@link SignatureServiceUrlException}: The selected service URL is not available.
+     *            -6 {@link SignaturePolicyAlgorithmMismatchException}: The selected explicit policy algorithm is not available.
+     *            -7 {@link SignaturePolicyLevelMismatch}: The selected signature level collides with the policy options.
+     *            -8 {@link SignatureTokenException}: The PKCS12 private key could not be found.
+     *            -9 {@link KeyStoreException}: The selected keystore failed
+     *            -10 {@link eu.europa.ec.markt.dss.exception.BadPasswordException}: The password was not valid.
+     *            -11 {@link NoSuchAlgorithmException}: The selected digest algorithm could not be loaded.
+     *            -12 {@link SignatureTargetFileException} The target output file could not be written.
+     *            -13 For any other exception
+     */
+    private static int writeLogFile(SignatureArgs args, Exception e) throws FileNotFoundException {
+        int code;
+        if (e == null) {
+            code = 0;
+        } else {code = -1;
+            for (Class clazz : possibleExceptions) {
+                if (clazz.isInstance(e)) {
+                    break;
+                }
+                code--;
+            }
+        }
+
+        String logFile = args.getLog();
+        if (Util.isNullOrEmpty(logFile)) {
+            return code;
+        }
+
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(new File(logFile), "utf-8");
+            pw.write(Integer.toString(code));
+            pw.write("\n");
+            e.printStackTrace(pw);
+        } catch (IOException ex) {
+            throw new FileNotFoundException("Can't write the log file, please specify a valid path.");
+        } finally {
+            try {
+                pw.close();
+            } catch (Exception ex) {}
+        }
+
+        return code;
     }
 }

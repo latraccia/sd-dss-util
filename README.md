@@ -95,6 +95,7 @@ folder
 	* the hash value of the signature policy in base64 format
 	* the algorithm used to produce it (only available option for now is `SHA1`)
 * `--simulate` or `-s`, validates the parameters but doesn't start the actual signing process
+* `--log` or `-log`, the path of the log file to be written (if any)
 
 Even if `--pkcs11`, `--pkcs12`, `--mscapi`, `--mocca` are not required, one of them has to be specified in order to
 provide the signature token provider.
@@ -109,6 +110,32 @@ provide the signature token provider.
 		--pkcs12="path/to/the/pkcs12/key.p12" "pkcs12filepassword"
 		--output="output/file.pdf"
 		--url="http://localhost:8080/service"
+		
+### Logging
+
+The `--log` option will create a "utf-8" log file with the following content pattern:
+
+    [code]
+    [description]
+
+The code can be one of the following:
+
+* 0: success!
+* -1 SignatureSourceFileNotFoundException: The source file could not be found.
+* -2 SignatureFormatMismatchException: The selected signature format collides with the file type.
+* -3 SignatureLevelMismatchException: The selected signature level collides with other options.
+* -4 SignaturePackagingMismatchException: The selected signature packaging collides with the file type.
+* -5 SignatureServiceUrlException: The selected service URL is not available.
+* -6 SignaturePolicyAlgorithmMismatchException: The selected explicit policy algorithm is not available.
+* -7 SignaturePolicyLevelMismatch: The selected signature level collides with the policy options.
+* -8 SignatureTokenException: The PKCS12 private key could not be found.
+* -9 KeyStoreException: The selected keystore failed
+* -10 BadPasswordException: The password was not valid.
+* -11 NoSuchAlgorithmException: The selected digest algorithm could not be loaded.
+* -12 SignatureTargetFileException} The target output file could not be written.
+* -13 For any other exception.
+
+The description (if any) will contain the stack trace of the Exception (for reporting purposes).
 
 ## Future development and contribution
 

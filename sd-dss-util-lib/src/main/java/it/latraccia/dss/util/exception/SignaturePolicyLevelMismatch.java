@@ -20,6 +20,12 @@
 package it.latraccia.dss.util.exception;
 
 public class SignaturePolicyLevelMismatch extends SignatureException {
+    public SignaturePolicyLevelMismatch() {
+    }
+    public SignaturePolicyLevelMismatch(Exception e) {
+        super(e);
+    }
+
     @Override
     public String getMessage() {
         return "The selected signature level collides with other options!";

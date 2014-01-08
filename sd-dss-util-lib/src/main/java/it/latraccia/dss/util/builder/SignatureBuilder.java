@@ -22,6 +22,7 @@ package it.latraccia.dss.util.builder;
 import eu.europa.ec.markt.dss.applet.main.FileType;
 import eu.europa.ec.markt.dss.applet.util.SigningUtils;
 import eu.europa.ec.markt.dss.common.SignatureTokenType;
+import eu.europa.ec.markt.dss.exception.BadPasswordException;
 import eu.europa.ec.markt.dss.exception.DSSException;
 import eu.europa.ec.markt.dss.signature.DSSDocument;
 import eu.europa.ec.markt.dss.signature.SignatureFormat;
@@ -55,7 +56,7 @@ import java.util.List;
 /**
  * Custom builder for signing a document with given parameters.
  * When finished setting all of the parameters, call {@link SignatureBuilder#build()}.
- *
+ * <p/>
  * Date: 06/12/13
  * Time: 9.37
  *
@@ -144,7 +145,21 @@ public class SignatureBuilder implements IBuilder<File> {
         return build(false);
     }
 
-    public File build(boolean simulate) throws IOException, SignatureException, KeyStoreException, NoSuchAlgorithmException {
+    public File build(boolean simulate)
+            throws SignatureSourceFileNotFoundException,
+                   SignatureFormatMismatchException,
+                   SignatureLevelMismatchException,
+                   SignaturePackagingMismatchException,
+                   SignatureServiceUrlException,
+                   SignatureTokenException,
+                   KeyStoreException,
+                   BadPasswordException,
+                   SignaturePolicyAlgorithmMismatchException,
+                   SignaturePolicyLevelMismatch,
+                   SignatureTargetFileException,
+                   NoSuchAlgorithmException,
+                   SignatureMoccaAlgorithmMismatchException,
+                   SignatureMoccaUnavailabilityException {
         InnerSignatureBuilder innerBuilder = new InnerSignatureBuilder();
 
         // Set the source file
@@ -164,7 +179,11 @@ public class SignatureBuilder implements IBuilder<File> {
         innerBuilder.setDigestAlgorithm(digestAlgorithm, model);
 
         // Set the token and token parameters
-        innerBuilder.setToken(tokenBuilder, model);
+        try {
+            innerBuilder.setToken(tokenBuilder, model);
+        } catch (FileNotFoundException e) {
+            throw new SignatureTokenException(e);
+        }
 
         // Ensure that a key chooser has been selected
         innerBuilder.validatePrivateKeyChooser();
@@ -191,7 +210,8 @@ public class SignatureBuilder implements IBuilder<File> {
 
     /**
      * Get the suggested target file name.
-     * This method is a wrapper around the original {@link it.latraccia.dss.util.builder.SignatureBuilder#prepareTargetFileName(java.io.File, eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}.
+     * This method is a wrapper around the original {@link it.latraccia.dss.util.builder.SignatureBuilder#prepareTargetFileName(java.io.File,
+     * eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}.
      *
      * @return The suggested target file name
      */
@@ -213,8 +233,8 @@ public class SignatureBuilder implements IBuilder<File> {
      * @return The suggested target File
      */
     private File prepareTargetFileName(final File file,
-                                              final SignaturePackaging signaturePackaging,
-                                              final String signatureFormat) {
+                                       final SignaturePackaging signaturePackaging,
+                                       final String signatureFormat) {
 
         final File parentDir = file.getParentFile();
         final String originalName = StringUtils.substringBeforeLast(file.getName(), ".");
@@ -248,10 +268,14 @@ public class SignatureBuilder implements IBuilder<File> {
          * @param model         The signature model
          * @throws java.io.FileNotFoundException Thrown if the input file hasn't been found or it is not valid
          */
-        protected void setSourceFile(String sourceFile, SignatureCLIModel model) throws FileNotFoundException {
+        protected void setSourceFile(String sourceFile, SignatureCLIModel model) throws SignatureSourceFileNotFoundException {
             // Search in resources, then absolute path
-            String foundFile = Util.getFileInAbsolutePathOrResources(sourceFile);
-            model.setSelectedFile(new File(foundFile));
+            try {
+                String foundFile = Util.getFileInAbsolutePathOrResources(sourceFile);
+                model.setSelectedFile(new File(foundFile));
+            } catch (FileNotFoundException exception) {
+                throw new SignatureSourceFileNotFoundException(exception);
+            }
         }
 
         /**
@@ -259,11 +283,12 @@ public class SignatureBuilder implements IBuilder<File> {
          * Validation from {@link eu.europa.ec.markt.dss.applet.wizard.signature.FileStep#isValid()}
          *
          * @param model The signature model
-         * @throws FileNotFoundException Thrown if the file does not exists or the path is not a file
+         * @throws SignatureSourceFileNotFoundException Thrown if the file does not exists or the path is not a file
          */
-        protected void validateSourceFile(SignatureCLIModel model) throws FileNotFoundException {
+        protected void validateSourceFile(SignatureCLIModel model) throws SignatureSourceFileNotFoundException {
             if (!model.getSelectedFile().exists() || !model.getSelectedFile().isFile()) {
-                throw new FileNotFoundException("The source file was not found or it is not a valid file.");
+                throw new SignatureSourceFileNotFoundException(
+                        new FileNotFoundException("The source file was not found or it is not a valid file."));
             }
         }
 
@@ -271,11 +296,18 @@ public class SignatureBuilder implements IBuilder<File> {
          * Set the signature format, level and packaging.
          * Some of the code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.SignatureStep#init()}.
          *
-         * @param model         The signature model
-         * @throws it.latraccia.dss.util.exception.SignatureException Thrown if there is some kind of signature parameter mismatch
+         * @param model The signature model
+         *
+         * @throws SignatureLevelMismatchException  Thrown if there is a mismatch between the file extension and the
+         *                                          signature level
+         *
+         * @throws SignaturePackagingMismatchException  Thrown if there is a mismatch between the file extension and the
+         *                                              signature packaging
+         * @throws SignatureFormatMismatchException     Thrown if there is a mismatch between the file extension and the
+         *                                              signature format
          */
         protected void setSignatureFormatLevelPackaging(FormatBuilder formatBuilder, SignatureCLIModel model)
-                throws SignatureException {
+                throws SignatureLevelMismatchException, SignaturePackagingMismatchException, SignatureFormatMismatchException {
 
             // Build the object
             signatureFormatLevelPackaging = formatBuilder.build();
@@ -359,7 +391,7 @@ public class SignatureBuilder implements IBuilder<File> {
         /**
          * Set the custom digest algorithm.
          *
-         * @param model         The signature model
+         * @param model The signature model
          */
         protected void setDigestAlgorithm(DigestAlgorithm digestAlgorithm, SignatureCLIModel model) {
             // Set the digest algorithm, to SHA1 if null
@@ -376,17 +408,18 @@ public class SignatureBuilder implements IBuilder<File> {
          * - PKCS11: library file and password
          * - PKCS12: certificate file and password
          * - MOCCA: signature algorithm
-         *
+         * <p/>
          * Some of this code has been taken from:
-         *  - {@link eu.europa.ec.markt.dss.applet.wizard.signature.SignatureStep#getNextStep()}
-         *  - {@link eu.europa.ec.markt.dss.applet.wizard.signature.PKCS11Step#isValid()}
-         *  - {@link eu.europa.ec.markt.dss.applet.wizard.signature.PKCS12Step#isValid()}
+         * - {@link eu.europa.ec.markt.dss.applet.wizard.signature.SignatureStep#getNextStep()}
+         * - {@link eu.europa.ec.markt.dss.applet.wizard.signature.PKCS11Step#isValid()}
+         * - {@link eu.europa.ec.markt.dss.applet.wizard.signature.PKCS12Step#isValid()}
          *
-         * @param model         The signature model
-         * @throws FileNotFoundException If any of the files doesn't exist
-         * @throws SignatureException    Thrown if the MOCCA algorithm is not valid
+         * @param model The signature model
          */
-        protected void setToken(TokenBuilder tokenBuilder, SignatureCLIModel model) throws SignatureMoccaAlgorithmMismatchException, SignatureMoccaUnavailabilityException, FileNotFoundException {
+        protected void setToken(TokenBuilder tokenBuilder, SignatureCLIModel model) throws
+                                                                                    FileNotFoundException,
+                                                                                    SignatureMoccaAlgorithmMismatchException,
+                                                                                    SignatureMoccaUnavailabilityException {
             // Set the token file, password, do some pre-validation
             token = tokenBuilder.build();
 
@@ -420,6 +453,7 @@ public class SignatureBuilder implements IBuilder<File> {
 
         /**
          * Ensure that the private key chooser has been set.
+         *
          * @throws java.lang.NullPointerException if the chooser was not set
          */
         protected void validatePrivateKeyChooser() throws NullPointerException {
@@ -436,7 +470,7 @@ public class SignatureBuilder implements IBuilder<File> {
          * @param model The signature model
          * @throws java.security.KeyStoreException If there are errors accessing the keystore
          */
-        protected void setPrivateKey(SignatureCLIModel model) throws KeyStoreException {
+        protected void setPrivateKey(SignatureCLIModel model) throws KeyStoreException, BadPasswordException {
             // Create the connection to the keystore provider
             SignatureTokenConnection connection = model.createTokenConnection();
             // Get the keys
@@ -457,8 +491,8 @@ public class SignatureBuilder implements IBuilder<File> {
         /**
          * Set the claimed role of the user.
          *
-         * @param claimedRole   The claimed role
-         * @param model         The signature model
+         * @param claimedRole The claimed role
+         * @param model       The signature model
          */
         protected void setClaimedRole(String claimedRole, SignatureCLIModel model) {
             model.setClaimedRole(claimedRole);
@@ -468,12 +502,12 @@ public class SignatureBuilder implements IBuilder<File> {
          * Set the user personal data.
          * Part of the code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.PersonalDataStep#init()}.
          *
-         * @param policyBuilder The {@link it.latraccia.dss.util.builder.policy.PolicyBuilder} that will be built to get the set values
+         * @param policyBuilder The {@link it.latraccia.dss.util.builder.policy.PolicyBuilder} that will be built to get
+         *                      the set values
          * @param model         The signature model
          * @throws SignatureException Thrown if any of the policy parameters are invalid
          */
-        protected void setPolicy(PolicyBuilder policyBuilder, SignatureCLIModel model)
-                throws SignatureException {
+        protected void setPolicy(PolicyBuilder policyBuilder, SignatureCLIModel model) throws SignaturePolicyAlgorithmMismatchException {
 
             // Default to no policy
             model.setSignaturePolicyCheck(false);
@@ -498,7 +532,7 @@ public class SignatureBuilder implements IBuilder<File> {
          * Some of this code has been taken from {@link eu.europa.ec.markt.dss.applet.wizard.signature.PersonalDataStep#init()}.
          *
          * @param model The signature model
-         * @throws SignaturePolicyLevelMismatch              Thrown if the signature level doesn't match
+         * @throws SignaturePolicyLevelMismatch Thrown if the signature level doesn't match
          */
         protected void validatePolicy(SignatureCLIModel model) throws SignaturePolicyLevelMismatch {
             boolean levelBES = model.getSimpleLevel().equalsIgnoreCase("BES");
@@ -514,8 +548,8 @@ public class SignatureBuilder implements IBuilder<File> {
          * {@link eu.europa.ec.markt.dss.applet.wizard.signature.SaveStep#prepareTargetFileName(java.io.File,
          * eu.europa.ec.markt.dss.signature.SignaturePackaging, String)}.
          *
-         * @param targetFile    The target file to set
-         * @param model         The signature model
+         * @param targetFile The target file to set
+         * @param model      The signature model
          */
         protected void setTargetFile(String targetFile, SignatureCLIModel model) {
             // The output path if and as requested by the user
@@ -559,12 +593,15 @@ public class SignatureBuilder implements IBuilder<File> {
          *
          * @param model The signature model
          * @return The {@link java.io.FileOutputStream} of the signed document
-         * @throws java.io.IOException              Thrown if there is an input/output exception while/reading a file or a
-         *                                  network stream
+         *
+         * @throws it.latraccia.dss.util.exception.SignatureTargetFileException Thrown if there is an input/output
+         *                                                                      exception while/reading a file or a
+         *                                                                      network stream
+         *
          * @throws java.security.NoSuchAlgorithmException Thrown if a specified algorithm isn't available
          */
         private File signDocument(SignatureCLIModel model)
-                throws IOException, NoSuchAlgorithmException {
+                throws SignatureTargetFileException, NoSuchAlgorithmException {
             final File fileToSign = model.getSelectedFile();
             final SignatureTokenConnection tokenConnection = model.getTokenConnection();
             final DSSPrivateKeyEntry privateKey = model.getSelectedPrivateKey();
@@ -597,23 +634,29 @@ public class SignatureBuilder implements IBuilder<File> {
                 policy.setDigestAlgo(digestAlgo);
             }
 
-            FileOutputStream output = new FileOutputStream(model.getTargetFile());
+            FileOutputStream output;
+            try {
+                output = new FileOutputStream(model.getTargetFile());
+            } catch (FileNotFoundException e) {
+                throw new SignatureTargetFileException(e);
+            }
 
             final TrustedListCertificateVerifier certificateVerifier = (TrustedListCertificateVerifier) model.getCertificateVerifier(
                     model.getCRLSource(), model.getOSCPSource(), model.getCertificateSource(model.getCertificateSource102853())
             );
 
-            final DSSDocument signedDocument;
+            DSSDocument signedDocument;
             try {
                 signedDocument = SigningUtils
                         .signDocument(fileToSign, parameters, model.getTSPSource(), certificateVerifier, tokenConnection, privateKey);
-            } catch (DSSException exception) {
-                System.err.println(exception.getMessage());
-                throw exception;
+                IOUtils.copy(signedDocument.openStream(), output);
+                output.close();
+            } catch (DSSException dssException) {
+                throw new SignatureTargetFileException(dssException);
+            } catch (IOException ioException) {
+                throw new SignatureTargetFileException(ioException);
             }
 
-            IOUtils.copy(signedDocument.openStream(), output);
-            output.close();
             System.out.println("SUCCESS.");
             System.out.println(String.format("Signed file: %s", model.getTargetFile().getAbsoluteFile()));
             return fileToSign;

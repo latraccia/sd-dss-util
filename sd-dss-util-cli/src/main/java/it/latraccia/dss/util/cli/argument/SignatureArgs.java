@@ -42,6 +42,10 @@ public class SignatureArgs {
     @Parameter(names = {"-u", "--url"},
             description = "URL of the DSS Web Service")
     private String url;
+
+    @Parameter(names = {"-log", "--log"},
+               description = "Path for the output log file")
+    private String log;
     /* END OF MAIN PARAMETERS */
 
     /* SIGNATURE FORMAT PARAMETERS */
@@ -140,6 +144,14 @@ public class SignatureArgs {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
     }
 
     public String getFormat() {
