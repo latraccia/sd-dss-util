@@ -19,16 +19,14 @@
 
 package it.latraccia.dss.util.exception;
 
-public class SignatureFormatMismatchException extends SignatureException {
-    public SignatureFormatMismatchException() {
-    }
-
-    public SignatureFormatMismatchException(Exception e) {
+/**
+ * Date: 07/01/14
+ * Time: 18.43
+ *
+ * @author Francesco Pontillo
+ */
+public class SignatureTokenException extends SignatureException {
+    public SignatureTokenException(Exception e) {
         super(e);
-    }
-
-    @Override
-    public String getMessage() {
-        return "The selected signature format collides with the file type!";
     }
 }

@@ -20,6 +20,12 @@
 package it.latraccia.dss.util.exception;
 
 public class SignatureServiceUrlException extends SignatureException {
+    public SignatureServiceUrlException() {
+    }
+    public SignatureServiceUrlException(Exception e) {
+        super(e);
+    }
+
     @Override
     public String getMessage() {
         return "The service URL was required but not specified!";

@@ -19,10 +19,7 @@
 
 package it.latraccia.dss.util.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 
@@ -172,7 +169,7 @@ public class Util {
      * @return  The file absolute path as a {@link String}, if it was found anywhere
      *          in the absolute path or in the resources
      */
-    public static String getFileInAbsolutePathOrResources(String fileName) {
+    public static String getFileInAbsolutePathOrResources(String fileName) throws FileNotFoundException {
         File file = new File(fileName);
         String filePath = file.getAbsolutePath();
         if (!file.exists()) {

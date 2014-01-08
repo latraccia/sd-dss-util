@@ -19,16 +19,16 @@
 
 package it.latraccia.dss.util.exception;
 
-public class SignatureFormatMismatchException extends SignatureException {
-    public SignatureFormatMismatchException() {
-    }
 
-    public SignatureFormatMismatchException(Exception e) {
+public class SignatureSourceFileNotFoundException extends SignatureException {
+    public SignatureSourceFileNotFoundException() {
+    }
+    public SignatureSourceFileNotFoundException(Exception e) {
         super(e);
     }
 
     @Override
     public String getMessage() {
-        return "The selected signature format collides with the file type!";
+        return "The source file could not be found!";
     }
 }

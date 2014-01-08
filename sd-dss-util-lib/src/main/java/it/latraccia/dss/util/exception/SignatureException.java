@@ -19,5 +19,14 @@
 
 package it.latraccia.dss.util.exception;
 
+/**
+ * Basic exception class for handling signature errors.
+ */
 public class SignatureException extends Exception {
+    public SignatureException() {
+    }
+
+    public SignatureException(Exception e) {
+        this.initCause(e);
+    }
 }
