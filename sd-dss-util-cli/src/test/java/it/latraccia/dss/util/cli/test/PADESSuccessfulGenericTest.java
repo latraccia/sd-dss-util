@@ -45,7 +45,8 @@ public abstract class PADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // PDF, EPES, ENVELOPED
                         {"PDF, EPES, ENVELOPED", new String[] {
@@ -55,7 +56,8 @@ public abstract class PADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }}
                 };
 

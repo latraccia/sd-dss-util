@@ -109,6 +109,10 @@ public class SignatureArgsHelper {
         public static String SHA256 = "SHA256";
     }
 
+    public static class KeyRegex {
+        public static String MATCH_ALL = ".*";
+    }
+
     public List<String> getBaseArgs() {
         List<String> arguments = new ArrayList<String>();
         Collections.addAll(arguments);

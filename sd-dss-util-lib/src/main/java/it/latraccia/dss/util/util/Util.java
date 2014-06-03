@@ -60,6 +60,20 @@ public class Util {
     }
 
     /**
+     * Get the issuer CN {@link String} from a certificate.
+     * @param cert A {@link X509Certificate} to read the issuer CN from
+     * @return The {@link String} representing the issuer CN for the {@link X509Certificate}
+     */
+    public static String getIssuerCN(X509Certificate cert) {
+        String issuerCN = cert.getIssuerDN().getName();
+        int cnStartIndex = issuerCN.indexOf("CN=") + 3;
+        if (cnStartIndex > 0 && issuerCN.indexOf(",", cnStartIndex) > 0) {
+            issuerCN = issuerCN.substring(cnStartIndex, issuerCN.indexOf(",", cnStartIndex));
+        }
+        return issuerCN;
+    }
+
+    /**
      * Read an {@link Integer} from the standard input.
      * @return The read {@link Integer}
      * @throws IOException if a read error has occurred

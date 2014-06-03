@@ -45,7 +45,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // XML, BES, ENVELOPING
                         {"XML, BES, ENVELOPING", new String[] {
@@ -55,7 +56,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // DOC, BES, ENVELOPING
                         {"DOC, BES, ENVELOPING", new String[] {
@@ -65,7 +67,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // PDF, BES, DETACHED
                         {"PDF, BES, DETACHED", new String[] {
@@ -75,7 +78,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // XML, BES, DETACHED
                         {"XML, BES, DETACHED", new String[] {
@@ -85,7 +89,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // DOC, BES, DETACHED
                         {"DOC, BES, DETACHED", new String[] {
@@ -95,7 +100,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // XML, BES, ENVELOPED
                         {"XML, BES, ENVELOPED", new String[] {
@@ -105,7 +111,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.BES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // PDF, EPES, ENVELOPING
                         {"PDF, EPES, ENVELOPING", new String[] {
@@ -115,7 +122,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // XML, EPES, ENVELOPING
                         {"XML, EPES, ENVELOPING", new String[] {
@@ -125,7 +133,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // DOC, EPES, ENVELOPING
                         {"DOC, EPES, ENVELOPING", new String[] {
@@ -135,7 +144,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPING,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // PDF, EPES, DETACHED
                         {"PDF, EPES, DETACHED", new String[] {
@@ -145,7 +155,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // XML, EPES, DETACHED
                         {"XML, EPES, DETACHED", new String[] {
@@ -155,7 +166,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // DOC, EPES, DETACHED
                         {"DOC, EPES, DETACHED", new String[] {
@@ -165,7 +177,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.DETACHED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                         // XML, EPES, ENVELOPED
                         {"XML, EPES, ENVELOPED", new String[] {
@@ -175,7 +188,8 @@ public abstract class XADESSuccessfulGenericTest extends SuccessfulGenericTest {
                                 "-l=" + SignatureArgsHelper.Level.EPES,
                                 "-p=" + SignatureArgsHelper.Packaging.ENVELOPED,
                                 "-o=\"" + SignatureArgsHelper.Output.ROOT + "\"",
-                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256
+                                "-d=" + SignatureArgsHelper.DigestAlgorithm.SHA256,
+                                "-icn=\"" + SignatureArgsHelper.KeyRegex.MATCH_ALL + "\""
                         }},
                 };
 

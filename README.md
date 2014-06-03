@@ -51,18 +51,18 @@ To sign a document, simply call the `SignCLI` class on the `sd-dss-util-cli.jar`
     java sd-dss-util-cli.jar SignCli
 
 ### Parameters
-The following list contains all of the accepted parameters. The parameters in **bold** are required.
+The following list contains all of the accepted parameters.
 
 * input file, passed as first nameless parameter
-* `**--url**` or `-u`, the DSS server URL, required for `PAdES` (all levels) and for levels other than `BES`, `EPES` in
-other formats
+* **REQUIRED** `--url` or `-u`, the DSS server URL, required for `PAdES` (all levels) and for levels other than `BES`,
+`EPES` in other formats
 * `--output` or `-o`, the destination path (optionally, with a file name)
-* `**--format**` or `-f`, required, the signature format
+* **REQUIRED** `--format` or `-f`, required, the signature format
 	* `CAdES`
 	* `PAdES`, for PDF files only
 	* `XAdES`
 	* `ASiC-S`, not yet implemented
-* `**--level**` or `-l`, required, the signature level
+* **REQUIRED** `--level` or `-l`, required, the signature level
 	* `BES`, available for every format
 	* `EPES`, available for every format
 	* `LTV`, only for `PAdES`
@@ -71,7 +71,7 @@ other formats
 	* `X`, only for `CAdES`, `XAdES`
 	* `XL`, only for `CAdES`, `XAdES`
 	* `A`, only for `CAdES`, `XAdES`
-* `**--packaging**` or `-p`, required, the packaging kind for the signed file(s)
+* **REQUIRED** `--packaging` or `-p`, required, the packaging kind for the signed file(s)
 	* `ENVELOPING`, only for `CAdES`, `XAdES`
 	* `ENVELOPED`, only for `PAdES` (PDF files), `XAdES` (XML files)
 	* `DETACHED`, only for `CAdES`, `XAdES`
@@ -89,6 +89,7 @@ folder
 * `--mocca` or `-m` if the signature token is provided via MOCCA:
 	* `SHA1`
 	* `SHA256`
+* `--issuercn` or `-icn`, a regular expression that will be used to select the right key based on the certificate issuer CN; if there are multiple keys and the issuer CN is not specified, a key selection will be prompted
 * `--signer-role` or `-sr`, the claimed role of the signer, optional
 * `--signature-policy-explicit` or `-spe`, optional, if the policy is specified with the following required data:
 	* the policy OID as a dot-separated digits string
@@ -110,6 +111,7 @@ provide the signature token provider.
 		--pkcs12="path/to/the/pkcs12/key.p12" "pkcs12filepassword"
 		--output="output/file.pdf"
 		--url="http://localhost:8080/service"
+		--icn=".*some.key.provider.*"
 		
 ### Logging
 
@@ -120,20 +122,20 @@ The `--log` option will create a "utf-8" log file with the following content pat
 
 The code can be one of the following:
 
-* 0: success!
-* -1 SignatureSourceFileNotFoundException: The source file could not be found.
-* -2 SignatureFormatMismatchException: The selected signature format collides with the file type.
-* -3 SignatureLevelMismatchException: The selected signature level collides with other options.
-* -4 SignaturePackagingMismatchException: The selected signature packaging collides with the file type.
-* -5 SignatureServiceUrlException: The selected service URL is not available.
-* -6 SignaturePolicyAlgorithmMismatchException: The selected explicit policy algorithm is not available.
-* -7 SignaturePolicyLevelMismatch: The selected signature level collides with the policy options.
-* -8 SignatureTokenException: The PKCS12 private key could not be found.
-* -9 KeyStoreException: The selected keystore failed
-* -10 BadPasswordException: The password was not valid.
-* -11 NoSuchAlgorithmException: The selected digest algorithm could not be loaded.
-* -12 SignatureTargetFileException} The target output file could not be written.
-* -13 For any other exception.
+* `0`: success!
+* `-1` SignatureSourceFileNotFoundException: The source file could not be found.
+* `-2` SignatureFormatMismatchException: The selected signature format collides with the file type.
+* `-3` SignatureLevelMismatchException: The selected signature level collides with other options.
+* `-4` SignaturePackagingMismatchException: The selected signature packaging collides with the file type.
+* `-5` SignatureServiceUrlException: The selected service URL is not available.
+* `-6` SignaturePolicyAlgorithmMismatchException: The selected explicit policy algorithm is not available.
+* `-7` SignaturePolicyLevelMismatch: The selected signature level collides with the policy options.
+* `-8` SignatureTokenException: The PKCS12 private key could not be found.
+* `-9` KeyStoreException: The selected keystore failed (device not connected, no drivers, etc.).
+* `-10` BadPasswordException: The password was not valid.
+* `-11` NoSuchAlgorithmException: The selected digest algorithm could not be loaded.
+* `-12` SignatureTargetFileException} The target output file could not be written.
+* `-13` For any other exception.
 
 The description (if any) will contain the stack trace of the Exception (for reporting purposes).
 
@@ -152,7 +154,7 @@ Pull requests and any kind of contribution are welcomed.
 SD-DSS-Util is released under the LGPL.
 
     SD-DSS-Util, a Utility Library and a Command Line Interface for SD-DSS.
-    Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
+    Copyright (C) 2014 La Traccia http://www.latraccia.it/en/
     Developed by Francesco Pontillo
 
     This program is free software: you can redistribute it and/or modify

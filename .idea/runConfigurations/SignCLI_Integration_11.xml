@@ -20,6 +20,12 @@
     <patterns>
       <pattern testClass="it.latraccia.dss.util.cli.test.integration.PKCS11.*" />
     </patterns>
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="" />
+      <option name="TRANSPORT" value="0" />
+      <option name="LOCAL" value="true" />
+    </RunnerSettings>
+    <ConfigurationWrapper RunnerId="Debug" />
     <method />
   </configuration>
 </component>

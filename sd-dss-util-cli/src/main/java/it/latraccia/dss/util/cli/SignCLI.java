@@ -94,7 +94,7 @@ public class SignCLI {
         setSignatureFormatLevelPackagingServiceUrl(signatureArgs, signatureBuilder);
         setDigestAlgorithm(signatureArgs, signatureBuilder);
         setToken(signatureArgs, signatureBuilder);
-        setPrivateKeyChooser(signatureBuilder);
+        setPrivateKeyChooser(signatureArgs, signatureBuilder);
         setClaimedRole(signatureArgs, signatureBuilder);
         setPolicy(signatureArgs, signatureBuilder);
         setOutputFile(signatureArgs, signatureBuilder);
@@ -202,8 +202,12 @@ public class SignCLI {
      *
      * @param builder The signature builder
      */
-    protected static void setPrivateKeyChooser(SignatureBuilder builder) {
-        builder.setDSSPrivateKeyChooser(new InputDSSPrivateKeyChooser());
+    protected static void setPrivateKeyChooser(SignatureArgs signatureArgs, SignatureBuilder builder) {
+        if (Util.isNullOrEmpty(signatureArgs.getIssuerCN())) {
+            builder.setDSSPrivateKeyChooser(new InputDSSPrivateKeyChooser());
+        } else {
+            builder.setDSSPrivateKeyChooser(new RegexDSSPrivateKeyChooser(signatureArgs.getIssuerCN()));
+        }
     }
 
     /**
@@ -284,6 +288,35 @@ public class SignCLI {
     }
 
     /**
+     * Choose a key by matching the issuer CN against a regex of acceptable ones.
+     * Only the first accepted key will be returned
+     */
+    public static class RegexDSSPrivateKeyChooser implements SignatureBuilder.IDSSPrivateKeyChooser {
+        private String regexIssuerCN;
+
+        public RegexDSSPrivateKeyChooser(String issuerCN) {
+            regexIssuerCN = issuerCN;
+        }
+
+        @Override
+        public DSSPrivateKeyEntry getDSSPrivateKey(List<DSSPrivateKeyEntry> keys) {
+            DSSPrivateKeyEntry key = null;
+            if (keys != null) {
+                // for each string to match
+                // return the first key that matches
+                for (DSSPrivateKeyEntry curKey : keys) {
+                    String issuerCN = Util.getIssuerCN(curKey.getCertificate());
+                    if (issuerCN.matches(regexIssuerCN)) {
+                        key = curKey;
+                        break;
+                    }
+                }
+            }
+            return key;
+        }
+    }
+
+    /**
      * Get the return code, given an Exception.
      * @param e The {@link java.lang.Exception} to check against
      * @return  0 for no error, a negative number for an exception, in order:
@@ -295,7 +328,7 @@ public class SignCLI {
      *            -6 {@link SignaturePolicyAlgorithmMismatchException}: The selected explicit policy algorithm is not available.
      *            -7 {@link SignaturePolicyLevelMismatch}: The selected signature level collides with the policy options.
      *            -8 {@link SignatureTokenException}: The PKCS12 private key could not be found.
-     *            -9 {@link KeyStoreException}: The selected keystore failed
+     *            -9 {@link KeyStoreException}: The selected keystore failed (device not connected, no drivers, etc.).
      *            -10 {@link eu.europa.ec.markt.dss.exception.BadPasswordException}: The password was not valid.
      *            -11 {@link NoSuchAlgorithmException}: The selected digest algorithm could not be loaded.
      *            -12 {@link SignatureTargetFileException} The target output file could not be written.
@@ -324,7 +357,9 @@ public class SignCLI {
             pw = new PrintWriter(new File(logFile), "utf-8");
             pw.write(Integer.toString(code));
             pw.write("\n");
-            e.printStackTrace(pw);
+            if (e != null) {
+                e.printStackTrace(pw);
+            }
         } catch (IOException ex) {
             throw new FileNotFoundException("Can't write the log file, please specify a valid path.");
         } finally {
