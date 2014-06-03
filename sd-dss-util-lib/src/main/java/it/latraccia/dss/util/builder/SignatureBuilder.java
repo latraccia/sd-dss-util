@@ -476,13 +476,8 @@ public class SignatureBuilder implements IBuilder<File> {
             // Get the keys
             List<DSSPrivateKeyEntry> entries = connection.getKeys();
 
-            DSSPrivateKeyEntry key = null;
-            // Get the selected key to be used, if more than one
-            if (entries.size() > 1) {
-                key = privateKeyChooser.getDSSPrivateKey(entries);
-            } else {
-                key = entries.get(0);
-            }
+            // Get the selected key to be used
+            DSSPrivateKeyEntry key = privateKeyChooser.getDSSPrivateKey(entries);
 
             // Set the key to be used for the signing process
             model.setSelectedPrivateKey(key);

@@ -95,6 +95,10 @@ public class SignatureArgs {
     @Parameter(names = {"-m", "--mocca"},
             description = "Specified if signature token is loaded via MOCCA. Can be one of \"SHA1\" or \"SHA256\"")
     private String mocca;
+
+    @Parameter(names = {"-icn", "--issuercn"},
+               description = "Regular expression to select keys based on the Issuer CN")
+    private String issuerCN;
     /* END OF SIGNATURE TOKEN PARAMETERS */
 
     /* SIGNER CLAIMED ROLE */
@@ -224,6 +228,14 @@ public class SignatureArgs {
 
     public void setMocca(String mocca) {
         this.mocca = mocca;
+    }
+
+    public String getIssuerCN() {
+        return issuerCN;
+    }
+
+    public void setIssuerCN(String issuerCN) {
+        this.issuerCN = issuerCN;
     }
 
     public String getClaimedRole() {

@@ -89,6 +89,7 @@ folder
 * `--mocca` or `-m` if the signature token is provided via MOCCA:
 	* `SHA1`
 	* `SHA256`
+* `--issuercn` or `-icn`, a regular expression that will be used to select the right key based on the certificate issuer CN; if there are multiple keys and the issuer CN is not specified, a key selection will be prompted
 * `--signer-role` or `-sr`, the claimed role of the signer, optional
 * `--signature-policy-explicit` or `-spe`, optional, if the policy is specified with the following required data:
 	* the policy OID as a dot-separated digits string
@@ -110,6 +111,7 @@ provide the signature token provider.
 		--pkcs12="path/to/the/pkcs12/key.p12" "pkcs12filepassword"
 		--output="output/file.pdf"
 		--url="http://localhost:8080/service"
+		--icn=".*some.key.provider.*"
 		
 ### Logging
 
@@ -152,7 +154,7 @@ Pull requests and any kind of contribution are welcomed.
 SD-DSS-Util is released under the LGPL.
 
     SD-DSS-Util, a Utility Library and a Command Line Interface for SD-DSS.
-    Copyright (C) 2013 La Traccia http://www.latraccia.it/en/
+    Copyright (C) 2014 La Traccia http://www.latraccia.it/en/
     Developed by Francesco Pontillo
 
     This program is free software: you can redistribute it and/or modify
