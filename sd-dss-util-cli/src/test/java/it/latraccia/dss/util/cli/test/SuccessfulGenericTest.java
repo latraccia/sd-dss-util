@@ -21,6 +21,7 @@ package it.latraccia.dss.util.cli.test;
 
 import it.latraccia.dss.util.cli.SignCLI;
 import it.latraccia.dss.util.exception.SignatureException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -53,6 +54,10 @@ public abstract class SuccessfulGenericTest extends GenericTest {
         Collections.addAll(arguments, args);
         handleSimulate(arguments);
 
-        SignCLI.main(listToArray(arguments));
+        try {
+            SignCLI.main(listToArray(arguments));
+        } catch (Exception e) {
+            Assert.assertEquals(e, null);
+        }
     }
 }

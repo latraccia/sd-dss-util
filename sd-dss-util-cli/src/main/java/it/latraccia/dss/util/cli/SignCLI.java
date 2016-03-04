@@ -65,7 +65,7 @@ public class SignCLI {
             SignatureTargetFileException.class
     };
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         // Read and parse the arguments
         SignatureArgs signatureArgs = new SignatureArgs();
         new JCommander(signatureArgs, args);
@@ -78,6 +78,10 @@ public class SignCLI {
             returnedException = e;
         }
         writeLogFile(signatureArgs, returnedException);
+
+        if (returnedException != null) {
+            throw returnedException;
+        }
     }
 
     private static File execute(SignatureArgs signatureArgs) throws NoSuchAlgorithmException, SignaturePolicyLevelMismatch,
